@@ -21,7 +21,6 @@ public final class R {
         public static final int button_show_answer=0x7f060001;
         public static final int count_bad=0x7f060007;
         public static final int count_good=0x7f060005;
-        public static final int good=0x7f060008;
         public static final int question=0x7f060004;
         public static final int state=0x7f060003;
     }

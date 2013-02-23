@@ -11,8 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/button_show_answer"
-        android:text="@string/dont_know"
-         />
+        android:text="@string/dont_know" />
 
     <Button
         android:id="@+id/button_know"
@@ -21,8 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/button_show_answer"
-        android:text="@string/dont_know"
-         />
+        android:text="@string/know" />
 
     <TextView
         android:id="@+id/state"
@@ -39,8 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/state"
         android:layout_centerHorizontal="true"
-        android:textAppearance="?android:attr/textAppearanceMedium" 
-         />
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/count_good"
@@ -48,8 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/answer"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-         />
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/count_bad"
@@ -57,8 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/answer"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-         />
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/answer"
@@ -72,7 +67,7 @@
         android:id="@+id/button_show_answer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/good"
+        android:layout_below="@+id/count_good"
         android:layout_centerHorizontal="true"
         android:text="@string/show_answer" />
 
