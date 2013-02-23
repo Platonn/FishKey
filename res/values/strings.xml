@@ -1,5 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">FishKey</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    
+    <string name="show_answer">Pokaż odpowiedź</string>
+    <string name="know">Wiedziałem</string>
+    <string name="dont_know">Nie wiedziałem</string>
+    
+    <!-- Próbne wartości w wersji alpha -->
+    <string name="alpha_state">12/80</string>
+    <string name="alpha_question">uczyć się</string>
+    <string name="alpha_answer">learn</string>
+    <string name="alpha_count_good">8</string>
+    <string name="alpha_count_bad">4</string>
 
 </resources>
