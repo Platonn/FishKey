@@ -5,10 +5,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
@@ -27,8 +25,8 @@ public class Quiz extends Activity {
 	private View progressBarEmpty;
 	
 	/* spike */
-	private TextView countCorrect;
-	private TextView countWrong;
+	//private TextView countCorrect;
+	//private TextView countWrong;
 	
 	private Flashcard currentFlashcard;
 	private static final String answerReplacement = "?";	// zamiast odpowiedzi najpierw wyswietla sie znak zapytania
@@ -39,12 +37,10 @@ public class Quiz extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.quiz);
 		
-		quizState = new QuizState(); //spike TODO: pobieranie zestawu fiszek z zewnetrznego zrodla
+		quizState = new QuizState(this); //spike TODO: pobieranie zestawu fiszek z zewnetrznego zrodla
 		currentFlashcard = null;
 		
-		DisplayMetrics dm = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(dm);
-		screenWidthDpi = (int) dm.xdpi;
+		
 		
 		buttonKnow 	  	= (Button) findViewById(R.id.button_know);
 		buttonDontKnow	= (Button) findViewById(R.id.button_dont_know);
@@ -61,15 +57,16 @@ public class Quiz extends Activity {
 		
 		/* spike 
 		 * TODO: Progres Bar */
-		countCorrect  	= (TextView) findViewById(R.id.count_good);
-		countWrong	  	= (TextView) findViewById(R.id.count_bad);
+		//countCorrect  	= (TextView) findViewById(R.id.count_good);
+		//countWrong	  	= (TextView) findViewById(R.id.count_bad);
 		
-		/* spike */
+		/* spike 
 		state.setText("12/80 w rundzie 1");
 		question.setText("pytanie");
 		answer.setText("odpowiedz");
-		countCorrect.setText("8");
-		countWrong.setText("4");
+		//countCorrect.setText("8");
+		//countWrong.setText("4");
+		*/
 		
 		updateState();											// Zaktualizowanie stanu licznikow
 		askQuestion(); 											// Zadaj pytanie
@@ -83,8 +80,9 @@ public class Quiz extends Activity {
 	 * @return void
 	 */
 	public void updateState(){
-		countCorrect.setText(String.valueOf(quizState.getStateCorrect()));	// Aktualizowanie licznika dobrych odpowiedzi
-		countWrong.setText(String.valueOf(quizState.getStateWrong()));		// Aktualizowanie zlych dobrych odpowiedzi
+		/* spike */
+		//countCorrect.setText(String.valueOf(quizState.getStateCorrect()));	// Aktualizowanie licznika dobrych odpowiedzi
+		//countWrong.setText(String.valueOf(quizState.getStateWrong()));		// Aktualizowanie zlych dobrych odpowiedzi
 		state.setText(String.valueOf(quizState.getStateCorrect()+quizState.getStateWrong())
 						+ "/" 
 						+ String.valueOf(quizState.getStateAllCurrentSet())

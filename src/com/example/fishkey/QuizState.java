@@ -1,8 +1,15 @@
 package com.example.fishkey;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Queue;
+
+import android.content.Context;
+import android.util.Log;
 
 /*  
  * Klasa odpowiedzialna za obsluge stanu quizu
@@ -23,7 +30,7 @@ class QuizState {
 	 * 
 	 * TODO: Wczytywanie fiszek z zewnetrznego zrodla
 	 */
-	public QuizState() {
+	public QuizState(Context context) {
 		flashcardSet 			= new LinkedList<Flashcard>();
 		correctSet 				= new LinkedList<Flashcard>();
 		wrongSet 				= new LinkedList<Flashcard>();
@@ -32,14 +39,53 @@ class QuizState {
 		countWrong				= 0;
 		roundNumber				= 1;
 		
-		/* spike */
+		this.importDataFromFile(context);
+		//Log.i("Opening file - spike", "Afrer Reading file"); // spike
+		/*  //spike 
 		flashcardSet.offer(new Flashcard("przypominac sobie","recollect"));
 		flashcardSet.offer(new Flashcard("uczyc sie","learn"));
 		flashcardSet.offer(new Flashcard("przywolywac wspomnienia","bring back"));
 		flashcardSet.offer(new Flashcard("lubic","care for"));
 		flashcardSet.offer(new Flashcard("odniesc sukces, miec powodzenie","succeed"));
+		*/
 		
+		//Log.i("Opening file - spike", "Afrer additional flashcards"); // spike
 		currentSetSize=flashcardSetSize=flashcardSet.size();
+		//Log.i("Opening file - spike", "After reading size of flashcardSet"); // spike
+
+	}
+	
+	/* 
+	 * Funkcja dodaje podana fiszke do listy dobrze odgadnietych fiszek 
+	 * TODO: Robiæ to w tle - watku/usludze
+	 * 
+	 * @param	context		Egzemplarz klasy Context potrzebnej do wykonania niezbednych operacji
+	 */
+	//spike
+	public void importDataFromFile(Context context) {
+		try{
+			//Log.i("Opening file - spike", "Before open"); // spike
+			InputStream in = context.getAssets().open("slowka.txt");
+			//Log.i("Opening file - spike", "After open"); // spike
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in,"UTF-8"));
+			//Log.i("Opening file - spike", "new Buffer"); // spike
+			String line;												// Tu beda wczytywane kolejne linie
+			String[] text;												// Tablica bedzie przechowywac dwa stringi: odpowiedz oraz pytanie fiszki (w podanej kolejnosci)
+			do {
+				line = reader.readLine();								// Wczytanie nastepnej linii
+				if(line==null)											// Trzeba bylo tak "nieelegancko" zrobic, zeby mozna bylo uzyc potem funkcji split na nie-null'owym stringu
+					break;
+				text = line.split("-");									// Rozdzielenie pytania od odpowiedzi przez separator (myslnik)
+				//Log.i("Opening file - spike", "read Line: "+line); // spike
+				flashcardSet.offer(new Flashcard(text[1].trim(),text[0].trim()));		// TODO: od kolejnosci zalezy, co jest pytaniem a co odpowiedzia. powinno sie to sprawdzac jakos wczesniej! Zadbac o usuniecie brzegowych spacji
+				//Log.i("Opening file - spike", "Adding to queue"); // spike
+			} while(true);												// "Nieeleganncko" - ale wewn¹trz pêtli jest warunek z instrukcj¹ break;
+			//Log.i("Opening file - spike", "out of while"); // spike
+			in.close();
+			//Log.i("Opening file - spike", "after closing"); // spike
+		} catch (IOException e) {
+			Log.i("Quiz", "QuizState - cannot open a file"); // spike
+		}
 	}
 	
 	/* 

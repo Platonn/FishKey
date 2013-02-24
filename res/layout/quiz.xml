@@ -4,26 +4,6 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/button_dont_know"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/button_show_answer"
-        android:text="@string/dont_know"
-        android:onClick="dontKnow" />
-
-    <Button
-        android:id="@+id/button_know"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/button_show_answer"
-        android:text="@string/know"
-        android:onClick="know" />
-
     <TextView
         android:id="@+id/state"
         android:layout_width="wrap_content"
@@ -37,10 +17,12 @@
         android:id="@+id/question"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:layout_below="@+id/state"
         android:layout_centerHorizontal="true"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
+    <!-- TODO: skasować liczniki, bo nie sa juz potrzebne - jest 4-kolorowy progres bar
     <TextView
         android:id="@+id/count_good"
         android:layout_width="wrap_content"
@@ -49,6 +31,7 @@
         android:layout_below="@+id/answer"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
+    
     <TextView
         android:id="@+id/count_bad"
         android:layout_width="wrap_content"
@@ -56,34 +39,27 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/answer"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+         -->
 
     <TextView
         android:id="@+id/answer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <Button
-        android:id="@+id/button_show_answer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/count_good"
-        android:layout_centerHorizontal="true"
-        android:text="@string/show_answer"
-        android:onClick="showAnswer" />
     
-    <!-- Tu bedzie progress bar zielono/czerwony -->
+    <!-- Pprogress bar zielono-jasnozielono-czerwono-bialy -->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/progress_bar"
 	    android:layout_width="fill_parent"
 	    android:layout_height="10dp"
 	    android:orientation="horizontal" 
-	    android:layout_below="@+id/button_know"
+	    android:layout_below="@+id/answer"
         android:layout_centerHorizontal="true">
 		
-        <!-- spike -->
-        <View
+         <View
 		    android:id="@+id/progress_bar_green"
 		    android:background="#008000"
 		    android:layout_width="0dp"
@@ -109,5 +85,34 @@
 		    />
         	
 	</LinearLayout>
+
+    <Button
+        android:id="@+id/button_show_answer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/progress_bar"
+        android:layout_centerHorizontal="true"
+        android:text="@string/show_answer"
+        android:onClick="showAnswer" />
+    
+    <Button
+        android:id="@+id/button_dont_know"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/button_show_answer"
+        android:text="@string/dont_know"
+        android:onClick="dontKnow" />
+
+    <Button
+        android:id="@+id/button_know"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/button_show_answer"
+        android:text="@string/know"
+        android:onClick="know" />
 
 </RelativeLayout>

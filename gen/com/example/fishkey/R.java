@@ -22,18 +22,17 @@ public final class R {
         public static final int progress_bar2=0x7f020002;
     }
     public static final class id {
-        public static final int answer=0x7f070006;
-        public static final int button_dont_know=0x7f070000;
-        public static final int button_know=0x7f070002;
-        public static final int button_show_answer=0x7f070001;
-        public static final int count_bad=0x7f070007;
-        public static final int count_good=0x7f070005;
-        public static final int progress_bar_green=0x7f070008;
-        public static final int progress_bar_green_light=0x7f070009;
-        public static final int progress_bar_red=0x7f07000a;
-        public static final int progress_bar_white=0x7f07000b;
-        public static final int question=0x7f070004;
-        public static final int state=0x7f070003;
+        public static final int answer=0x7f070002;
+        public static final int button_dont_know=0x7f070009;
+        public static final int button_know=0x7f07000a;
+        public static final int button_show_answer=0x7f070008;
+        public static final int progress_bar=0x7f070003;
+        public static final int progress_bar_green=0x7f070004;
+        public static final int progress_bar_green_light=0x7f070005;
+        public static final int progress_bar_red=0x7f070006;
+        public static final int progress_bar_white=0x7f070007;
+        public static final int question=0x7f070001;
+        public static final int state=0x7f070000;
     }
     public static final class layout {
         public static final int quiz=0x7f030000;
