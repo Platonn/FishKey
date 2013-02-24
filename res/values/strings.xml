@@ -9,11 +9,24 @@
     <string name="know">Wiedziałem</string>
     <string name="dont_know">Nie wiedziałem</string>
     
+    <string name="round_finished">Zakończyłeś rundę nr </string>
+    <string name="here_is_your_score">Oto ilość Twoich odpowiedzi:\n</string>
+    
+    <string name="correct">poprawnych</string>
+    <string name="wrong">błędnych</string>
+    <string name="next">Dalej</string>
+    <string name="finish">Zakończ</string>
+    
+    <string name="congratulations">Gratulacje!</string>
+    <string name="quiz_finished">Umiesz już wszystkie fiszki z tego zestawu!</string>
+    
     <!-- Próbne wartości w wersji alpha -->
     <string name="alpha_state">12/80</string>
     <string name="alpha_question">uczyć się</string>
     <string name="alpha_answer">learn</string>
     <string name="alpha_count_good">8</string>
     <string name="alpha_count_bad">4</string>
+    
+    
 
 </resources>

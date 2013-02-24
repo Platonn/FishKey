@@ -2,6 +2,6 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android" >
     <!-- Tu bedzie progress bar zielono/czerwony -->
 	<!-- TODO: zrobic ladne gradienty przez zielen i czerwien -->
-	<gradient android:startColor="#008000" android:endColor="#FF0000" android:angle="0" />
+	<gradient android:startColor="#000070" android:endColor="#500050" android:angle="0" />
  
 </shape>

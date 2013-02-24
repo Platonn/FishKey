@@ -11,7 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/button_show_answer"
-        android:text="@string/dont_know" />
+        android:text="@string/dont_know"
+        android:onClick="dontKnow" />
 
     <Button
         android:id="@+id/button_know"
@@ -20,7 +21,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/button_show_answer"
-        android:text="@string/know" />
+        android:text="@string/know"
+        android:onClick="know" />
 
     <TextView
         android:id="@+id/state"
@@ -69,6 +71,43 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/count_good"
         android:layout_centerHorizontal="true"
-        android:text="@string/show_answer" />
+        android:text="@string/show_answer"
+        android:onClick="showAnswer" />
+    
+    <!-- Tu bedzie progress bar zielono/czerwony -->
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="fill_parent"
+	    android:layout_height="10dp"
+	    android:orientation="horizontal" 
+	    android:layout_below="@+id/button_know"
+        android:layout_centerHorizontal="true">
+		
+        <!-- spike -->
+        <View
+		    android:id="@+id/progress_bar_green"
+		    android:background="#008000"
+		    android:layout_width="0dp"
+		    android:layout_height="wrap_content"
+		    />
+        <View
+		    android:id="@+id/progress_bar_green_light"
+		    android:background="#0f0"
+		    android:layout_width="0dp"
+		    android:layout_height="wrap_content"
+		    />
+        <View
+		    android:id="@+id/progress_bar_red"
+		    android:background="#f00"
+		    android:layout_width="0dp"
+		    android:layout_height="wrap_content"
+		    />
+        <View
+		    android:id="@+id/progress_bar_white"
+		    android:background="#fff"
+		    android:layout_width="0dp"
+		    android:layout_height="wrap_content"
+		    />
+        	
+	</LinearLayout>
 
 </RelativeLayout>
