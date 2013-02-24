@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -39,7 +38,7 @@ class QuizState {
 		countWrong				= 0;
 		roundNumber				= 1;
 		
-		this.importDataFromFile(context);
+		this.importDataFromFile(context, "podroze_phrasal_verbs.txt");	// TODO: zrobic petle albo mechanizm korzystajacy z tej funkcji z dynamiczna nazwa pliku albo z baza danych
 		//Log.i("Opening file - spike", "Afrer Reading file"); // spike
 		/*  //spike 
 		flashcardSet.offer(new Flashcard("przypominac sobie","recollect"));
@@ -60,14 +59,15 @@ class QuizState {
 	 * TODO: Robiæ to w tle - watku/usludze
 	 * 
 	 * @param	context		Egzemplarz klasy Context potrzebnej do wykonania niezbednych operacji
+	 * @param	fileName	Nazwa pliku do importu fiszek
 	 */
 	//spike
-	public void importDataFromFile(Context context) {
+	public void importDataFromFile(Context context, String fileName) {
 		try{
 			//Log.i("Opening file - spike", "Before open"); // spike
-			InputStream in = context.getAssets().open("slowka.txt");
+			InputStream in = context.getAssets().open(fileName);
 			//Log.i("Opening file - spike", "After open"); // spike
-			BufferedReader reader = new BufferedReader(new InputStreamReader(in,"UTF-8"));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));		// TODO: Kontrolowaæ kodowanie pliku, ewentualnie zamieniac je wczesniej na UTF-8
 			//Log.i("Opening file - spike", "new Buffer"); // spike
 			String line;												// Tu beda wczytywane kolejne linie
 			String[] text;												// Tablica bedzie przechowywac dwa stringi: odpowiedz oraz pytanie fiszki (w podanej kolejnosci)
