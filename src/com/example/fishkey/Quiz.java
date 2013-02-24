@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout.LayoutParams;
@@ -37,7 +38,23 @@ public class Quiz extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.quiz);
 		
-		quizState = new QuizState(this); //spike TODO: pobieranie zestawu fiszek z zewnetrznego zrodla
+		Log.i("Bundle", "is empty?"); // spike
+		if(savedInstanceState != null && !savedInstanceState.isEmpty()) {					// Jezeli istnieje zserializowana instancja quizState, to wczytaj ja z obiektu Bundle. W przeciwnym utworz nowa.
+			Log.i("Bundle", "is empty in"); // spike
+			quizState = savedInstanceState.getParcelable("lastQuizState");
+			Log.i("Bundle", "is empty out"); // spike
+        }
+		else {
+			Log.i("Bundle", "is NOT empty in"); // spike
+			quizState = new QuizState(this); //spike TODO: pobieranie zestawu fiszek z zewnetrznego zrodla
+			Log.i("Bundle", "is NOT empty out"); // spike
+		}
+		Log.i("Bundle", "is empty after all"); // spike
+		
+		
+		//spike
+		//quizState = new QuizState(this); //spike TODO: pobieranie zestawu fiszek z zewnetrznego zrodla
+		
 		currentFlashcard = null;
 		
 		
@@ -70,7 +87,28 @@ public class Quiz extends Activity {
 		
 		updateState();											// Zaktualizowanie stanu licznikow
 		askQuestion(); 											// Zadaj pytanie
-	}
+		
+               
+    }
+	
+	/*
+	 * Metoda wywolywana przy wstrzymywaniu aktywnosci
+	 */
+	@Override
+    protected void onPause() {
+    	super.onPause();
+    	Log.i("Bundle", "creating bundle"); // spike
+        //Bundle b = new Bundle();
+        Log.i("Bundle", "putting parcelable quizState to bundle"); // spike
+        //b.putParcelable("lastQuizState", quizState);
+        Log.i("Bundle", "saving instance state with bundle"); // spike
+        //onSaveInstanceState(b);
+        Log.i("Bundle", "after saving instance state with bundle"); // spike
+    }
+    
+ 
+    
+	
 	
 	/*
 	 * Funkcja odpowieda za wyswietlenie pytania na ekranie i skonfigurowanie kontrolek.
