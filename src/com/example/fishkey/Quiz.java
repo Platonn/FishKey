@@ -17,7 +17,7 @@ public class Quiz extends Activity {
 	private Button buttonDontKnow;
 	private Button buttonKnow;
 	private Button buttonShowAnswer;
-	private TextView state;;
+	private TextView state;
 	private TextView question;
 	private TextView answer;
 	private View progressBarCorrectLastRounds;
@@ -32,28 +32,28 @@ public class Quiz extends Activity {
 	private Flashcard currentFlashcard;
 	private static final String answerReplacement = "?";	// zamiast odpowiedzi najpierw wyswietla sie znak zapytania
 	
-	int screenWidthDpi;
+	//spike
+	//boolean restoredInstanceState = false;
 	
 	public void onCreate(Bundle savedInstanceState) {
+		Log.i("Bundle", "onCreate"); // spike
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.quiz);
-		
-		Log.i("Bundle", "is empty?"); // spike
-		if(savedInstanceState != null && !savedInstanceState.isEmpty()) {					// Jezeli istnieje zserializowana instancja quizState, to wczytaj ja z obiektu Bundle. W przeciwnym utworz nowa.
-			Log.i("Bundle", "is empty in"); // spike
-			quizState = savedInstanceState.getParcelable("lastQuizState");
-			Log.i("Bundle", "is empty out"); // spike
-        }
-		else {
-			Log.i("Bundle", "is NOT empty in"); // spike
-			quizState = new QuizState(this); //spike TODO: pobieranie zestawu fiszek z zewnetrznego zrodla
-			Log.i("Bundle", "is NOT empty out"); // spike
+		Log.i("Bundle", "check whether bundle is not null"); // spike
+		if (savedInstanceState !=null && savedInstanceState.containsKey("laststate")) {
+			Log.i("Bundle", "check whether bundle is not null IN"); // spike
+			quizState = (QuizState) savedInstanceState.getParcelable("laststate");
+			if (quizState==null) 	Log.i("Bundle", "quizState test object: is null"); // spike
+			else					Log.i("Bundle", "quizState test object: wrong answers - "+quizState.getStateWrong()); // spike
+			Log.i("Bundle", "check whether bundle is not null OUT"); // spike
 		}
-		Log.i("Bundle", "is empty after all"); // spike
+		else {
+			Log.i("Bundle", "check whether bundle is null - IN"); // spike
+			quizState = new QuizState(this); //spike TODO: pobieranie zestawu fiszek z zewnetrznego zrodla
+			Log.i("Bundle", "check whether bundle is null - OUT"); // spike
+		}
+		Log.i("Bundle", "check whether bundle is not null - after"); // spike
 		
-		
-		//spike
-		//quizState = new QuizState(this); //spike TODO: pobieranie zestawu fiszek z zewnetrznego zrodla
 		
 		currentFlashcard = null;
 		
@@ -87,27 +87,47 @@ public class Quiz extends Activity {
 		
 		updateState();											// Zaktualizowanie stanu licznikow
 		askQuestion(); 											// Zadaj pytanie
-		
-               
-    }
+	}
 	
-	/*
-	 * Metoda wywolywana przy wstrzymywaniu aktywnosci
-	 */
+	//spike
 	@Override
-    protected void onPause() {
-    	super.onPause();
-    	Log.i("Bundle", "creating bundle"); // spike
-        //Bundle b = new Bundle();
-        Log.i("Bundle", "putting parcelable quizState to bundle"); // spike
-        //b.putParcelable("lastQuizState", quizState);
-        Log.i("Bundle", "saving instance state with bundle"); // spike
-        //onSaveInstanceState(b);
-        Log.i("Bundle", "after saving instance state with bundle"); // spike
+	protected void onPause() {
+        super.onPause();
+        Bundle b = new Bundle();
+        if (quizState==null) 	Log.i("Bundle", "Putting to bundle quizState test object: is null"); // spike
+		else					Log.i("Bundle", "Putting to bundle quizState test object: answers wrong - "+quizState.getStateWrong()); // spike
+        b.putParcelable("laststate", quizState); // spike quizState); new QuizState(this)
+        
+        /*//spike
+        QuizState deparceledQuizState = b.getParcelable("laststate");
+		if (quizState==null) 	Log.i("Bundle", "Deparceled quizState test object: is null"); // spike
+		else					Log.i("Bundle", "Deparceled quizState test object: answers wrong - "+quizState.getStateWrong()); // spike
+        */
+        onSaveInstanceState(b);
+        
     }
     
- 
-    
+	/*//spike
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		Log.i("Bundle", "onSaveInstanceState(Bundle outState)"); // spike
+		super.onSaveInstanceState(outState);
+		outState.putParcelable("laststate", quizState);
+	}
+	*/
+	
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		Log.i("Bundle", "onrestoreInstanceState(Bundle outState)"); // spike
+		 //quizState = savedInstanceState.getParcelable("laststate"); //spike
+		
+		 /* Spike */
+		QuizState deparceledQuizState = savedInstanceState.getParcelable("laststate");
+		if (deparceledQuizState==null) 	Log.i("Bundle", "Deparceled quizState test object: is null"); // spike
+		else					Log.i("Bundle", "Deparceled quizState test object: answers wrong - "+quizState.getStateWrong()); // spike
+		
+		super.onRestoreInstanceState(savedInstanceState);
+	}
 	
 	
 	/*
