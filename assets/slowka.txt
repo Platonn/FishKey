@@ -1,17 +1,96 @@
-fall in - sink inward (e.g. the roof)
-fall over - lose one's balance and collapse to the ground
-fall out (with) - quarrel
-fall for - be deceived by (e.g. a false story)
-fall through - to fail
-get back - return (e.g. from a holiday)
-get to / get at - reach (e.g. something on a high shelf)
-get through - be connected (by telephone)
-get sb down - depress, demoralise  sb
-go through - be approved; succeed in getting through the approval process
-go by - pass (time)
-go off - go bad (food, milk)
-go with - match (style, colour)
-keep off - avoid a subject
-keep up (with) - maintain some spped, level as others
-keep away - maintain a physical distance between sth and sth else
-keep sth back - withhold sth
+the worst/best is yet to come - najgorsze/najlepsze jest jeszcze przed nami
+according to - zgodnie z, według
+persist - upierać się, nalegać
+misleading - złudny, mylny
+portrayal - obraz, interpretacja, ukazanie (czegoś)
+therefore - zatem, toteż, dlatego
+The sooner ..., the more, ... - Im dłużej ..., tym więcej ...
+urge sb to - nakłonić kogoś, aby
+to fall behind - robić zaległości, pozostawać w tyle
+chatch up - nadrobić zaległości
+day off - dzień wolny (od pracy)
+toes - palce u stóp
+switch off the light - zgasić światło
+fluently - płynnie, biegle (np. wypowiadać się)
+how long - jak długo (o czasie)
+provided - zakładając, że
+even if - choćby
+even though - nawet jeśli, mimo że, chociaż
+although - chociaż, mimo, pomimo
+until - do (czasu), aż, dopóki
+as soon as - jak tylko, gdy tylko
+as long as - jeśli tylko, jeśli
+conjunction - koniunkcja logiczna, połączenie
+fill up with petrol - zatankować, napełnić paliwem
+afford sth - móc sobie pozwolić na coś
+later on - później
+jumper - sweter (w Wlk. Bryt.)
+to feel like doing sth - mieć ochotę na robienie czegoś
+be over - skończyć się
+refrigerator - lodówka
+get a hang of sth - zorientować się w czymś, poznać podstawy, rozpocząć naukę czegoś
+compound - złożony, wieloczłonowy
+intend - zamierzać, przeznaczać, mieć intencję
+bad manners - złe maniery
+be fond of sth - lubić coś
+slide, slid, slidden - ślizgać się (odmiana: trzy formy)
+involved in - wplątany w 
+zinc - cynk
+A-levels - matura (w Wielkiej Brytanii)
+expand - rozszerzać, rozrastać się
+be broke - być spłukanym, nie mieć pieniędzy
+condition - warunek
+fur - futro
+semi-detached - bliźniak (typ domu)
+shabby - odrapany, zniszczony
+triangular - trójkątny
+marble - marmurowy
+chop - kroić, ciąć na kawałki
+slice - kroić w plasterki
+nearly always - prawie zawsze
+hen - kura
+beautiful old Chinese vase - piękna stara chińska waza
+huge black metal box - ogromne czarne metalowe pudło
+scoff at sth - szydzić z czegoś
+curse - klątwa
+think twice about doing sth - pomyśleć dwa razy, zanim coś się zrobi
+sudden - nagły, niespodziewany
+hawk - jastrząb
+bite on - ugryźć w
+pneumonia - zapalenie płuc
+mansion - rezydencja
+under strange circumstances - w dziwnych okolicznościach
+half brother - przyrodni brat
+die of sth/natural_causes - umrzeć na coś / śmiercią_naturalną
+appendicitis - zapalenie wyrostka robaczkowego
+be descended from - wywodzić się z, pochodzić z (np. dynastii)
+tycoon - potentat (handlowy, giełdowy, przemysłowy)
+commit suicide - popełnić samobójstwo
+fight, fought, fought - walczyć (odmiana: trzy formy)
+fight against - walczć przeciwko
+live on sth - utrzymywać się z czegoś
+otiginate from - mieć początek w, pochodzić z 
+associate with - kojarzyć z
+enquiry - dochodzenie, śledztwo
+remain - pozostać
+ape - małpa
+judging by sth - sądząc po czymś
+split up - rozdzielić się, rozejść się
+on account of - z powodu, ze względu na
+in addition to - oprócz
+in agreement with - zgodny z
+in answer to - w odpowiedzi na
+on behalf of ... - w imieniu ...
+have sth in common with - mieć coś wspólnego z ...
+in exchange for - wzamian za
+in favour of sb/sth - na korzyść kogoś/czegoś
+on good terms with - w dobrych stosunkach z
+fall in love with sb - zakochać się w kimś
+by means of sth - za pomocą czegoś
+be at odds with sb - nie zgadzać się, sprzeczać się z kimś
+out of pity for - bez litości dla
+in/with reference to - w nawiązaniu do
+with the compliments of sb - z wyrazami szacunku (formalnie)
+at the expense of sth - kosztem czegoś
+under the influence of sth - pod wpływem czegoś
+for the sake of ... - przez wzgląd na ...

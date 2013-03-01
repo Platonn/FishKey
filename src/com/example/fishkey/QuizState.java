@@ -39,7 +39,7 @@ class QuizState implements Parcelable {
 		countWrong				= 0;
 		roundNumber				= 1;
 		
-		this.importDataFromFile(context, "podroze_phrasal_verbs.txt");	// TODO: zrobic petle albo mechanizm korzystajacy z tej funkcji z dynamiczna nazwa pliku albo z baza danych
+		this.importDataFromFile(context, "slowka.txt");	// TODO: zrobic petle albo mechanizm korzystajacy z tej funkcji z dynamiczna nazwa pliku albo z baza danych
 		//Log.i("Opening file - spike", "Afrer Reading file"); // spike
 		/*  //spike 
 		flashcardSet.offer(new Flashcard("przypominac sobie","recollect"));
@@ -77,7 +77,7 @@ class QuizState implements Parcelable {
 				line = reader.readLine();								// Wczytanie nastepnej linii
 				if(line==null)											// Trzeba bylo tak "nieelegancko" zrobic, zeby mozna bylo uzyc potem funkcji split na nie-null'owym stringu
 					break;
-				text = line.split("-");									// Rozdzielenie pytania od odpowiedzi przez separator (myslnik)
+				text = line.split(" - ");								// Dwie spacje obok umozliwiaja podanie slowka zawierajacego "gêst¹ spacjê", np. semi-detached								// Rozdzielenie pytania od odpowiedzi przez separator (myslnik)
 				//Log.i("Opening file - spike", "read Line: "+line); // spike
 				flashcardSet.offer(new Flashcard(text[1].trim(),text[0].trim()));		// TODO: od kolejnosci zalezy, co jest pytaniem a co odpowiedzia. powinno sie to sprawdzac jakos wczesniej! Zadbac o usuniecie brzegowych spacji
 				//Log.i("Opening file - spike", "Adding to LinkedList"); // spike
