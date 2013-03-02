@@ -1,96 +1,180 @@
-the worst/best is yet to come - najgorsze/najlepsze jest jeszcze przed nami
-according to - zgodnie z, według
-persist - upierać się, nalegać
-misleading - złudny, mylny
-portrayal - obraz, interpretacja, ukazanie (czegoś)
-therefore - zatem, toteż, dlatego
-The sooner ..., the more, ... - Im dłużej ..., tym więcej ...
-urge sb to - nakłonić kogoś, aby
-to fall behind - robić zaległości, pozostawać w tyle
-chatch up - nadrobić zaległości
-day off - dzień wolny (od pracy)
-toes - palce u stóp
-switch off the light - zgasić światło
-fluently - płynnie, biegle (np. wypowiadać się)
-how long - jak długo (o czasie)
-provided - zakładając, że
-even if - choćby
-even though - nawet jeśli, mimo że, chociaż
-although - chociaż, mimo, pomimo
-until - do (czasu), aż, dopóki
-as soon as - jak tylko, gdy tylko
-as long as - jeśli tylko, jeśli
-conjunction - koniunkcja logiczna, połączenie
-fill up with petrol - zatankować, napełnić paliwem
-afford sth - móc sobie pozwolić na coś
-later on - później
-jumper - sweter (w Wlk. Bryt.)
-to feel like doing sth - mieć ochotę na robienie czegoś
-be over - skończyć się
-refrigerator - lodówka
-get a hang of sth - zorientować się w czymś, poznać podstawy, rozpocząć naukę czegoś
-compound - złożony, wieloczłonowy
-intend - zamierzać, przeznaczać, mieć intencję
-bad manners - złe maniery
-be fond of sth - lubić coś
-slide, slid, slidden - ślizgać się (odmiana: trzy formy)
-involved in - wplątany w 
-zinc - cynk
-A-levels - matura (w Wielkiej Brytanii)
-expand - rozszerzać, rozrastać się
-be broke - być spłukanym, nie mieć pieniędzy
-condition - warunek
-fur - futro
-semi-detached - bliźniak (typ domu)
-shabby - odrapany, zniszczony
-triangular - trójkątny
-marble - marmurowy
-chop - kroić, ciąć na kawałki
-slice - kroić w plasterki
-nearly always - prawie zawsze
-hen - kura
-beautiful old Chinese vase - piękna stara chińska waza
-huge black metal box - ogromne czarne metalowe pudło
-scoff at sth - szydzić z czegoś
-curse - klątwa
-think twice about doing sth - pomyśleć dwa razy, zanim coś się zrobi
-sudden - nagły, niespodziewany
-hawk - jastrząb
-bite on - ugryźć w
-pneumonia - zapalenie płuc
-mansion - rezydencja
-under strange circumstances - w dziwnych okolicznościach
-half brother - przyrodni brat
-die of sth/natural_causes - umrzeć na coś / śmiercią_naturalną
-appendicitis - zapalenie wyrostka robaczkowego
-be descended from - wywodzić się z, pochodzić z (np. dynastii)
-tycoon - potentat (handlowy, giełdowy, przemysłowy)
-commit suicide - popełnić samobójstwo
-fight, fought, fought - walczyć (odmiana: trzy formy)
-fight against - walczć przeciwko
-live on sth - utrzymywać się z czegoś
-otiginate from - mieć początek w, pochodzić z 
-associate with - kojarzyć z
-enquiry - dochodzenie, śledztwo
-remain - pozostać
-ape - małpa
-judging by sth - sądząc po czymś
-split up - rozdzielić się, rozejść się
-on account of - z powodu, ze względu na
-in addition to - oprócz
-in agreement with - zgodny z
-in answer to - w odpowiedzi na
-on behalf of ... - w imieniu ...
-have sth in common with - mieć coś wspólnego z ...
-in exchange for - wzamian za
-in favour of sb/sth - na korzyść kogoś/czegoś
-on good terms with - w dobrych stosunkach z
-fall in love with sb - zakochać się w kimś
-by means of sth - za pomocą czegoś
-be at odds with sb - nie zgadzać się, sprzeczać się z kimś
-out of pity for - bez litości dla
-in/with reference to - w nawiązaniu do
-with the compliments of sb - z wyrazami szacunku (formalnie)
-at the expense of sth - kosztem czegoś
-under the influence of sth - pod wpływem czegoś
-for the sake of ... - przez wzgląd na ...
+bay - zatoka
+canal - kanał
+cape - przylądek
+coastline - linia brzegowa
+dense forest - gęsty las
+dunes - wydmy
+estuary - ujście rzeki
+forest - last
+gulf - zatoka
+island - wyspa
+lake - jezioro
+meadow - łąka
+mountain range - pasmo górskie
+open fields - otwarty teren
+peninsula - półwysep
+peak - szczyt górski
+pond - staw
+riverside - brzeg rzeki
+unspoilt countryside - dziewiczy krajobraz wiejski
+wetland - teren podmokły
+air pressure - ciśnienie powietrza
+blizzard - zamieć śnieżna
+blow - wiać
+breeze - bryza,lekki wietrzyk
+couldy - pochmurny
+fog - gęsta mgła
+freezing cold - bradzo zimny, lodowaty
+frost - mróz
+gale/gale-force wind - wichura
+hail - grad
+haze - lekka mgiełka
+heatwave - fala upałów
+heavy snowfall - obfite, silne opady śniegu
+high humidity - duża wilgotnośc powietrza
+hurricane - huragan
+it looks like rain - wygląda, jakby miało padać
+light shower - przelotne opady
+mist - lekka mgła
+overcast sky - zachmurzone niego
+pour_with_rain/rain_heavily - mocno padać (o deszcu)
+rainstorm - burza
+schorching - skwarny
+sleet - śnieg z deszczem
+snowstorm - burza śnieżna
+soaring temperatures - bardzo wysokie temperatury
+thick clouds - gęste chmury
+thunderstorm - burza z piorunami
+torrential rain - ulewny deszcz
+avalanche - lawina
+drought - susza
+earthquake - trzęsienie ziemi
+famine - klęska głodu
+flood - powódź
+gale-force wind - huraganowy wiatr
+landslide - obsunięcie się ziemi
+tornado - tornado
+typhoon - tajfun
+volcanic eruption - wybuch wulkanu
+brich - brzoza
+horse chestnut - kasztan
+maple - klon
+oak - dąb
+pine - sosna
+spruce - świerk
+daffodil - żonkil
+daisy - stokrotka
+forget-me-not - niezapominajka
+heatcher - wrzos
+lily - lilia
+lily of the valley - konwalia
+pansy - bratek
+snowdrop - przebiśnieg
+tulip - tulipan
+eagle - orzeł
+great tit - sikorka bogatka
+magpie - sroka
+owl - sowa
+puiegon - gołąb
+raven - kruk
+seagull - mewa
+sparrow - wróbel
+stork - bocian
+swan - łabędź
+beaver - bóbr
+breed (noun) - rasa
+breed (verb) - rozmnażać się
+chick - pisklę
+donkey - osioł
+epreror penguin - pingwin cesarski
+feed - żywić się, karmić
+goat - koza
+graze - paść się 
+hatch - wykluwać się
+have young  - mieć młode
+hibernate - zapadać w sen zimowy
+hunt - polować
+incubate eggs - wtsiadywać jajka
+krill - kryl
+lay eggs - skłądać jaja
+mating call - śpiew godowy
+migrate - migrować
+nest - gniazdo
+prey - że, zdobycz
+sheep - owca
+agriculture - rolnictwo
+biodiversity - różnorodność w przyrodzie
+ecosystem - ekosystem
+endemic species - gatunek endenemiczny (występujący na określonym terenie, lokalny)
+give off (oxygen) - wydzielać (tlen)
+habitat - siedlisko
+in the wild - w naturalnycm środowisku
+polar ice cap - czapa lodowa
+sea level - poziom morza
+the ozone layer - warstwa ozonowa
+vegetation - roślinnść
+well-adapted to the environment - dobrze przystosowany do środowiska
+wildlife - dzika fauna i flora
+acid rain - kwaśny deszcz
+air pollution - zanieczyszczenie powietrza
+become extinct - wyginąć
+carbon dioxide - dwutlenek węgla
+climate change - zmiana klimatyczna
+commercial forestry - leśnictwo komercyjne
+consumerist lifestyle - konsumpcyjny styl życia
+contaminate - zanieczyszczać
+deforestation - wycinanie lasów
+degradation - degradacja
+disposable containers - pojemniki jednorazowego użytku
+endangered species - zagrożony gatunek / zagrożone gatunki
+exhaust fumes - spaliny
+extincion - wymarcie, wyginięcie
+fell trees - ścinać trzewa
+fossil fuels - paliwa kopalne
+global warming - globalne ocieplenie
+greenhouse gas emissions - emisja gazów cieplarnianych
+harmful th the envirorment - szkodliwy dla środowiska
+have a negative impact - wpływać na coś negatywnie
+irreparable damage - skzody nie do naprawienia
+landfill - wysypisko śmieci
+log rainforests - wycinać lasy tropikalne
+melting of glaciers - topnienie lodowców
+oil refinery - rafineria ropy naftowej
+oil spill - wyciek ropy
+oil tanker - tankowiec przewożący ropę naftową
+overpopulation - przeludnienie
+petrol - benzyna
+petroleum - ropa naftowa
+soil erosion - erozja gleby
+threat - zagrożenie
+toxic - odpady toksyczne
+waste natural resources - marnować surowce naturalne
+alternative energy sources - alternatynwne źródła energii
+biodegradable - ulegający biodegradacji
+bring (sth) under stricter control - wprowadzić bardziej surową kontrolę (czegoś)
+cycle path - ścieżka rowerowa
+carbon footprint - miara emisji dwutlenku węgla
+carbon neutral - niewydzieljący dwutlenku węgla
+eco-friendly - ekologiczny
+ecological activist - dziiałacz ekologiczny
+energy-saving lightning - oświetlenie energooszczędne
+envirirmentally friendly - przyjazny dla środowiska
+grenn products - produkty ekologiczne
+locally grown food - żywność produkowana lokalnie
+organic food - żywność ekologiczna
+phase (sth) out - stopniowo (coś) eliminować z użycia
+recycling - recyklin
+redewss the natual balance - przywrócć naturalną równowagę
+reduce traffic congestion - zmiejszać zagęszczenie ruchu
+renewable energy - energia odnawialna
+unleaded petrol - benzyna bezołowiowa
+wildlife reserve/sanctuary - rezerwat przyrody
+wind power - energia wiatru
+conserve water and energy - oszczędzać wodę i energię
+consume less - używać (czegoś) mniej
+environmental sustainability - zrównowazony rozwój
+generate less pollution - wytwarzać mniej zanieczyszczeń
+lower/reduce CO2 emissions - obniżyć emisję dwutlenku węga
+minimise one's impact on the environment - zminimlizować swój wpływ na środowisko
+plant trees - sadzić drzewa
+use public transport - używać transportu publicznego
