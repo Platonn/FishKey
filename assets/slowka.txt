@@ -5,7 +5,7 @@ coastline - linia brzegowa
 dense forest - gęsty las
 dunes - wydmy
 estuary - ujście rzeki
-forest - last
+forest - las
 gulf - zatoka
 island - wyspa
 lake - jezioro
@@ -31,7 +31,7 @@ hail - grad
 haze - lekka mgiełka
 heatwave - fala upałów
 heavy snowfall - obfite, silne opady śniegu
-high humidity - duża wilgotnośc powietrza
+high humidity - duża wilgotność powietrza
 hurricane - huragan
 it looks like rain - wygląda, jakby miało padać
 light shower - przelotne opady
@@ -65,7 +65,7 @@ spruce - świerk
 daffodil - żonkil
 daisy - stokrotka
 forget-me-not - niezapominajka
-heatcher - wrzos
+heather - wrzos
 lily - lilia
 lily of the valley - konwalia
 pansy - bratek
@@ -75,7 +75,7 @@ eagle - orzeł
 great tit - sikorka bogatka
 magpie - sroka
 owl - sowa
-puiegon - gołąb
+pigeon - gołąb
 raven - kruk
 seagull - mewa
 sparrow - wróbel
@@ -86,7 +86,7 @@ breed (noun) - rasa
 breed (verb) - rozmnażać się
 chick - pisklę
 donkey - osioł
-epreror penguin - pingwin cesarski
+eperror penguin - pingwin cesarski
 feed - żywić się, karmić
 goat - koza
 graze - paść się 
@@ -94,13 +94,13 @@ hatch - wykluwać się
 have young  - mieć młode
 hibernate - zapadać w sen zimowy
 hunt - polować
-incubate eggs - wtsiadywać jajka
+incubate eggs - wysiadywać jajka
 krill - kryl
-lay eggs - skłądać jaja
+lay eggs - składać jaja
 mating call - śpiew godowy
 migrate - migrować
 nest - gniazdo
-prey - że, zdobycz
+prey - żer, zdobycz
 sheep - owca
 agriculture - rolnictwo
 biodiversity - różnorodność w przyrodzie
@@ -108,7 +108,7 @@ ecosystem - ekosystem
 endemic species - gatunek endenemiczny (występujący na określonym terenie, lokalny)
 give off (oxygen) - wydzielać (tlen)
 habitat - siedlisko
-in the wild - w naturalnycm środowisku
+in the wild - w naturalnym środowisku
 polar ice cap - czapa lodowa
 sea level - poziom morza
 the ozone layer - warstwa ozonowa
@@ -128,14 +128,14 @@ degradation - degradacja
 disposable containers - pojemniki jednorazowego użytku
 endangered species - zagrożony gatunek / zagrożone gatunki
 exhaust fumes - spaliny
-extincion - wymarcie, wyginięcie
+extinction - wymarcie, wyginięcie
 fell trees - ścinać trzewa
 fossil fuels - paliwa kopalne
 global warming - globalne ocieplenie
 greenhouse gas emissions - emisja gazów cieplarnianych
-harmful th the envirorment - szkodliwy dla środowiska
+harmful to the environment - szkodliwy dla środowiska
 have a negative impact - wpływać na coś negatywnie
-irreparable damage - skzody nie do naprawienia
+irreparable damage - szkody nie do naprawienia
 landfill - wysypisko śmieci
 log rainforests - wycinać lasy tropikalne
 melting of glaciers - topnienie lodowców
@@ -154,17 +154,17 @@ biodegradable - ulegający biodegradacji
 bring (sth) under stricter control - wprowadzić bardziej surową kontrolę (czegoś)
 cycle path - ścieżka rowerowa
 carbon footprint - miara emisji dwutlenku węgla
-carbon neutral - niewydzieljący dwutlenku węgla
+carbon neutral - niewydzielający dwutlenku węgla
 eco-friendly - ekologiczny
 ecological activist - dziiałacz ekologiczny
 energy-saving lightning - oświetlenie energooszczędne
-envirirmentally friendly - przyjazny dla środowiska
-grenn products - produkty ekologiczne
+environmentally friendly - przyjazny dla środowiska
+green products - produkty ekologiczne
 locally grown food - żywność produkowana lokalnie
 organic food - żywność ekologiczna
 phase (sth) out - stopniowo (coś) eliminować z użycia
-recycling - recyklin
-redewss the natual balance - przywrócć naturalną równowagę
+recycling - recykling
+redress the natual balance - przywrócić naturalną równowagę
 reduce traffic congestion - zmiejszać zagęszczenie ruchu
 renewable energy - energia odnawialna
 unleaded petrol - benzyna bezołowiowa
