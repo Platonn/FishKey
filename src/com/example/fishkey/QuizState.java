@@ -1,6 +1,7 @@
 package com.example.fishkey;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -64,7 +65,14 @@ class QuizState implements Parcelable {
 	 * @param	fileName	Nazwa pliku do importu fiszek
 	 */
 	//spike
+	
+	
 	public void importDataFromFile(Context context, String fileName) {
+		InternalStorage intStor = new InternalStorage();
+		String slowka = intStor.read(fileName);
+		
+		
+		/*// Poprzednia wersja z assets
 		try{
 			//Log.i("Opening file - spike", "Before open"); // spike
 			InputStream in = context.getAssets().open(fileName);
@@ -88,6 +96,7 @@ class QuizState implements Parcelable {
 		} catch (IOException e) {
 			Log.i("Quiz", "QuizState - cannot open a file"); // spike
 		}
+		*/
 	}
 	
 	/* 
