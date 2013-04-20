@@ -1,5 +1,7 @@
-package com.example.fishkey;
+package com.fishkey;
 
+
+import com.example.fishkey.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;

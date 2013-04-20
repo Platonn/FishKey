@@ -1,4 +1,4 @@
-package com.example.fishkey;
+package com.fishkey;
 
 /* Klasa reprezentujaca pojedyncza fiszke 
  * 

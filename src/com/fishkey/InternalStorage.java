@@ -1,4 +1,4 @@
-package com.example.fishkey;
+package com.fishkey;
 
 import android.app.Activity;
 import android.content.Context;

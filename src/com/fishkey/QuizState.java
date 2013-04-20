@@ -1,4 +1,4 @@
-package com.example.fishkey;
+package com.fishkey;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

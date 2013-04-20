@@ -1,4 +1,4 @@
-package com.example.fishkey;
+package com.fishkey;
 
 import java.util.Collections;
 import java.util.List;
