@@ -132,7 +132,7 @@ public class Quiz extends Activity {
 	}
 	
 	
-	/*
+	/**
 	 * Funkcja odpowieda za wyswietlenie pytania na ekranie i skonfigurowanie kontrolek.
 	 * 
 	 * Funkcja wyswietla pytanie, jako odpowiedz ustawia "?" oraz wyswietla przycisk "Pokaz odpowiedz".
@@ -157,7 +157,7 @@ public class Quiz extends Activity {
 
 	}
 	
-	/* Funkcja pokazuje chmurke z wynikiem koncowym i ewentualnie rozpoczyna nowy korus ze zle odgadnietymi fiszkami */
+	/** Funkcja pokazuje chmurke z wynikiem koncowym i ewentualnie rozpoczyna nowy korus ze zle odgadnietymi fiszkami */
 	public void showResults() {
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(Quiz.this);
 		String alertButtonText;
@@ -224,7 +224,7 @@ public class Quiz extends Activity {
 		}
 	}
 	
-	/*
+	/**
 	 * Funkcja wywo³ywana po kliknieciu przycisku "Pokaz odpowiedz" (definicja w XMLu)
 	 * 
 	 * @return void
@@ -237,7 +237,7 @@ public class Quiz extends Activity {
 	}
 	
 	
-	/*
+	/**
 	 * Funkcja wywo³ywana po kliknieciu przycisku "Wiedzialem" (definicja w XMLu)
 	 * 
 	 * @return void
@@ -248,7 +248,7 @@ public class Quiz extends Activity {
 		this.askQuestion();
 	}
 	
-	/*
+	/**
 	 * Funkcja wywo³ywana po kliknieciu przycisku "Nie wiedzialem" (definicja w XMLu)
 	 * 
 	 * @return void
