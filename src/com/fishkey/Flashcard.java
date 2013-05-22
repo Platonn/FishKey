@@ -1,36 +1,43 @@
 package com.fishkey;
 
 /**  
- * Klasa reprezentujaca pojedyncza fiszke
+ * klasa reprezentujaca pojedyncza fiszke
  */
 class Flashcard {
-	/** Pytanie fiszki */
+	/**
+	 * pytanie fiszki
+	 */
 	private String question;
 	
-	/** Prawidlowa odpowiedz fiszki */
+	/**
+	 * prawidlowa odpowiedz fiszki
+	 */
 	private String answer;
 	
-	/** Konstruktor przypisuje pytanie i odpowiedz fiszki do pol klasy 
+	/** 
+	 * inicjalizuje pola fiszki
 	 * 
-	 * @param	q	Pytanie fiszki
-	 * @param	a	Odpowiedz fiszki 
+	 * @param	q	pytanie fiszki
+	 * @param	a	pdpowiedz fiszki 
 	 */
 	public Flashcard(String q, String a) {
 		question = q;
 		answer	 = a;
 	}
 	
-	/** Funkcja zwraca pytanie fiszki
+	/** 
+	 * zwraca pytanie fiszki
 	 * 
-	 * @return	string	Pytanie fiszki 
+	 * @return	String	pytanie fiszki 
 	 */
 	String getQuestion() {
 		return question;
 	}
 	
-	/** Funkcja zwraca prawidlowa odpowiedz fiszki
+	/** 
+	 * zwraca prawidlowa odpowiedz fiszki
 	 * 
-	 * @return	string	Odpowiedz fiszki 
+	 * @return	String	prawidlowa odpowiedz fiszki 
 	 */
 	String getAnswer() {
 		return answer;

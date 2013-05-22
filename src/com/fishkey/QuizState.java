@@ -13,7 +13,7 @@ import android.os.Parcelable;
 import android.util.Log;
 
 /**  
- * Klasa odpowiedzialna za obsluge stanu quizu
+ * obsluga stanu quizu
  */
 class QuizState implements Parcelable {
 	LinkedList<Flashcard> flashcardSet;
@@ -27,11 +27,15 @@ class QuizState implements Parcelable {
 	private int roundNumber;
 	
 	/**  
-	 * Kostruktor wczytuje zestaw fiszek i ustawia liczniki poprawnych oraz z³ych odpowiedzi na 0 oraz numer rundy na 1
+	 * przygotowuje quiz do rozpoczecia
 	 * 
-	 * TODO: Wczytywanie fiszek z zewnetrznego zrodla
+	 * Wczytuje zestaw fiszek i ustawia liczniki poprawnych oraz zzych odpowiedzi na 0 oraz numer rundy na 1.
+	 * Posiada wlasne statystyki, ktore udostepnia
+	 * 
+	 * @param	 context	obiekt <code>Context</code>
 	 */
 	public QuizState(Context context) {
+		// TODO: Wczytywanie fiszek z zewnetrznego zrodla
 		flashcardSet 			= new LinkedList<Flashcard>();
 		correctSet 				= new LinkedList<Flashcard>();
 		wrongSet 				= new LinkedList<Flashcard>();
@@ -58,15 +62,13 @@ class QuizState implements Parcelable {
 	}
 	
 	/** 
-	 * Funkcja dodaje podana fiszke do listy dobrze odgadnietych fiszek 
+	 * dodaje podana fiszke do listy dobrze odgadnietych fiszek 
 	 * TODO: Robiæ to w tle - watku/usludze
 	 * 
-	 * @param	context		Egzemplarz klasy Context potrzebnej do wykonania niezbednych operacji
-	 * @param	fileName	Nazwa pliku do importu fiszek
+	 * @param	context		obiekt klasy context - do obslugi plikow
+	 * @param	fileString	nazwa pliku do importu fiszek
+	 * @deprecated
 	 */
-	//spike
-	
-	
 	public void importDataFromFile(Context context, String fileName) {
 		InternalStorage intStor = new InternalStorage();
 		String slowka = intStor.read(fileName);
@@ -100,9 +102,9 @@ class QuizState implements Parcelable {
 	}
 	
 	/** 
-	 * Funkcja usuwa ostatnia fiszke z zestawu do odpytywania i wrzuca podana fiszke do listy dobrze odgadnietych fiszek 
+	 * usuwa ostatnia fiszke z zestawu do odpytywania i wrzuca podana fiszke do listy dobrze odgadnietych fiszek 
 	 * 
-	 * @param	f	Dobrze odgadnieta fiszka
+	 * @param	f	fiszka dobrze odgadnieta
 	 */
 	public void answerCorrect(Flashcard f) {
 		flashcardSet.remove();				// Usuniecie ostatnio pobranej fiszki z listy
@@ -111,9 +113,9 @@ class QuizState implements Parcelable {
 	}
 	
 	/** 
-	 * Funkcja usuwa ostatnia fiszke z zestawu do odpytywania i wrzuca podana fiszke do listy zle odgadnietych fiszek 
+	 * usuwa ostatnia fiszke z zestawu do odpytywania i wrzuca podana fiszke do listy dobrze odgadnietych fiszek 
 	 * 
-	 * @param	f	Zle odgadnieta fiszka
+	 * @param	f	fiszka zle odgadnieta
 	 */
 	public void answerWrong(Flashcard f) {
 		flashcardSet.remove();				// Usuniecie ostatnio pobranej fiszki z listy
@@ -122,30 +124,46 @@ class QuizState implements Parcelable {
 	}
 	
 	/** 
-	 * Funkcja pobiera ale nie usuwa(!) fiszke z listy i zwraca ja w return 
+	 * pobiera ale nie usuwa(!) fiszke z listy i zwraca ja w return 
 	 * 
-	 * @return	Flashcard	Pobierana z kolejki fiszka
+	 * @return	f	fiszka pobierana z kolejki
 	 */
 	public Flashcard getFlashcard(){
 		return flashcardSet.peek();
 	}
 	
-	/** Funkcja zwraca liczbe udzielonych dobrych odpowiedzi */
+	/** 
+	 * zwraca liczbe udzielonych dobrych odpowiedzi 
+	 * 
+	 * @return	int	liczba dobrych odpowiedzi
+	 * */
 	int getStateCorrect() {
 		return countCorrect;
 	}
 	
-	/** Funkcja zwraca liczbe poprawionych odpowiedzi w tej rundzie (w poprzedniej byly bledne) */
+	/** 
+	 * zwraca liczbe poprawionych odpowiedzi udzielonych w poprzednich rundach
+	 * 
+	 * @return	int	liczba odpowiedzi udzielonych w poprzednich rundach 
+	 */
 	int getStateCorrectLastRounds() {
 		return countCorrectLastRounds;
 	}
 	
-	/** Funkcja zwraca liczbe udzielonych zlych odpowiedzi */
+	/** 
+	 * zwraca liczbe udzielonych zlych odpowiedzi
+	 * 
+	 * @return	int	liczba zlych odpowiedzi w aktualnej rundzie
+	 */
 	int getStateWrong() {
 		return countWrong;
 	}
 	
-	/** Funkcja zwraca liczbe wszystkich fiszek w zestawie */
+	/**
+	 * zwraca liczbe wszystkich fiszek w zestawie
+	 * 
+	 * @return 	int	ilosc wszystkich odpowiedzi w aktualnej rundzie
+	 */
 	int getStateAllCurrentSet() {
 		return currentSetSize;
 	}
@@ -154,13 +172,17 @@ class QuizState implements Parcelable {
 		return flashcardSetSize;
 	}
 	
-	/** Funkcja zwraca numer rundy */
+	/** 
+	 * zwraca numer rundy
+	 * 
+	 * @return	int	numer rundy
+	 */
 	int getRoundNumber() {
 		return roundNumber;
 	}
 	
 	/** 
-	 * Funkcja rozpoczyna nowa runde i podmienia zestaw slowek quizu z tymi zle odgadnietymi w poprzedniej rundzie
+	 * rozpoczyna nowa runde i podmienia zestaw slowek quizu z tymi zle odgadnietymi w poprzedniej rundzie
 	 */
 	void startNextRound() {
 		++roundNumber;								// Zwieksz numer rundy
@@ -175,18 +197,10 @@ class QuizState implements Parcelable {
 		wrongSet.clear();							// Wyrzuc wszystkie fiszki zle odgadniete w poprzedniej rundzie
 	}
 	
-	/** TODO: oczyscic pamiec - koniec quizu */
-	void endQuiz(){
-		
-	}
-	
+	/* Okreslanie potrzebnych funkcji do serializacji danych: */
 	
 	/**
-	 * Okreslanie potrzebnych funkcji do serializacji danych:
-	 */
-	
-	/**
-	 * Pole sluzaca do serializacji
+	 * Pole sluzace do serializacji
 	 */
 	//spike
 	public static final Parcelable.Creator<QuizState> CREATOR = new Parcelable.Creator<QuizState>() {

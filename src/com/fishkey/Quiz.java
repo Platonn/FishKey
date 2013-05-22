@@ -133,9 +133,9 @@ public class Quiz extends Activity {
 	
 	
 	/**
-	 * Funkcja odpowieda za wyswietlenie pytania na ekranie i skonfigurowanie kontrolek.
+	 * wyswietla pytania na ekranie i blokuje/odblokowuje kontrolki
 	 * 
-	 * Funkcja wyswietla pytanie, jako odpowiedz ustawia "?" oraz wyswietla przycisk "Pokaz odpowiedz".
+	 * wyswietla pytanie, jako odpowiedz ustawia "?" oraz wyswietla przycisk "Pokaz odpowiedz".
 	 * 
 	 * @return void
 	 */
@@ -157,7 +157,12 @@ public class Quiz extends Activity {
 
 	}
 	
-	/** Funkcja pokazuje chmurke z wynikiem koncowym i ewentualnie rozpoczyna nowy korus ze zle odgadnietymi fiszkami */
+	/**
+	 * Wyswietla wynik koncowy rundy
+	 * 
+	 * Wstawia na glowny ekran chmurke z wynikiem koncowym i ewentualnie rozpoczyna nowy quiz,
+	 * jesli pozostal niepusty stos fiszek "nie wiedzialem"
+	 * */
 	public void showResults() {
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(Quiz.this);
 		String alertButtonText;
@@ -227,7 +232,7 @@ public class Quiz extends Activity {
 	/**
 	 * Funkcja wywo³ywana po kliknieciu przycisku "Pokaz odpowiedz" (definicja w XMLu)
 	 * 
-	 * @return void
+	 * @param	View	przycisk, kotry zostal klikniety
 	 */
 	public void showAnswer(View v) {
 		answer.setText(currentFlashcard.getAnswer());			// Wyswietlenie poprawnej odpowiedzi
@@ -240,7 +245,7 @@ public class Quiz extends Activity {
 	/**
 	 * Funkcja wywo³ywana po kliknieciu przycisku "Wiedzialem" (definicja w XMLu)
 	 * 
-	 * @return void
+	 * @param	View	przycisk, kotry zostal klikniety
 	 */
 	public void know(View v) {
 		quizState.answerCorrect(currentFlashcard);
@@ -251,7 +256,7 @@ public class Quiz extends Activity {
 	/**
 	 * Funkcja wywo³ywana po kliknieciu przycisku "Nie wiedzialem" (definicja w XMLu)
 	 * 
-	 * @return void
+	 * @param	View	przycisk, kotry zostal klikniety
 	 */
 	public void dontKnow(View v) {
 		quizState.answerWrong(currentFlashcard);
