@@ -54,4 +54,17 @@ public class QuizRound {
 		ROUND_SET_SIZE			= fs.size();
 		ROUND_NUMBER 			= ++roundCounter;
 	}
+	
+	/**
+	 * zwraca info, czy jest juz rundy quizu
+	 * <p>
+	 * zwraca info, czy skonczyly sie juz fiszki do przepytania w tej rundzie
+	 * 
+	 * @return	true, jesli zestaw koniec rundy, false w przeciwnym przypadku
+	 */
+	public boolean isEnd(){
+		return toAskSet.isEmpty();
+	}
+	
+	
 }

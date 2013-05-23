@@ -54,7 +54,7 @@ public class FlashcardSet {
 	}
 	
 	/**
-	 * wstawia fiszke na koniec listy fiszek
+	 * zwraca info, czy zestaw jest pusty
 	 * 
 	 * @return	true, jesli zestaw jest pusty, false w przeciwnym przypadku
 	 */

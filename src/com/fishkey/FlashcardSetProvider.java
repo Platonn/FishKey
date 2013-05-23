@@ -25,6 +25,7 @@ public class FlashcardSetProvider {
 	 * 
 	 * @param	context		obiekt klasy context - do obslugi plikow
 	 * @param	fileString	nazwa pliku do importu fiszek
+	 * @param	flashcarSet	zestaw fiszek do wypelnienia wczytanymi fiszkami
 	 */
 	public static void importDataFromAssetsFile(Context context, String fileName, FlashcardSet flashcardSet) {
 		try{
