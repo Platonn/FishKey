@@ -59,7 +59,6 @@ class QuizState {
 	 * 
 	 * @param	context		obiekt klasy context - do obslugi plikow
 	 * @param	fileString	nazwa pliku do importu fiszek
-	 * @deprecated
 	 */
 	public void importDataFromAssetsFile(Context context, String fileName) {
 		try{
@@ -112,7 +111,7 @@ class QuizState {
 	/** 
 	 * zwraca liczbe udzielonych dobrych odpowiedzi 
 	 * 
-	 * @return	int	liczba dobrych odpowiedzi
+	 * @return	liczba dobrych odpowiedzi
 	 * */
 	int getStateCorrect() {
 		return countCorrect;
@@ -121,7 +120,7 @@ class QuizState {
 	/** 
 	 * zwraca liczbe poprawionych odpowiedzi udzielonych w poprzednich rundach
 	 * 
-	 * @return	int	liczba odpowiedzi udzielonych w poprzednich rundach 
+	 * @return	liczba odpowiedzi udzielonych w poprzednich rundach 
 	 */
 	int getStateCorrectLastRounds() {
 		return countCorrectLastRounds;
@@ -130,7 +129,7 @@ class QuizState {
 	/** 
 	 * zwraca liczbe udzielonych zlych odpowiedzi
 	 * 
-	 * @return	int	liczba zlych odpowiedzi w aktualnej rundzie
+	 * @return	liczba zlych odpowiedzi w aktualnej rundzie
 	 */
 	int getStateWrong() {
 		return countWrong;
@@ -139,7 +138,7 @@ class QuizState {
 	/**
 	 * zwraca liczbe wszystkich fiszek w zestawie
 	 * 
-	 * @return 	int	ilosc wszystkich odpowiedzi w aktualnej rundzie
+	 * @return 	ilosc wszystkich odpowiedzi w aktualnej rundzie
 	 */
 	int getStateAllCurrentSet() {
 		return currentSetSize;
@@ -152,7 +151,7 @@ class QuizState {
 	/** 
 	 * zwraca numer rundy
 	 * 
-	 * @return	int	numer rundy
+	 * @return	numer rundy
 	 */
 	int getRoundNumber() {
 		return roundNumber;
