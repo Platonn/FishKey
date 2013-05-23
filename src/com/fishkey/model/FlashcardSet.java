@@ -23,7 +23,7 @@ public class FlashcardSet {
 		list = new LinkedList<Flashcard>();
 		size = 0;
 	}
-	
+
 	/**
 	 * wyjmuje i zwraca aktualnie pierwsza fiszke z zestawu
 	 * 
@@ -85,8 +85,22 @@ public class FlashcardSet {
 	    }
 	}
 	
-	public void addAll(FlashcardSet fs) {
+	/**
+	 * kopiuje do zestawu wszystkie fiszki z zestawu podanego jako argument 
+	 * @param fs	zestaw fiszek do skopiowania
+	 */
+	public void copyAllFrom(FlashcardSet fs) {
 		list.addAll(fs.list);
+	}
+	
+	/**
+	 * przenosi do zestawu wszystkie fiszki z zestawu podanego jako argument
+	 * <p>
+	 * @param fs	zestaw fiszek do przeniesienia
+	 */
+	public void moveAllFrom(FlashcardSet fs) {
+		list.addAll(fs.list);
+		fs.clear();
 	}
 	
 }

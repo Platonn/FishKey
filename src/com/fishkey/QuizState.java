@@ -29,7 +29,7 @@ class QuizState {
 	
 	/**  
 	 * przygotowuje quiz do rozpoczecia
-	 * 
+	 * <p>
 	 * Wczytuje zestaw fiszek i ustawia liczniki poprawnych oraz zzych odpowiedzi na 0 oraz numer rundy na 1.
 	 * Posiada wlasne statystyki, ktore udostepnia
 	 * 
@@ -43,7 +43,7 @@ class QuizState {
 		roundNumber				= 1;
 		
 		FlashcardSetProvider.importDataFromAssetsFile(context, "slowka.txt", flashcardSet);
-
+		
 		currentSetSize=flashcardSetSize=flashcardSet.size();
 		flashcardSet.shuffle();									// Tasuj zestaw fiszek do przepytania
 	}
@@ -69,7 +69,7 @@ class QuizState {
 	}
 	
 	/** 
-	 * pobiera ale nie usuwa(!) fiszke z listy i zwraca ja w return 
+	 * pobiera i usuwa fiszke z zestawu oraz zwraca ja w return 
 	 * 
 	 * @return	f	fiszka pobierana z kolejki
 	 */
@@ -135,8 +135,8 @@ class QuizState {
 		++roundNumber;								// Zwieksz numer rundy
 		countCorrectLastRounds += correctSet.size();// Dodaj do licznika poprawnych odpowiedzi fiszki poprawione w ostatniej rundzie
 		currentSetSize			= wrongSet.size();	// Ustaw jako liczbe fiszek w nastepnej rundzie - liczbe zle odgadnietych fiszek
-		flashcardSet = wrongSet;					// Przerzuc fiszki z zestawu zlych odpowiedzi do zestawu przepytywanych (w nastepnej rundzie)
-		wrongSet.clear();							// Wyrzuc wszystkie fiszki zle odgadniete w poprzedniej rundzie
+		correctSet.clear();							// Wyrzuc wszystkie fiszki dobrze odgadniete w poprzedniej rundzie
+		flashcardSet.moveAllFrom(wrongSet);			// Przerzuc fiszki z zestawu zlych odpowiedzi do zestawu przepytywanych (w nastepnej rundzie)
 	}
 	
 }

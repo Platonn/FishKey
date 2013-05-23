@@ -17,6 +17,7 @@ import com.fishkey.model.FlashcardSet;
  *
  */
 public class FlashcardSetProvider {
+	
 	/** 
 	 * wczytuje z pliku assets zestaw fiszek 
 	 * <p>
