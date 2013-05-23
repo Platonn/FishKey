@@ -1,5 +1,7 @@
 package com.fishkey;
 
+import com.fishkey.model.Flashcard;
+
 /**
  * Sedzia sprawdza poprawnosc udzielanych odpowiedzi.
  * <p>

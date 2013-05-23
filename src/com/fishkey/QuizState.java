@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 
+import com.fishkey.model.Flashcard;
+
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;

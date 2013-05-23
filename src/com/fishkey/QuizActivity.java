@@ -2,6 +2,7 @@ package com.fishkey;
 
 
 import com.example.fishkey.R;
+import com.fishkey.model.Flashcard;
 
 import android.app.Activity;
 import android.app.AlertDialog;

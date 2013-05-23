@@ -1,5 +1,7 @@
 package com.fishkey;
 
+import com.fishkey.model.Flashcard;
+
 /**
  * Sedzia sumienie ocenia "naiwnie" poprawnosc odpowiedi,
  * bazujac na informacji, czy odpowiadajacy znal poprawna odpowiedz
