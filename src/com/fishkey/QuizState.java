@@ -22,9 +22,7 @@ class QuizState {
 	FlashcardSet flashcardSet;
 	FlashcardSet correctSet;
 	FlashcardSet wrongSet;
-	int countCorrect;
 	int countCorrectLastRounds;
-	int countWrong;
 	int flashcardSetSize;
 	int currentSetSize;
 	private int roundNumber;
@@ -41,9 +39,7 @@ class QuizState {
 		flashcardSet 			= new FlashcardSet();
 		correctSet 				= new FlashcardSet();
 		wrongSet 				= new FlashcardSet();
-		countCorrect			= 0;
 		countCorrectLastRounds	= 0;
-		countWrong				= 0;
 		roundNumber				= 1;
 		
 		this.importDataFromAssetsFile(context, "slowka.txt");
@@ -86,7 +82,7 @@ class QuizState {
 	 */
 	public void answerCorrect(Flashcard f) {
 		correctSet.add(f);					// Dodanie podanej fiszki do listy dobrze odgadnietych
-		++countCorrect;						// Zwiekszenie licznika dobrze odgadnietych fiszek
+		//++countCorrect;						// Zwiekszenie licznika dobrze odgadnietych fiszek
 	}
 	
 	/** 
@@ -96,7 +92,7 @@ class QuizState {
 	 */
 	public void answerWrong(Flashcard f) {
 		wrongSet.add(f);					// Dodanie podanej fiszki do listy zle odgadnietych
-		++countWrong;						// Zwiekszenie licznika zle odgadnietych fiszek
+		//++countWrong;						// Zwiekszenie licznika zle odgadnietych fiszek
 	}
 	
 	/** 
@@ -114,7 +110,8 @@ class QuizState {
 	 * @return	liczba dobrych odpowiedzi
 	 * */
 	int getStateCorrect() {
-		return countCorrect;
+		//return countCorrect;
+		return correctSet.size();
 	}
 	
 	/** 
@@ -132,7 +129,8 @@ class QuizState {
 	 * @return	liczba zlych odpowiedzi w aktualnej rundzie
 	 */
 	int getStateWrong() {
-		return countWrong;
+		//return countWrong;
+		return wrongSet.size();
 	}
 	
 	/**
@@ -162,10 +160,8 @@ class QuizState {
 	 */
 	void startNextRound() {
 		++roundNumber;								// Zwieksz numer rundy
-		countCorrectLastRounds += countCorrect;		// Dodaj do licznika poprawnych odpowiedzi fiszki poprawione w ostatniej rundzie
-		currentSetSize			= countWrong;		// Ustaw jako liczbe fiszek w nastepnej rundzie - liczbe zle odgadnietych fiszek
-		countCorrect	  		= 0;				// Wyzeruj licznik poprawianych odpowiedzi
-		countWrong 				= 0;				// Wyzeruj licznik zlych odpowiedzi
+		countCorrectLastRounds += correctSet.size();// Dodaj do licznika poprawnych odpowiedzi fiszki poprawione w ostatniej rundzie
+		currentSetSize			= wrongSet.size();	// Ustaw jako liczbe fiszek w nastepnej rundzie - liczbe zle odgadnietych fiszek
 		flashcardSet = wrongSet;					// Przerzuc fiszki z zestawu zlych odpowiedzi do zestawu przepytywanych (w nastepnej rundzie)
 		wrongSet.clear();							// Wyrzuc wszystkie fiszki zle odgadniete w poprzedniej rundzie
 	}
