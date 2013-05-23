@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.util.LinkedList;
 
 import com.fishkey.model.Flashcard;
+import com.fishkey.model.FlashcardSet;
 
 import android.content.Context;
 import android.os.Parcel;
@@ -18,9 +19,9 @@ import android.util.Log;
  * obsluga stanu quizu
  */
 class QuizState {
-	LinkedList<Flashcard> flashcardSet;
-	LinkedList<Flashcard> correctSet;
-	LinkedList<Flashcard> wrongSet;
+	FlashcardSet flashcardSet;
+	FlashcardSet correctSet;
+	FlashcardSet wrongSet;
 	int countCorrect;
 	int countCorrectLastRounds;
 	int countWrong;
@@ -37,10 +38,9 @@ class QuizState {
 	 * @param	 context	obiekt <code>Context</code>
 	 */
 	public QuizState(Context context) {
-		// TODO: Wczytywanie fiszek z zewnetrznego zrodla
-		flashcardSet 			= new LinkedList<Flashcard>();
-		correctSet 				= new LinkedList<Flashcard>();
-		wrongSet 				= new LinkedList<Flashcard>();
+		flashcardSet 			= new FlashcardSet();
+		correctSet 				= new FlashcardSet();
+		wrongSet 				= new FlashcardSet();
 		countCorrect			= 0;
 		countCorrectLastRounds	= 0;
 		countWrong				= 0;
@@ -49,7 +49,7 @@ class QuizState {
 		this.importDataFromAssetsFile(context, "slowka.txt");
 
 		currentSetSize=flashcardSetSize=flashcardSet.size();
-		new ShuffleList(flashcardSet);
+		flashcardSet.shuffle();									// Tasuj zestaw fiszek do przepytania
 	}
 	
 	/** 
@@ -72,7 +72,7 @@ class QuizState {
 				if(line==null)															// Trzeba bylo tak zrobic, zeby mozna bylo uzyc potem funkcji split na nie-null'owym stringu
 					break;
 				text = line.split(" - ");												// Dwie spacje obok umozliwiaja podanie slowka zawierajacego "gêst¹ spacjê", np. semi-detached								// Rozdzielenie pytania od odpowiedzi przez separator (myslnik)
-				flashcardSet.offer(new Flashcard(text[1].trim(),text[0].trim()));		// Wczytuje wg schematu: "PYTANIE - ODPOWIEDZ" (musza byc spacje wokol myslnika)
+				flashcardSet.add(new Flashcard(text[1].trim(),text[0].trim()));		// Wczytuje wg schematu: "PYTANIE - ODPOWIEDZ" (musza byc spacje wokol myslnika)
 			} while(true);
 			in.close();
 		} catch (IOException e) {
@@ -86,8 +86,7 @@ class QuizState {
 	 * @param	f	fiszka dobrze odgadnieta
 	 */
 	public void answerCorrect(Flashcard f) {
-		flashcardSet.remove();				// Usuniecie ostatnio pobranej fiszki z listy
-		correctSet.offer(f);				// Dodanie podanej fiszki do listy dobrze odgadnietych
+		correctSet.add(f);					// Dodanie podanej fiszki do listy dobrze odgadnietych
 		++countCorrect;						// Zwiekszenie licznika dobrze odgadnietych fiszek
 	}
 	
@@ -97,8 +96,7 @@ class QuizState {
 	 * @param	f	fiszka zle odgadnieta
 	 */
 	public void answerWrong(Flashcard f) {
-		flashcardSet.remove();				// Usuniecie ostatnio pobranej fiszki z listy
-		wrongSet.offer(f);					// Dodanie podanej fiszki do listy zle odgadnietych
+		wrongSet.add(f);					// Dodanie podanej fiszki do listy zle odgadnietych
 		++countWrong;						// Zwiekszenie licznika zle odgadnietych fiszek
 	}
 	
@@ -108,7 +106,7 @@ class QuizState {
 	 * @return	f	fiszka pobierana z kolejki
 	 */
 	public Flashcard getFlashcard(){
-		return flashcardSet.peek();
+		return flashcardSet.getNext();
 	}
 	
 	/** 
@@ -169,10 +167,7 @@ class QuizState {
 		currentSetSize			= countWrong;		// Ustaw jako liczbe fiszek w nastepnej rundzie - liczbe zle odgadnietych fiszek
 		countCorrect	  		= 0;				// Wyzeruj licznik poprawianych odpowiedzi
 		countWrong 				= 0;				// Wyzeruj licznik zlych odpowiedzi
-		flashcardSet.clear();						// Wyrzuc wszystkie fiszki z zestawu
-		for(Flashcard wrongFlashcard: wrongSet){	// Przerzuc zle odgadniete fiszki do zestawu odgadywanych w nastepnej rundzie
-			flashcardSet.offer(wrongFlashcard);
-		}
+		flashcardSet = wrongSet;					// Przerzuc fiszki z zestawu zlych odpowiedzi do zestawu przepytywanych (w nastepnej rundzie)
 		wrongSet.clear();							// Wyrzuc wszystkie fiszki zle odgadniete w poprzedniej rundzie
 	}
 	

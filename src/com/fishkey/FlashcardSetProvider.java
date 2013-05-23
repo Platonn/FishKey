@@ -1,9 +1,8 @@
 package com.fishkey;
 
 /**
- * Dostarcza zestaw fiszek do <code>QuizManager</code>a
+ * Dostarcza zestaw fiszek do przeprowadzenia quizu
  * @author Platon
- * @see QuizManager
  *
  */
 public class FlashcardSetProvider {
