@@ -27,6 +27,13 @@ class QuizState {
 	int currentSetSize;
 	private int roundNumber;
 	
+	LinkedList<QuizRound> roundsList;
+	
+	/**
+	 * tag to oznaczania logow
+	 */
+	private static final String TAG = QuizState.class.getName();
+	
 	/**  
 	 * przygotowuje quiz do rozpoczecia
 	 * <p>
@@ -36,6 +43,8 @@ class QuizState {
 	 * @param	 context	obiekt <code>Context</code>
 	 */
 	public QuizState(Context context) {
+		roundsList				= new LinkedList<QuizRound>();
+		
 		flashcardSet 			= new FlashcardSet();
 		correctSet 				= new FlashcardSet();
 		wrongSet 				= new FlashcardSet();
@@ -43,6 +52,7 @@ class QuizState {
 		roundNumber				= 1;
 		
 		FlashcardSetProvider.importDataFromAssetsFile(context, "slowka.txt", flashcardSet);
+		roundsList.add(new QuizRound(flashcardSet));
 		
 		currentSetSize=flashcardSetSize=flashcardSet.size();
 		flashcardSet.shuffle();									// Tasuj zestaw fiszek do przepytania
@@ -120,23 +130,30 @@ class QuizState {
 	}
 	
 	/** 
-	 * zwraca numer rundy
+	 * zwraca biezacej numer rundy
 	 * 
-	 * @return	numer rundy
+	 * @return	numer biezacej rundy
 	 */
 	int getRoundNumber() {
-		return roundNumber;
+		try {
+			QuizRound currentRound = roundsList.getLast();
+			return currentRound.ROUND_NUMBER;
+		} catch (java.util.NoSuchElementException ex) {
+			Log.e(TAG,"Nie mozna pobrac numeru rundy. Brak rund na liscie.");
+			return 0;
+		}
 	}
 	
-	/** 
+	/**
 	 * rozpoczyna nowa runde i podmienia zestaw slowek quizu z tymi zle odgadnietymi w poprzedniej rundzie
 	 */
-	void startNextRound() {
+	void startNextRound() { 
 		++roundNumber;								// Zwieksz numer rundy
 		countCorrectLastRounds += correctSet.size();// Dodaj do licznika poprawnych odpowiedzi fiszki poprawione w ostatniej rundzie
 		currentSetSize			= wrongSet.size();	// Ustaw jako liczbe fiszek w nastepnej rundzie - liczbe zle odgadnietych fiszek
 		correctSet.clear();							// Wyrzuc wszystkie fiszki dobrze odgadniete w poprzedniej rundzie
 		flashcardSet.moveAllFrom(wrongSet);			// Przerzuc fiszki z zestawu zlych odpowiedzi do zestawu przepytywanych (w nastepnej rundzie)
+		roundsList.add(new QuizRound(flashcardSet));// Utworzenie nowej rundy
 	}
 	
 }
