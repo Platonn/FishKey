@@ -1,10 +1,14 @@
 package com.fishkey;
 
 import android.content.Context;
+import android.util.Log;
 
+import com.fishkey.exceptions.EndOfQuizException;
+import com.fishkey.exceptions.EndOfQuizRoundException;
+import com.fishkey.model.Flashcard;
 import com.fishkey.model.FlashcardSet;
 
-public class QuizRound {
+public class QuizRound implements IFlashcardPassOn {
 	/**
 	 * zestaw fiszek do przepytania
 	 */
@@ -23,7 +27,7 @@ public class QuizRound {
 	/**
 	 * ilosc fiszek do przepytania w rundzie
 	 */
-	public final int ROUND_SET_SIZE;
+	public final int SIZE;
 	
 	/**
 	 * numer rundy
@@ -31,28 +35,79 @@ public class QuizRound {
 	 * w konstruktorze numer rundy jest ustalany na podstawie <code>roundCounter</code>
 	 * @see #roundCounter
 	 */
-	public final int ROUND_NUMBER;
+	public final int NUMBER;
 	
 	/**
 	 * licznik rund
 	 * <p>
-	 * przechowuje liczbe utworzonych instancji obiektu QuizRound
+	 * licznik utworzonych instancji obiektu QuizRound
 	 * @see QuizRound
 	 */
-	private static int roundCounter = 0;
+	private static int roundsCounter = 0;
 	
 	/**
-	 * przygotowuje runde do przeprowadzia
-	 * @param fs			lista do przepytania w rundzie
-	 * @param roundNumber	numer rundy
+	 * tag to oznaczania logow
+	 */
+	private static final String LOG_TAG = QuizRound.class.getName();
+	
+	/**
+	 * przygotowuje runde do przeprowadzenia
+	 * <p>
+	 * ustawia podany zestaw fiszek jako zestaw do przepytania
+	 * @param fs			zestaw fiszek do przepytania w rundzie
 	 */
 	public QuizRound(FlashcardSet fs) {
 		toAskSet 				= fs;
 		answeredCorrectSet		= new FlashcardSet();
 		answeredWrongSet		= new FlashcardSet();
-		
-		ROUND_SET_SIZE			= fs.size();
-		ROUND_NUMBER 			= ++roundCounter;
+		SIZE					= toAskSet.size();
+		NUMBER 					= ++roundsCounter;
+	}
+	
+	/**
+	 * przygotowuje kolejna runde do przeprowadzenia na podstawie poprzedniej
+	 * <p>
+	 * kopiuje z poprzedniej rundy zestaw fiszek nieodgadnietych do zestawu fiszek do przepytania
+	 * biezacej rundzie
+	 * @param prevRound		poprzednia runda
+	 * @throws EndOfQuizException rzucany, gdy w konstruktorze rundy zostanie podany pusty zestaw fiszek
+	 */
+	public QuizRound(QuizRound prevRound) throws EndOfQuizException {
+		FlashcardSet fs = prevRound.answeredWrongSet;
+		if(fs.isEmpty())
+			throw new EndOfQuizException();
+		toAskSet.addAllFrom(fs);
+		answeredCorrectSet		= new FlashcardSet();
+		answeredWrongSet		= new FlashcardSet();
+		SIZE					= toAskSet.size();
+		NUMBER 					= ++roundsCounter;
+	}
+	
+	/* Implementacja metod interfejsu IFlashcardPassOn */
+	
+	public Flashcard popFlashcard() throws EndOfQuizRoundException {
+		if (isEnd()) {
+			Log.v(LOG_TAG,"Koniec rundy nr "+NUMBER);
+			throw new EndOfQuizRoundException(getReport());
+		}
+		else
+			return toAskSet.pop();
+	}
+	
+	public void putAnswered(Flashcard f, boolean isCorrectAnswered) {
+		if (isCorrectAnswered)
+			answeredCorrectSet.add(f);
+		else
+			answeredWrongSet.add(f);
+	}
+	
+	/* Implementacja metod wlasnych */
+	
+	/**
+	 * wyzerowuje licznik rund
+	 */
+	public static void resetRoundsCounter() {
+		roundsCounter = 0;
 	}
 	
 	/**
@@ -62,9 +117,74 @@ public class QuizRound {
 	 * 
 	 * @return	true, jesli zestaw koniec rundy, false w przeciwnym przypadku
 	 */
-	public boolean isEnd(){
+	private boolean isEnd(){
 		return toAskSet.isEmpty();
 	}
 	
+	/* Implementacja metod interfejsu IQuizRoundInformator */
 	
+	/**
+	 * zwraca liczbe poprawnych odpowiedzi w tej rundzie
+	 * @return	liczba poprawnych odpowiedzi w tej rundzie
+	 */
+	public int getNumCorrect(){
+		return answeredCorrectSet.size();
+	}
+	
+	/**
+	 * zwraca liczbe blednych odpowiedzi w tej rundzie
+	 * @return	liczba blednych odpowiedzi w tej rundzie
+	 */
+	public int getNumWrong(){
+		return answeredWrongSet.size();
+	}
+	
+	/**
+	 * Dodaje fiszke do zestawu dobrze ogadnietych
+	 * @param	fiszka do dodania do zestawu dobrze odgadnietych
+	 */
+	public void answeredCorrect(Flashcard f){
+		answeredCorrectSet.add(f);
+	}
+	
+	/**
+	 * Dodaje fiszke do zestawu dobrze ogadnietych
+	 * @param	fiszka do dodania do zestawu dobrze odgadnietych
+	 */
+	public void answeredWrong(Flashcard f){
+		answeredWrongSet.add(f);
+	}
+	
+	/**
+	 * raport stanu rundy
+	 * @author Platon
+	 *
+	 */
+	public class Report {
+		int correctNum;
+		int wrongNum;
+		int roundSize;
+		int roundNumber;
+		
+		public Report(){
+			correctNum	= getNumCorrect();
+			wrongNum 	= getNumWrong();
+			roundSize	= getRoundSize();
+			roundNumber	= NUMBER;
+		}
+		
+		/* gettery */
+		public int getCorrectNum() { return correctNum; }
+		public int getWrongNum() { return wrongNum; }
+		public int getRoundSize() { return roundSize; }
+		public int getRoundNumber() { return roundNumber; }
+	}
+	
+	/**
+	 * zwraca raport z aktualnego stanu rundy
+	 * @return raport z aktualnego stanu rundy
+	 */
+	public Report getReport(){
+		return new Report();
+	}
 }
