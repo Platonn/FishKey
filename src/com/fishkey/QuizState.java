@@ -7,153 +7,131 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 
+import com.fishkey.exceptions.EmptyQuizException;
+import com.fishkey.exceptions.EndOfQuizException;
+import com.fishkey.exceptions.EndOfQuizRoundException;
+import com.fishkey.exceptions.LoadFlashcardSetException;
 import com.fishkey.model.Flashcard;
 import com.fishkey.model.FlashcardSet;
 
+import android.R.integer;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
 /**  
- * obsluga stanu quizu
+ * odpowiada za obsluge stanu quizu
  */
-class QuizState {
-	FlashcardSet flashcardSet;
-	FlashcardSet correctSet;
-	FlashcardSet wrongSet;
-	int countCorrectLastRounds;
-	int flashcardSetSize;
-	int currentSetSize;
-	private int roundNumber;
+class QuizState implements IQuizInformator, IFlashcardPassOn {
 	
-	LinkedList<QuizRound> roundsList;
+	/**
+	 * lista z rundami QuizRound
+	 * <p>
+	 * reprezentuje historie przebiegu rund quizu
+	 * 
+	 * @see QuizRound
+	 */
+	private LinkedList<QuizRound> roundsList;
+	
+	/**
+	 * liczba wszystkich fiszek w quizie
+	 */
+	public final int QUIZ_SIZE;
+	
+	/**
+	 * liczba dobrze odgadnietych fiszek w poprzednich rundach
+	 */
+	private int countCorrectPastRounds;
 	
 	/**
 	 * tag to oznaczania logow
 	 */
-	private static final String TAG = QuizState.class.getName();
+	private static final String LOG_TAG = QuizState.class.getName();
 	
-	/**  
+	/**
 	 * przygotowuje quiz do rozpoczecia
 	 * <p>
 	 * Wczytuje zestaw fiszek i ustawia liczniki poprawnych oraz zzych odpowiedzi na 0 oraz numer rundy na 1.
 	 * Posiada wlasne statystyki, ktore udostepnia
 	 * 
 	 * @param	 context	obiekt <code>Context</code>
+	 * @throws LoadFlashcardSetException
+	 * @throws EmptyQuizException 
 	 */
-	public QuizState(Context context) {
-		roundsList				= new LinkedList<QuizRound>();
+	public QuizState(Context context) throws LoadFlashcardSetException, EmptyQuizException {
+		QuizRound.resetRoundsCounter();
+		roundsList = new LinkedList<QuizRound>();
 		
-		flashcardSet 			= new FlashcardSet();
-		correctSet 				= new FlashcardSet();
-		wrongSet 				= new FlashcardSet();
-		countCorrectLastRounds	= 0;
-		roundNumber				= 1;
+		FlashcardSet fs = FlashcardSetProvider.importDataFromAssetsFile(context, "slowka.txt");
+		if(fs.isEmpty()) throw new EmptyQuizException();
 		
-		FlashcardSetProvider.importDataFromAssetsFile(context, "slowka.txt", flashcardSet);
-		roundsList.add(new QuizRound(flashcardSet));
+		fs.shuffle();
+		roundsList.add(new QuizRound(fs));
 		
-		currentSetSize=flashcardSetSize=flashcardSet.size();
-		flashcardSet.shuffle();									// Tasuj zestaw fiszek do przepytania
+		QUIZ_SIZE = fs.size();
+		countCorrectPastRounds = 0;
 	}
 	
-	/** 
-	 * usuwa ostatnia fiszke z zestawu do odpytywania i wrzuca podana fiszke do listy dobrze odgadnietych fiszek 
-	 * 
-	 * @param	f	fiszka dobrze odgadnieta
+	/* Implementacja metod interfejsu IQuizInformator */
+	@Override
+	public int getNumPastCorrect() {
+		return countCorrectPastRounds;
+	}
+
+	@Override
+	public int getNumCorrect() {
+		return getCurrentRound().getNumCorrect();
+	}
+
+	@Override
+	public int getNumWrong() {
+		return getCurrentRound().getNumWrong();
+	}
+
+	@Override
+	public int getCurrentRoundNumber() {
+		return getCurrentRound().NUMBER;
+	}
+
+	@Override
+	public int getCurrentRoundSize() {
+		return getCurrentRound().SIZE;
+	}
+
+	@Override
+	public int getQuizSize() {
+		return roundsList.getFirst().SIZE;
+	}
+	
+	/* Implementacja metod interfejsu IFlashcardPassOn */
+	
+	public Flashcard popFlashcard() throws EndOfQuizRoundException {
+		return getCurrentRound().popFlashcard();
+	}
+	
+	public void putAnswered(Flashcard f, boolean isCorrectAnswered) {
+		getCurrentRound().putAnswered(f, isCorrectAnswered);
+	}
+	
+	/* Implementacja metod wlasnych */
+	
+	/**
+	 * zwraca obiekt QuizRound biezacej rundy
+	 * @return	QuizRound obiekt biezacej rundy
 	 */
-	public void answerCorrect(Flashcard f) {
-		correctSet.add(f);					// Dodanie podanej fiszki do listy dobrze odgadnietych
-		//++countCorrect;						// Zwiekszenie licznika dobrze odgadnietych fiszek
-	}
-	
-	/** 
-	 * usuwa ostatnia fiszke z zestawu do odpytywania i wrzuca podana fiszke do listy dobrze odgadnietych fiszek 
-	 * 
-	 * @param	f	fiszka zle odgadnieta
-	 */
-	public void answerWrong(Flashcard f) {
-		wrongSet.add(f);					// Dodanie podanej fiszki do listy zle odgadnietych
-		//++countWrong;						// Zwiekszenie licznika zle odgadnietych fiszek
-	}
-	
-	/** 
-	 * pobiera i usuwa fiszke z zestawu oraz zwraca ja w return 
-	 * 
-	 * @return	f	fiszka pobierana z kolejki
-	 */
-	public Flashcard getFlashcard(){
-		return flashcardSet.getNext();
-	}
-	
-	/** 
-	 * zwraca liczbe udzielonych dobrych odpowiedzi 
-	 * 
-	 * @return	liczba dobrych odpowiedzi
-	 * */
-	int getStateCorrect() {
-		//return countCorrect;
-		return correctSet.size();
-	}
-	
-	/** 
-	 * zwraca liczbe poprawionych odpowiedzi udzielonych w poprzednich rundach
-	 * 
-	 * @return	liczba odpowiedzi udzielonych w poprzednich rundach 
-	 */
-	int getStateCorrectLastRounds() {
-		return countCorrectLastRounds;
-	}
-	
-	/** 
-	 * zwraca liczbe udzielonych zlych odpowiedzi
-	 * 
-	 * @return	liczba zlych odpowiedzi w aktualnej rundzie
-	 */
-	int getStateWrong() {
-		//return countWrong;
-		return wrongSet.size();
+	private QuizRound getCurrentRound() {
+		return roundsList.getLast();
 	}
 	
 	/**
-	 * zwraca liczbe wszystkich fiszek w zestawie
-	 * 
-	 * @return 	ilosc wszystkich odpowiedzi w aktualnej rundzie
+	 * rozpoczyna nowa runde
+	 * <p>
+	 * tworzy nowa runde, ktora bedzie od teraz biezaca
+	 * @throws EndOfQuizException rzucany, gdy nastapi koniec quizu i rozpoczecie nowej rundy nie bedzie mozliwe
 	 */
-	int getStateAllCurrentSet() {
-		return currentSetSize;
-	}
-	
-	int getStateAll() {
-		return flashcardSetSize;
-	}
-	
-	/** 
-	 * zwraca biezacej numer rundy
-	 * 
-	 * @return	numer biezacej rundy
-	 */
-	int getRoundNumber() {
-		try {
-			QuizRound currentRound = roundsList.getLast();
-			return currentRound.ROUND_NUMBER;
-		} catch (java.util.NoSuchElementException ex) {
-			Log.e(TAG,"Nie mozna pobrac numeru rundy. Brak rund na liscie.");
-			return 0;
-		}
-	}
-	
-	/**
-	 * rozpoczyna nowa runde i podmienia zestaw slowek quizu z tymi zle odgadnietymi w poprzedniej rundzie
-	 */
-	void startNextRound() { 
-		++roundNumber;								// Zwieksz numer rundy
-		countCorrectLastRounds += correctSet.size();// Dodaj do licznika poprawnych odpowiedzi fiszki poprawione w ostatniej rundzie
-		currentSetSize			= wrongSet.size();	// Ustaw jako liczbe fiszek w nastepnej rundzie - liczbe zle odgadnietych fiszek
-		correctSet.clear();							// Wyrzuc wszystkie fiszki dobrze odgadniete w poprzedniej rundzie
-		flashcardSet.moveAllFrom(wrongSet);			// Przerzuc fiszki z zestawu zlych odpowiedzi do zestawu przepytywanych (w nastepnej rundzie)
-		roundsList.add(new QuizRound(flashcardSet));// Utworzenie nowej rundy
-	}
-	
+	public void startNextRound() throws EndOfQuizException {
+		roundsList.add(new QuizRound(getCurrentRound()));
+		Log.v(LOG_TAG,"Rozpoczeto nowa runde nr " + getCurrentRound().NUMBER);
+	}	
 }
