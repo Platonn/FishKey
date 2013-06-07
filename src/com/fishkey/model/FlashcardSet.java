@@ -4,17 +4,28 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 
-
+/**
+ * kolekcja fiszek
+ * @author Platon
+ *
+ */
 public class FlashcardSet {
 	/**
 	 * lista z fiszkami
 	 */
-	LinkedList<Flashcard> list;
+	private LinkedList<Flashcard> list;
 	
 	/**
 	 * rozmiar listy fiszek
 	 */
-	int size;
+	private int size;
+	
+	/**
+	 * generator losowy
+	 * <p>
+	 * sluzy do tasowania zestawu fiszek za kazdym razem inaczej
+	 */
+	private static Random random = new Random();
 	
 	/**
 	 * inicjalizuje liste fiszek
@@ -29,7 +40,7 @@ public class FlashcardSet {
 	 * 
 	 * @return	Flashcard	ostatnia fiszka na liscie,
 	 */
-	public Flashcard getNext() {
+	public Flashcard pop() {
 		if(!isEmpty()) --size;
 		return list.poll();
 	}
@@ -41,7 +52,7 @@ public class FlashcardSet {
 	 */
 	public void add(Flashcard f) {
 		++size;
-		list.add(f);
+		list.offer(f);
 	}
 	
 	/**
@@ -77,7 +88,6 @@ public class FlashcardSet {
 	 */
 	public void shuffle() {
 		int n = list.size();
-	    Random random = new Random();
 	    random.nextInt();
 	    for (int i = 0; i < n; i++) {
 	    	int change = i + random.nextInt(n - i);
@@ -89,18 +99,7 @@ public class FlashcardSet {
 	 * kopiuje do zestawu wszystkie fiszki z zestawu podanego jako argument 
 	 * @param fs	zestaw fiszek do skopiowania
 	 */
-	public void copyAllFrom(FlashcardSet fs) {
+	public void addAllFrom(FlashcardSet fs) {
 		list.addAll(fs.list);
 	}
-	
-	/**
-	 * przenosi do zestawu wszystkie fiszki z zestawu podanego jako argument
-	 * <p>
-	 * @param fs	zestaw fiszek do przeniesienia
-	 */
-	public void moveAllFrom(FlashcardSet fs) {
-		list.addAll(fs.list);
-		fs.clear();
-	}
-	
 }
