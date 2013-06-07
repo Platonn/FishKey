@@ -1,6 +1,7 @@
 package com.fishkey;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -8,6 +9,7 @@ import java.io.InputStreamReader;
 import android.content.Context;
 import android.util.Log;
 
+import com.fishkey.exceptions.LoadFlashcardSetException;
 import com.fishkey.model.Flashcard;
 import com.fishkey.model.FlashcardSet;
 
@@ -18,16 +20,23 @@ import com.fishkey.model.FlashcardSet;
  */
 public class FlashcardSetProvider {
 	
+	/**
+	 * tag to oznaczania logow
+	 */
+	private static final String TAG = FlashcardSetProvider.class.getName();
+	
 	/** 
-	 * wczytuje z pliku assets zestaw fiszek 
+	 * zwraca wczytany z pliku zestaw fiszek 
 	 * <p>
 	 * TODO: Robic to w tle - watku/usludze. A moze nawet wczytywac z inernetu badz lokalnej bazy danych.  
 	 * 
 	 * @param	context		obiekt klasy context - do obslugi plikow
 	 * @param	fileString	nazwa pliku do importu fiszek
-	 * @param	flashcarSet	zestaw fiszek docelowy do wypelnienia
+	 * @return	wczytany z pliku zestaw fiszek
+	 * @throws LoadFlashcardSetException 
 	 */
-	public static void importDataFromAssetsFile(Context context, String fileName, FlashcardSet flashcardSet) {
+	public static FlashcardSet importDataFromAssetsFile(Context context, String fileName) throws LoadFlashcardSetException {
+		FlashcardSet flashcardSet = new FlashcardSet();
 		try{
 			InputStream in = context.getAssets().open(fileName);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));	// Plik musi posiadac poprawne kodowanie UTF-8!
@@ -38,11 +47,16 @@ public class FlashcardSetProvider {
 				if(line==null)															// Trzeba bylo tak zrobic, zeby mozna bylo uzyc potem funkcji split na nie-null'owym stringu
 					break;
 				text = line.split(" - ");												// Dwie spacje obok umozliwiaja podanie slowka zawierajacego "gêst¹ spacjê", np. semi-detached								// Rozdzielenie pytania od odpowiedzi przez separator (myslnik)
-				flashcardSet.add(new Flashcard(text[1].trim(),text[0].trim()));		// Wczytuje wg schematu: "PYTANIE - ODPOWIEDZ" (musza byc spacje wokol myslnika)
+				flashcardSet.add(new Flashcard(text[1].trim(),text[0].trim()));			// Wczytuje wg schematu: "PYTANIE - ODPOWIEDZ" (musza byc spacje wokol myslnika)
 			} while(true);
 			in.close();
+			return flashcardSet;
+		} catch (FileNotFoundException e) {
+			Log.e(TAG, "Nie odnaleziono pliku: '"+fileName+"'");
+			throw new LoadFlashcardSetException();
 		} catch (IOException e) {
-			Log.i("Quiz", "QuizState - cannot open a file");
+			Log.e(TAG, "Blad odczytu pliku: '"+fileName+"'");
+			throw new LoadFlashcardSetException();
 		}
 	}
 }
