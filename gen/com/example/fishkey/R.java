@@ -35,7 +35,7 @@ public final class R {
         public static final int state=0x7f070000;
     }
     public static final class layout {
-        public static final int quiz=0x7f030000;
+        public static final int quiz_activity=0x7f030000;
     }
     public static final class string {
         public static final int alpha_answer=0x7f050014;
