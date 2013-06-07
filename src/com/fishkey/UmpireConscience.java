@@ -1,6 +1,9 @@
 package com.fishkey;
 
-import com.fishkey.model.Flashcard;
+import android.content.Context;
+
+import com.fishkey.exceptions.EmptyQuizException;
+import com.fishkey.exceptions.LoadFlashcardSetException;
 
 /**
  * Sedzia sumienie ocenia "naiwnie" poprawnosc odpowiedi,
@@ -8,9 +11,9 @@ import com.fishkey.model.Flashcard;
  * @author Platon
  *
  */
-public class RefereeConscience extends Referee {
-	public RefereeConscience(Flashcard f) {
-		super(f);
+public class UmpireConscience extends Umpire {
+	public UmpireConscience(Context context) throws LoadFlashcardSetException, EmptyQuizException {
+		super(context);
 	}
 	
 	/**
