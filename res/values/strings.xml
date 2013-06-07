@@ -9,7 +9,7 @@
     <string name="know">Wiedziałem</string>
     <string name="dont_know">Nie wiedziałem</string>
     
-    <string name="round_finished">Zakończyłeś rundę nr </string>
+    <string name="round_finished">Zakończyłeś rundę nr</string>
     <string name="here_is_your_score">Oto ilość Twoich odpowiedzi:\n</string>
     
     <string name="correct">poprawnych</string>
@@ -17,8 +17,15 @@
     <string name="next">Dalej</string>
     <string name="finish">Zakończ</string>
     
-    <string name="congratulations">Gratulacje!</string>
+    <!-- Tresc okien AlertDialog -->
+    <string name="quiz_finished_title">Gratulacje!</string>
     <string name="quiz_finished">Umiesz już wszystkie fiszki z tego zestawu!</string>
+    
+    <string name="quiz_empty_title">Pusty quiz</string>
+    <string name="quiz_empty">Brak fiszek do przeprowadzenia quizu</string>
+    
+    <string name="quiz_error_title">Błąd quizu</string>
+    <string name="quiz_error">Nastąpiło nieoczekiwane zachowanie quizu. Musi on zostać zamknięty.</string>
     
     <!-- Próbne wartości w wersji alpha -->
     <string name="alpha_state">12/80</string>

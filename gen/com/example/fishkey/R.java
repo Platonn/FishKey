@@ -38,15 +38,14 @@ public final class R {
         public static final int quiz=0x7f030000;
     }
     public static final class string {
-        public static final int alpha_answer=0x7f050010;
-        public static final int alpha_count_bad=0x7f050012;
-        public static final int alpha_count_good=0x7f050011;
-        public static final int alpha_question=0x7f05000f;
+        public static final int alpha_answer=0x7f050014;
+        public static final int alpha_count_bad=0x7f050016;
+        public static final int alpha_count_good=0x7f050015;
+        public static final int alpha_question=0x7f050013;
         /**  Próbne wartości w wersji alpha 
          */
-        public static final int alpha_state=0x7f05000e;
+        public static final int alpha_state=0x7f050012;
         public static final int app_name=0x7f050000;
-        public static final int congratulations=0x7f05000c;
         public static final int correct=0x7f050008;
         public static final int dont_know=0x7f050005;
         public static final int finish=0x7f05000b;
@@ -55,7 +54,14 @@ public final class R {
         public static final int know=0x7f050004;
         public static final int menu_settings=0x7f050002;
         public static final int next=0x7f05000a;
+        public static final int quiz_empty=0x7f05000f;
+        public static final int quiz_empty_title=0x7f05000e;
+        public static final int quiz_error=0x7f050011;
+        public static final int quiz_error_title=0x7f050010;
         public static final int quiz_finished=0x7f05000d;
+        /**  Tresc okien AlertDialog 
+         */
+        public static final int quiz_finished_title=0x7f05000c;
         public static final int round_finished=0x7f050006;
         public static final int show_answer=0x7f050003;
         public static final int wrong=0x7f050009;
