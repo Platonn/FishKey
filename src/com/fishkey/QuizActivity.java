@@ -2,14 +2,14 @@ package com.fishkey;
 
 
 import com.example.fishkey.R;
+import com.fishkey.alertdialogs.CrashAlertDialogBuilder;
+import com.fishkey.alertdialogs.QuizRoundResultAlertDialogBuilder;
 import com.fishkey.exceptions.EmptyQuizException;
 import com.fishkey.exceptions.EndOfQuizException;
 import com.fishkey.exceptions.EndOfQuizRoundException;
 import com.fishkey.exceptions.LoadFlashcardSetException;
 import com.fishkey.model.Flashcard;
 
-import dialogs.CrashAlertDialogBuilder;
-import dialogs.QuizRoundResultAlertDialogBuilder;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -122,8 +122,9 @@ public class QuizActivity extends Activity {
 	/**
 	 * wyswietla wynik koncowy rundy
 	 */
-	public void showRoundResultAlert() {
-		new QuizRoundResultAlertDialogBuilder(QuizActivity.this).show();
+	public void showRoundResultAlert(QuizRound.Report report) {
+		new QuizRoundResultAlertDialogBuilder(QuizActivity.this, report).show();
+		Log.v(LOG_TAG,"Wyswietlono alert konca rundy quizu");
 	}
 	
 	/**
@@ -133,8 +134,8 @@ public class QuizActivity extends Activity {
 		String title 	= (String) this.getResources().getText(R.string.quiz_finished_title);
 		String message 	= (String) this.getResources().getText(R.string.quiz_finished);
 		new CrashAlertDialogBuilder(QuizActivity.this, title, message).show();
+		Log.v(LOG_TAG,"Wyswietlono alert konca quizu");
 	}
-	
 	
 	/**
 	 * zwraca sedziego
@@ -146,21 +147,15 @@ public class QuizActivity extends Activity {
 	
 	/**
 	 * wyswietla na ekranie pytanie oraz: blokuje przyciski know i dontKnow, odblokowuje przycisk showAnswer
-	 * @throws EndOfQuizException 
-	 * @throws EndOfQuizRoundException 
 	 */
 	public void askUser() {
-		try {
-			question.setText(umpire.getQuestion());				// Wyswietlenie pytania badz rzucenie wyjatku o koncu rundy albo quizu
-			answer.setText(Umpire.ANSWER_REPLACEMENT);			// Wyswietlenie zamiennika odpowiedzi
-			buttonShowAnswer.setEnabled(true);
-			buttonKnow.setEnabled(false);
-			buttonDontKnow.setEnabled(false);
-		} catch (EndOfQuizException e) {
-			showFinishedAlert();
-		} catch (EndOfQuizRoundException e) {
-			showRoundResultAlert();
-		}
+		String questionText = umpire.getQuestion(); 
+		question.setText(questionText);						// Wyswietlenie pytania
+		answer.setText(Umpire.ANSWER_REPLACEMENT);			// Wyswietlenie zamiennika odpowiedzi
+		buttonShowAnswer.setEnabled(true);
+		buttonKnow.setEnabled(false);
+		buttonDontKnow.setEnabled(false);
+		Log.v(LOG_TAG,"Wyswietlono pytanie: " + questionText);
 	}
 	
 	/**
@@ -169,21 +164,29 @@ public class QuizActivity extends Activity {
 	 * @param	 informacja udzielona przez uzytkownika, czy wiedzial, jaka jest poprawna odpowiedz
 	*/
 	public void userAnswer(boolean answer) {
-		((UmpireConscience) umpire).adjudicate(answer);
-		updateState();
-		askUser();
+		try {
+			((UmpireConscience) umpire).adjudicate(answer);
+			updateState();
+			askUser();
+		} catch (EndOfQuizException e) {
+			showFinishedAlert();
+		} catch (EndOfQuizRoundException e) {
+			updateState();
+			showRoundResultAlert(e.getReport());
+		}
 	}
 	
 	/**
-	 * Funkcja wywolywana po kliknieciu przycisku "Pokaz odpowiedz" (definicja w XMLu)
-	 * 
-	 * @param	View	przycisk, kotry zostal klikniety
+	 * wyswietla na ekranie poprawna odpowiedz biezacej fiszki oraz:
+	 * odblokowuje przyciski know i dontKnow, blokuje przycisk showAnswer
 	 */
 	public void showCorrectAnswer() {
-		answer.setText(currentFlashcard.getAnswer());			// Wyswietlenie poprawnej odpowiedzi
+		String answerText = umpire.getAnswer();
+		answer.setText(answerText);			// Wyswietlenie poprawnej odpowiedzi
 		buttonShowAnswer.setEnabled(false);
 		buttonKnow.setEnabled(true);
 		buttonDontKnow.setEnabled(true);
+		Log.v(LOG_TAG,"Wyswietlono odpowiedz: " + answerText);
 	}
 	
 }
