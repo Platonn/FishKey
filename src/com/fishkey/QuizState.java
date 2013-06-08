@@ -128,10 +128,10 @@ class QuizState implements IQuizInformator, IFlashcardPassOn {
 	 * rozpoczyna nowa runde
 	 * <p>
 	 * tworzy nowa runde, ktora bedzie od teraz biezaca
-	 * @throws EndOfQuizException rzucany, gdy nastapi koniec quizu i rozpoczecie nowej rundy nie bedzie mozliwe
+	 * @throws EndOfQuizException gdy nastapi koniec quizu
 	 */
 	public void startNextRound() throws EndOfQuizException {
+		countCorrectPastRounds += getCurrentRound().getNumCorrect();
 		roundsList.add(new QuizRound(getCurrentRound()));
-		Log.v(LOG_TAG,"Rozpoczeto nowa runde nr " + getCurrentRound().NUMBER);
 	}	
 }
