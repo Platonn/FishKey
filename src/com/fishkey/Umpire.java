@@ -30,7 +30,7 @@ public class Umpire implements IQuizInformator {
 	 * manager quizu
 	 * @see QuizState
 	 */
-	private QuizState quizState;
+	protected QuizState quizState;
 	
 	/**
 	 * aktualnie przepytywana fiszka
@@ -46,42 +46,60 @@ public class Umpire implements IQuizInformator {
 	public static final String ANSWER_REPLACEMENT = "?";
 	
 	/**
-	 * konstruktor sedziego
+	 * konstruktor sedziego pobiera pierwsza fiszke do przepytania
 	 * @param context
-	 * @throws LoadFlashcardSetException
-	 * @throws EmptyQuizException
-	 */
-	public Umpire(Context context) throws LoadFlashcardSetException, EmptyQuizException {
-		quizState = new QuizState(context);
-	}
-	
-	/**
-	 * zwraca, czy podana odpowiedz jest zgodna z prawidlowa
-	 * @param answer	odpowiedz do sprawdzenia
-	 * @return 			czy podano poprawna odpowiedz
-	 */
-	public boolean adjudicate(String answer){
-		boolean verdict = answer.equals(currentFlashcard.getAnswer());
-		quizState.putAnswered(currentFlashcard,verdict);
-		return verdict;	
-	}
-	
-	/**
-	 * zwraca tresc pytania (string) biezacej fiszki
-	 * @return	jesli istnieje fiszka do odpytania, to zwroc tresc pytania tej fiszki,
-	 * 			w przeciwnym przypadku zwroc tekst zastepczy z informacja o braku fiszki
+	 * @throws LoadFlashcardSetException gdy nieudalo sie wczytac zestawu fiszek
+	 * @throws EmptyQuizException gdy wczytany zestaw fiszek jest pusty
 	 * @throws EndOfQuizRoundException 
 	 * @throws EndOfQuizException 
 	 */
-	public String getQuestion() throws EndOfQuizRoundException, EndOfQuizException{
-		String question = currentFlashcard.getQuestion();
+	public Umpire(Context context) throws LoadFlashcardSetException, EmptyQuizException, EndOfQuizException, EndOfQuizRoundException {
+		quizState = new QuizState(context);
+		getNextFlashcard();							// TODO: tu nie powinien byc rzucany wyjatek konca rundy ani quizu!
+	}
+	
+	/**
+	 * sprawdza, czy podana odpowiedz jest zgodna z prawidlowa i zgodnie ze swoim werdyktem kaze
+	 * wlozyc fiszke do odpowiedniego zestawu 
+	 * @param answer	odpowiedz do sprawdzenia
+	 * @throws EndOfQuizRoundException gdy koniec rundy
+	 * @throws EndOfQuizException gdy koniec quizu
+	 */
+	public void adjudicate(String answer) throws EndOfQuizException, EndOfQuizRoundException{
+		boolean verdict = answer.equals(currentFlashcard.getAnswer());
+		quizState.putAnswered(currentFlashcard,verdict);
+		getNextFlashcard();
+	}
+	
+	/**
+	 * zwraca tresc pytania biezacej fiszki
+	 * @return	tresc pytania biezacej fiszki
+	 */
+	public String getQuestion() {
+		return currentFlashcard.getQuestion();
+	}
+	
+	/**
+	 * zwraca poprawna odpowiedz biezacej fiszki
+	 * @return	poprawna odpowiedz biezacej fiszki
+	 */
+	public String getAnswer() {
+		return currentFlashcard.getAnswer();
+	}
+	
+	/**
+	 * aktualizuje biezaca fiszke
+	 * @throws EndOfQuizException gdy nie mozna pobrac fiszki, bo koniec quizu
+	 * @throws EndOfQuizRoundException gdy nie mozna pobrac fiszki, bo koniec rundy 
+	 */
+	protected void getNextFlashcard() throws EndOfQuizException, EndOfQuizRoundException {
 		try {
-			quizState.popFlashcard();
+			currentFlashcard = quizState.popFlashcard();
 		} catch (EndOfQuizRoundException eofQuizRound) {
-			quizState.startNextRound();			// Jesli nie ma nastepnej rundy, zostanie rzucony wyjatek EOFQuiz
-			throw eofQuizRound;					// W przeciwnym przypadku zostanie rzucony dalej wyjatek EOFQuizRound
+			quizState.startNextRound();						// Rozpocznij nowa runde. Jesli nie ma nastepnej rundy, zostanie rzucony wyjatek EOFQuiz
+			currentFlashcard = quizState.popFlashcard();	// W przeciwnym przypadku rozpocznie sie nowa runda. Wiec Pobierz nowa fiszke // TODO: tu NIE powinien byc rzucany wyjatek eofQuizRound! 
+			throw eofQuizRound;								// i rzuc dalej wyjatek EOFQuizRound
 		}
-		return question;
 	}
 	
 	/* Implementacja metod interfejsu */
@@ -115,5 +133,4 @@ public class Umpire implements IQuizInformator {
 	public int getQuizSize() {
 		return quizState.getQuizSize();
 	}
-	
 }
