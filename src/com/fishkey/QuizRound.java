@@ -62,6 +62,7 @@ public class QuizRound implements IFlashcardPassOn {
 		answeredWrongSet		= new FlashcardSet();
 		SIZE					= toAskSet.size();
 		NUMBER 					= ++roundsCounter;
+		Log.v(LOG_TAG,"Rozpoczeto runde nr " + NUMBER);
 	}
 	
 	/**
@@ -74,13 +75,17 @@ public class QuizRound implements IFlashcardPassOn {
 	 */
 	public QuizRound(QuizRound prevRound) throws EndOfQuizException {
 		FlashcardSet fs = prevRound.answeredWrongSet;
-		if(fs.isEmpty())
+		if(fs.isEmpty()) {
+			Log.v(LOG_TAG,"Koniec quizu");
 			throw new EndOfQuizException();
+		}
+		toAskSet				= new FlashcardSet();
 		toAskSet.addAllFrom(fs);
 		answeredCorrectSet		= new FlashcardSet();
 		answeredWrongSet		= new FlashcardSet();
 		SIZE					= toAskSet.size();
 		NUMBER 					= ++roundsCounter;
+		Log.v(LOG_TAG,"Rozpoczeto nastepna runde nr " + NUMBER);
 	}
 	
 	/* Implementacja metod interfejsu IFlashcardPassOn */
@@ -99,6 +104,7 @@ public class QuizRound implements IFlashcardPassOn {
 			answeredCorrectSet.add(f);
 		else
 			answeredWrongSet.add(f);
+		Log.v(LOG_TAG,"Dodano do zestawu " + (isCorrectAnswered ? "poprawnych" : "blednych") + ": " + f.getQuestion());
 	}
 	
 	/* Implementacja metod wlasnych */
@@ -167,15 +173,16 @@ public class QuizRound implements IFlashcardPassOn {
 		int roundNumber;
 		
 		public Report(){
-			correctNum	= getNumCorrect();
-			wrongNum 	= getNumWrong();
-			roundSize	= getRoundSize();
-			roundNumber	= NUMBER;
+			correctNum	= QuizRound.this.getNumCorrect();
+			wrongNum 	= QuizRound.this.getNumWrong();
+			roundSize	= QuizRound.this.SIZE;
+			roundNumber	= QuizRound.this.NUMBER;
+			Log.v(LOG_TAG,"Utworzono raport CWSN: " + correctNum + " " + wrongNum + " " + roundSize + " " + roundNumber);
 		}
 		
 		/* gettery */
-		public int getCorrectNum() { return correctNum; }
-		public int getWrongNum() { return wrongNum; }
+		public int getNumCorrect() { return correctNum; }
+		public int getNumWrong() { return wrongNum; }
 		public int getRoundSize() { return roundSize; }
 		public int getRoundNumber() { return roundNumber; }
 	}
