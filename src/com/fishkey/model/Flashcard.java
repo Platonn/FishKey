@@ -1,9 +1,9 @@
-package com.fishkey;
+package com.fishkey.model;
 
 /**  
  * klasa reprezentujaca pojedyncza fiszke
  */
-class Flashcard {
+public class Flashcard {
 	/**
 	 * pytanie fiszki
 	 */
@@ -30,7 +30,7 @@ class Flashcard {
 	 * 
 	 * @return	String	pytanie fiszki 
 	 */
-	String getQuestion() {
+	public String getQuestion() {
 		return question;
 	}
 	
@@ -39,7 +39,7 @@ class Flashcard {
 	 * 
 	 * @return	String	prawidlowa odpowiedz fiszki 
 	 */
-	String getAnswer() {
+	public String getAnswer() {
 		return answer;
 	}
 	

@@ -19,7 +19,7 @@
         android:label="@string/app_name"
         android:theme="@style/FishKeyTheme" >
         
-        <activity android:name="com.fishkey.Quiz" android:label="@string/app_name"> <!-- TODO: Potem zmienić na aktywnosc glowna -->
+        <activity android:name="com.fishkey.QuizActivity" android:label="@string/app_name"> <!-- TODO: Potem zmienić na aktywnosc glowna -->
 	      <intent-filter>
 	        <action android:name="android.intent.action.MAIN" />
 	        <category android:name="android.intent.category.LAUNCHER" />

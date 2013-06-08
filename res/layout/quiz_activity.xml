@@ -22,25 +22,6 @@
         android:layout_centerHorizontal="true"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <!-- TODO: skasować liczniki, bo nie sa juz potrzebne - jest 4-kolorowy progres bar
-    <TextView
-        android:id="@+id/count_good"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/answer"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    
-    <TextView
-        android:id="@+id/count_bad"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/answer"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-         -->
-
     <TextView
         android:id="@+id/answer"
         android:layout_width="wrap_content"
@@ -51,7 +32,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
     
     <!-- Pprogress bar zielono-jasnozielono-czerwono-bialy -->
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
 	    android:id="@+id/progress_bar"
 	    android:layout_width="fill_parent"
 	    android:layout_height="10dp"
@@ -93,7 +74,7 @@
         android:layout_below="@+id/progress_bar"
         android:layout_centerHorizontal="true"
         android:text="@string/show_answer"
-        android:onClick="showAnswer" />
+        />
     
     <Button
         android:id="@+id/button_dont_know"
@@ -103,7 +84,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/button_show_answer"
         android:text="@string/dont_know"
-        android:onClick="dontKnow" />
+        />
 
     <Button
         android:id="@+id/button_know"
@@ -113,6 +94,6 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/button_show_answer"
         android:text="@string/know"
-        android:onClick="know" />
+        />
 
 </RelativeLayout>
