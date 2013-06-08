@@ -1,4 +1,4 @@
-package dialogs;
+package com.fishkey.alertdialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -9,8 +9,9 @@ import com.example.fishkey.R;
 import com.fishkey.QuizActivity;
 
 /**
- * tworzy AlertDialog z informacja o krytycznym bledzie i zamykajacy podana aktywnosc:
- * po nacisnieciu odpowiedniego przycisku badz po nacisnieciu sprzetowego Cofnij.
+ * tworzy AlertDialog, ktory po wcisnieciu "pozytywnego przycisku" badz 
+ * przy wcisnieciu sprzetowego Cofnij, wykona akcje:
+ * zakmnie podana aktywnosc
  * @author Platon
  *
  */
@@ -27,21 +28,18 @@ public class CrashAlertDialogBuilder extends AlertDialog.Builder {
 		this.setTitle(title);
 		this.setMessage(message);
 		String alertButtonText = (String) activity.getResources().getText(R.string.finish);
-		
-		this.setPositiveButton(alertButtonText, new DialogInterface.OnClickListener() {
-			 public void onClick(DialogInterface dialog,int which) {
-				 activityToClose.finish();
-			 }
-		});
 	}
 	
+	/**
+	 * zwraca gotowy do wyswietlenia alert dialog
+	 */
 	@Override
 	public AlertDialog create(){
 		AlertDialog alertDialog = super.create();
 		alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
 			@Override
 			public void onDismiss(DialogInterface dialog) {
-				 activityToClose.finish();
+				activityToClose.finish();
 			}
 		});
 		return alertDialog;
