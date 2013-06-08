@@ -101,5 +101,6 @@ public class FlashcardSet {
 	 */
 	public void addAllFrom(FlashcardSet fs) {
 		list.addAll(fs.list);
+		size += fs.size();
 	}
 }
