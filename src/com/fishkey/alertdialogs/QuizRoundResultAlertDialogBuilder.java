@@ -58,7 +58,7 @@ public class QuizRoundResultAlertDialogBuilder extends AlertDialog.Builder {
 	    		 				+ activity.getResources().getText(R.string.wrong)
 	    );
 		alertButtonText = (String) activity.getResources().getText(R.string.next);
-		
+		this.setPositiveButton(alertButtonText, null);
 	}
 	
 	/**

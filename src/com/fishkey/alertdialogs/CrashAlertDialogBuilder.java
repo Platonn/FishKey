@@ -28,6 +28,7 @@ public class CrashAlertDialogBuilder extends AlertDialog.Builder {
 		this.setTitle(title);
 		this.setMessage(message);
 		String alertButtonText = (String) activity.getResources().getText(R.string.finish);
+		this.setPositiveButton(alertButtonText, null);
 	}
 	
 	/**
