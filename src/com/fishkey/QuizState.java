@@ -13,6 +13,7 @@ import com.fishkey.exceptions.EndOfQuizRoundException;
 import com.fishkey.exceptions.LoadFlashcardSetException;
 import com.fishkey.model.Flashcard;
 import com.fishkey.model.FlashcardSet;
+import com.fishkey.utils.FlashcardSetProvider;
 
 import android.R.integer;
 import android.content.Context;
@@ -63,7 +64,7 @@ class QuizState implements IQuizInformator, IFlashcardPassOn {
 		QuizRound.resetRoundsCounter();
 		roundsList = new LinkedList<QuizRound>();
 		
-		FlashcardSet fs = FlashcardSetProvider.importDataFromAssetsFile(context, "slowka.txt");
+		FlashcardSet fs = FlashcardSetProvider.getFlashcardSet(context);
 		if(fs.isEmpty()) throw new EmptyQuizException();
 		
 		fs.shuffle();
