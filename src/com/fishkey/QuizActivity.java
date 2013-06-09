@@ -54,42 +54,47 @@ public class QuizActivity extends Activity {
 		// Stworzenie sedziego
 		try {
 			umpire = new UmpireConscience(this);
-		} catch (Exception e) {
+			
+			
+			// Pobranie referencji do zasobow widoku
+			buttonKnow 	  					= (Button) findViewById(R.id.button_know);
+			buttonDontKnow					= (Button) findViewById(R.id.button_dont_know);
+			buttonShowAnswer				= (Button) findViewById(R.id.button_show_answer);
+			state	 	  					= (TextView) findViewById(R.id.state);
+			question 	  					= (TextView) findViewById(R.id.question);
+			answer	 	  					= (TextView) findViewById(R.id.answer);
+			progressBarCorrectPastRounds	= (View) findViewById(R.id.progress_bar_green);
+			progressBarCorrect		 		= (View) findViewById(R.id.progress_bar_green_light);
+			progressBarWrong		 		= (View) findViewById(R.id.progress_bar_red);
+			progressBarEmpty		 		= (View) findViewById(R.id.progress_bar_white);
+			
+			// Ustawienie listnerow dla przyciskow
+			buttonKnow.setOnClickListener(new View.OnClickListener() {
+		        public void onClick(View v) {
+		        	userAnswer(true);
+		        }
+			});
+			buttonDontKnow.setOnClickListener(new View.OnClickListener() {
+		        public void onClick(View v) {
+		        	userAnswer(false);
+		        }
+			});
+			buttonShowAnswer.setOnClickListener(new View.OnClickListener() {
+		        public void onClick(View v) {
+		        	showCorrectAnswer();
+		        }
+			});
+			
+			askUser();
+		} catch (EmptyQuizException e) {
 			String title 	= (String) this.getResources().getText(R.string.quiz_empty_title);
 			String message 	= (String) this.getResources().getText(R.string.quiz_empty);
 			new CrashAlertDialogBuilder(QuizActivity.this, title, message).show();
+		} catch (Exception e) {
+			String title 	= (String) this.getResources().getText(R.string.quiz_error_title);
+			String message 	= (String) this.getResources().getText(R.string.quiz_error);
+			new CrashAlertDialogBuilder(QuizActivity.this, title, message).show();
 		}
-		
-		// Pobranie referencji do zasobow widoku
-		buttonKnow 	  					= (Button) findViewById(R.id.button_know);
-		buttonDontKnow					= (Button) findViewById(R.id.button_dont_know);
-		buttonShowAnswer				= (Button) findViewById(R.id.button_show_answer);
-		state	 	  					= (TextView) findViewById(R.id.state);
-		question 	  					= (TextView) findViewById(R.id.question);
-		answer	 	  					= (TextView) findViewById(R.id.answer);
-		progressBarCorrectPastRounds	= (View) findViewById(R.id.progress_bar_green);
-		progressBarCorrect		 		= (View) findViewById(R.id.progress_bar_green_light);
-		progressBarWrong		 		= (View) findViewById(R.id.progress_bar_red);
-		progressBarEmpty		 		= (View) findViewById(R.id.progress_bar_white);
-		
-		// Ustawienie listnerow dla przyciskow
-		buttonKnow.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-            	userAnswer(true);
-            }
-		});
-		buttonDontKnow.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-            	userAnswer(false);
-            }
-		});
-		buttonShowAnswer.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-            	showCorrectAnswer();
-            }
-		});
-		
-		askUser();
 	}
 
 	/**
@@ -149,6 +154,7 @@ public class QuizActivity extends Activity {
 	 * wyswietla na ekranie pytanie oraz: blokuje przyciski know i dontKnow, odblokowuje przycisk showAnswer
 	 */
 	public void askUser() {
+		updateState();
 		String questionText = umpire.getQuestion(); 
 		question.setText(questionText);						// Wyswietlenie pytania
 		answer.setText(Umpire.ANSWER_REPLACEMENT);			// Wyswietlenie zamiennika odpowiedzi
@@ -166,7 +172,6 @@ public class QuizActivity extends Activity {
 	public void userAnswer(boolean answer) {
 		try {
 			((UmpireConscience) umpire).adjudicate(answer);
-			updateState();
 			askUser();
 		} catch (EndOfQuizException e) {
 			showFinishedAlert();
@@ -188,6 +193,5 @@ public class QuizActivity extends Activity {
 		buttonDontKnow.setEnabled(true);
 		Log.v(LOG_TAG,"Wyswietlono odpowiedz: " + answerText);
 	}
-	
 }
 

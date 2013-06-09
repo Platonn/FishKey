@@ -70,7 +70,6 @@ public class QuizRoundResultAlertDialogBuilder extends AlertDialog.Builder {
 		alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
 			@Override
 			public void onDismiss(DialogInterface dialog) {
-				quizActivity.updateState();
 				quizActivity.askUser();
 			}
 		});
