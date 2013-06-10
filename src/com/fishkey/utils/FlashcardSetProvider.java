@@ -85,8 +85,8 @@ public class FlashcardSetProvider extends FileReader {
 			JSONArray flashcardsArray = jsonObject.getJSONArray(TAG_FLASHCARDS);
 			for(int i=0; i < flashcardsArray.length(); i++){
 			    JSONObject c = flashcardsArray.getJSONObject(i);
-			    flashcardSet.add(new Flashcard( c.getString(TAG_POL),
-			    								c.getString(TAG_ANG) ));
+			    flashcardSet.add(new Flashcard( c.getString(TAG_POL).trim(),
+			    								c.getString(TAG_ANG).trim() ));
 			}
 		} catch (JSONException e) {
 			Log.e(LOG_TAG, "Blad czytania JSON. Przyczyna: " + e.getMessage()); 
