@@ -54,7 +54,7 @@ public class FlashcardSetProvider extends FileReader {
 		    String line = null;
 		    String text[];																// Tablica, do ktorej beda wczytywane tresci oddzielone potem myslnikiem
 			while ((line = reader.readLine()) != null) {
-				text = line.split(" - ");												// Dwie spacje obok umozliwiaja podanie slowka zawierajacego "gêst¹ spacjê", np. semi-detached								// Rozdzielenie pytania od odpowiedzi przez separator (myslnik)
+				text = line.split(" - ");												// Dwie spacje obok umozliwiaja podanie slowka zawierajacego "gÄ™stÄ… spacjÄ™", np. semi-detached								// Rozdzielenie pytania od odpowiedzi przez separator (myslnik)
 				flashcardSet.add(new Flashcard(text[1].trim(),text[0].trim()));			// Wczytuje wg schematu: "PYTANIE - ODPOWIEDZ" (musza byc spacje wokol myslnika)
 			}
 		} catch (IOException e) {
