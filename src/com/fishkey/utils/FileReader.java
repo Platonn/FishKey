@@ -1,14 +1,19 @@
 package com.fishkey.utils;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.Scanner;
 
 import android.content.Context;
+import android.provider.SyncStateContract.Constants;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * sluzy do wczytywania danych z pliku
@@ -68,4 +73,59 @@ public class FileReader {
 		}
 		return total.toString();
 	}
+	
+	private static final String LINE_SEP = System.getProperty("line.separator");
+
+	public static void write(Context context, String fileName, String text) throws IOException {
+	    FileOutputStream fos = null;
+	    try {
+	
+	    	// note that there are many modes you can use
+	        fos = context.openFileOutput(fileName, Context.MODE_WORLD_WRITEABLE); // TODO: uwaga - plik o publicznym dostepie, kiedys to zmienic na prywatny, gdy bede korzystal z lacza http do synchronizacji
+	        fos.write(text.getBytes());
+	        Toast.makeText(context, "Zapisano do pliku.", Toast.LENGTH_SHORT).show(); 
+	    } catch (FileNotFoundException e) {
+	        Log.e(Constants.DATA, "File not found", e);
+	        throw new IOException();
+	    } catch (IOException e) {
+	        Log.e(Constants.DATA, "IO problem", e);
+	        throw new IOException();
+	    } finally {
+	        try {
+	        	fos.close();
+	        } catch (IOException e) {
+	        	// ignore, and take the verbosity punch from Java ;)
+	        }
+	    }
+	}
+
+   public static String read(Context context, String fileName) throws IOException {
+	   FileInputStream fis = null;
+	   Scanner scanner = null;
+	   StringBuilder sb = new StringBuilder();
+	   try {
+		   fis = context.openFileInput(fileName);
+		   // scanner does mean one more object, but it's easier to work with
+		   scanner = new Scanner(fis);
+		   while (scanner.hasNextLine()) {
+			   sb.append(scanner.nextLine() + LINE_SEP);
+		   }
+		   Toast.makeText(context, "Wczytano z pliku", Toast.LENGTH_SHORT).show();
+	   } catch (FileNotFoundException e) {
+		   Log.e(Constants.DATA, "File not found", e);
+		   throw new IOException();
+	   } finally {
+		   if (fis != null) {
+			   try {
+				   fis.close();
+			   } catch (IOException e) {
+				   // ignore, and take the verbosity punch from Java ;)
+			   }
+		   }
+		   if (scanner != null) {
+			   scanner.close();
+		   }
+	   }      
+      return sb.toString();
+   }
 }

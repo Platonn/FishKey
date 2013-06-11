@@ -102,13 +102,18 @@ public class FlashcardSetProvider extends FileReader {
 	 * @throws LoadFlashcardSetException	gdy wczytanie zestawu fiszek z zwenetrznego zrodla sie nie powiodlo sie
 	 */
 	public static FlashcardSet getFlashcardSet(Context context) throws LoadFlashcardSetException {
-		// Implementacja ta wykorzystuje parsowanie JSON
+		String fileText; // = readFromAssetsFile(context, DEFAULT_FILE_NAME_JSON, null); //spike
 		try {
-			String fileText = readFromAssetsFile(context, DEFAULT_FILE_NAME_JSON, null);
-			return parseJSON(fileText);
+			fileText = read(context, DEFAULT_FILE_NAME_JSON );
 		} catch (IOException e) {
-			throw new LoadFlashcardSetException();
+			try {
+				String fromAssetsText = readFromAssetsFile(context, DEFAULT_FILE_NAME_JSON, null);
+				write(context, DEFAULT_FILE_NAME_JSON, fromAssetsText); //spike - nie robic tego tak
+				fileText = read(context, DEFAULT_FILE_NAME_JSON );
+			} catch (IOException e1){ 
+				throw new LoadFlashcardSetException();
+			}
 		}
-
+		return parseJSON(fileText);
 	}
 }
