@@ -1,6 +1,7 @@
 package com.fishkey.utils;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -76,7 +77,7 @@ public class FileReader {
 	
 	private static final String LINE_SEP = System.getProperty("line.separator");
 
-	public static void write(Context context, String fileName, String text) throws IOException {
+	public static void writeInternal(Context context, String fileName, String text) throws IOException {
 	    FileOutputStream fos = null;
 	    try {
 	
@@ -99,7 +100,7 @@ public class FileReader {
 	    }
 	}
 
-   public static String read(Context context, String fileName) throws IOException {
+   public static String readInternal(Context context, String fileName) throws IOException {
 	   FileInputStream fis = null;
 	   Scanner scanner = null;
 	   StringBuilder sb = new StringBuilder();
@@ -128,4 +129,35 @@ public class FileReader {
 	   }      
       return sb.toString();
    }
+   
+   protected static void writeExternal(Context context, String fileName, String text) throws IOException {
+	      if (FileUtil.isExternalStorageWritable()) {
+	         File dir = FileUtil.getExternalFilesDirAllApiLevels(context.getPackageName());
+	         File file = new File(dir, fileName);
+	         FileUtil.writeStringAsFile(text, file);
+	         Toast.makeText(context, "File written", Toast.LENGTH_SHORT).show();
+	      } else {
+	         Toast.makeText(context, "External storage not writable", Toast.LENGTH_SHORT).show();
+	         throw new IOException();
+	      }
+	   }
+
+	   protected static String readExternal(Context context, String fileName) throws IOException {
+	      if (FileUtil.isExternalStorageReadable()) {
+	         File dir = FileUtil.getExternalFilesDirAllApiLevels(context.getPackageName());
+	         File file = new File(dir, fileName);
+	         String text;
+	         if (file.exists() && file.canRead()) {
+	        	text = FileUtil.readFileAsString(file);
+	            Toast.makeText(context, "File read", Toast.LENGTH_SHORT).show();
+	         } else {
+	            Toast.makeText(context, "Unable to read file: " + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();  
+		         throw new IOException();
+	         }
+	         return text; 
+	      } else {
+	         Toast.makeText(context, "External storage not readable", Toast.LENGTH_SHORT).show();
+	         throw new IOException();
+	      }
+	   }
 }

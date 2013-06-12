@@ -104,12 +104,12 @@ public class FlashcardSetProvider extends FileReader {
 	public static FlashcardSet getFlashcardSet(Context context) throws LoadFlashcardSetException {
 		String fileText; // = readFromAssetsFile(context, DEFAULT_FILE_NAME_JSON, null); //spike
 		try {
-			fileText = read(context, DEFAULT_FILE_NAME_JSON );
+			fileText = readExternal(context, DEFAULT_FILE_NAME_JSON );
 		} catch (IOException e) {
 			try {
 				String fromAssetsText = readFromAssetsFile(context, DEFAULT_FILE_NAME_JSON, null);
-				write(context, DEFAULT_FILE_NAME_JSON, fromAssetsText); //spike - nie robic tego tak
-				fileText = read(context, DEFAULT_FILE_NAME_JSON );
+				writeExternal(context, DEFAULT_FILE_NAME_JSON, fromAssetsText); //spike - nie robic tego tak
+				fileText = readExternal(context, DEFAULT_FILE_NAME_JSON );
 			} catch (IOException e1){ 
 				throw new LoadFlashcardSetException();
 			}
