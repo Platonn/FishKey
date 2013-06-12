@@ -1,7 +1,7 @@
 package com.fishkey;
 
 
-import com.example.fishkey.R;
+import com.fishkey.R;
 import com.fishkey.alertdialogs.CrashAlertDialogBuilder;
 import com.fishkey.alertdialogs.QuizRoundResultAlertDialogBuilder;
 import com.fishkey.exceptions.EmptyQuizException;

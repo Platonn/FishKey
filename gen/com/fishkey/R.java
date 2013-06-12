@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package com.example.fishkey;
+package com.fishkey;
 
 public final class R {
     public static final class attr {

@@ -4,7 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.util.Log;
 
-import com.example.fishkey.R;
+import com.fishkey.R;
 import com.fishkey.QuizActivity;
 import com.fishkey.QuizRound;
 import com.fishkey.Umpire;
