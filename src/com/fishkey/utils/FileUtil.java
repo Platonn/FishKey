@@ -15,198 +15,217 @@ import java.io.Writer;
 import java.nio.channels.FileChannel;
 
 /**
- * FileUtil methods. 
+ * posiada metody do operowania na plikach
  * 
- * @author ccollins
- *
+ * @author Platonn 
+ * @author ...na podstawie przykladu z ksiazki "Android in practice"
  */
 public final class FileUtil {
 	
 	/** Tag do oznaczania logow */
 	private static final String LOG_TAG = FileUtil.class.getName();
 	
-   // from the Android docs, these are the recommended paths
-   private static final String EXT_STORAGE_PATH_PREFIX = "/Android/data/";
-   private static final String EXT_STORAGE_FILES_PATH_SUFFIX = "/files/";
-   private static final String EXT_STORAGE_CACHE_PATH_SUFFIX = "/cache/";
-
-   // Object for intrinsic lock (per docs 0 length array "lighter" than a normal Object)
-   public static final Object[] DATA_LOCK = new Object[0];
-
-   private FileUtil() {
-   }
-
-   /**
-    * Use Environment to check if external storage is writable.
-    * 
-    * @return
-    */
-   public static boolean isExternalStorageWritable() {
-      return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
-   }
-
-   /**
-    * Use environment to check if external storage is readable.
-    * 
-    * @return
-    */
-   public static boolean isExternalStorageReadable() {
-      if (isExternalStorageWritable()) {
-         return true;
-      }
-      return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED_READ_ONLY);
-   }
-
-   /**
-    * Return the recommended external files directory, whether using API level 8 or lower.
-    * (Uses getExternalStorageDirectory and then appends the recommended path.)
-    * 
-    * @param packageName
-    * @return
-    */
-   public static File getExternalFilesDirAllApiLevels(final String packageName) {
-      return FileUtil.getExternalDirAllApiLevels(packageName, EXT_STORAGE_FILES_PATH_SUFFIX);
-   }
+	/** Zalecana sciezka na dane */ 
+	private static final String EXT_STORAGE_PATH_PREFIX = "/Android/data/";
    
-   /**
-    * Return the recommended external cache directory, whether using API level 8 or lower.
-    * (Uses getExternalStorageDirectory and then appends the recommended path.)
+   	/** Zalecany katalog na pliki */
+   	private static final String EXT_STORAGE_FILES_PATH_SUFFIX = "/files/";
+   
+   	/** Zalecany katalog na pliki tymczasowe */
+   	private static final String EXT_STORAGE_CACHE_PATH_SUFFIX = "/cache/";
+
+   	/**
+   	 * obiekt statyczny do blokowania ciagow wrazliwych operacji na plikach
+   	 * za pomoca <code>synchronized</code> .
+   	 * <p>
+   	 * (<code>new Object[0]</code> zajmuje mniej pamieci niz <code>new Object</code>)
+   	 */
+   	public static final Object[] DATA_LOCK = new Object[0];
+
+   	/**
+   	 * zwraca, czy mozna pisac w zewnetrznej pamieci
+   	 * 
+   	 * @return	czy mozna pisac w zewnetrznej pamieci
+   	 */
+   	public static boolean isExternalStorageWritable() {
+   		return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+   	}
+
+   	/**
+   	 * zwraca, czy mozna czytac z zewnetrznej pamieci
+   	 * 
+   	 * @return	czy mozna czytac z zewnetrznej pamieci
+   	 */
+   	public static boolean isExternalStorageReadable() {
+   		if (isExternalStorageWritable()) return true;
+   		return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED_READ_ONLY);
+   	}
+
+   	/**
+   	 * zwraca zalecana pelna sciezke do katalogu na pliki aplikacji
+   	 * (takze dla API level 8 lub nizszego). Tworzac sciezke, uwzglednia
+   	 * podana nazwe paczki aplikacji.
+   	 * 
+   	 * @param packageName	nazwa paczki aplikacji
+   	 * @return 				obiekt File zalecana pelna sciezka do katalogu na pliki aplikacji
+   	 */
+   	public static File getExternalFilesDirAllApiLevels(final String packageName) {
+   		return FileUtil.getExternalDirAllApiLevels(packageName, EXT_STORAGE_FILES_PATH_SUFFIX);
+   	}
+   
+   	/**
+   	 * zwraca obiekt File - zalecana pelna sciezke do katalogu na pliki tymczasowe aplikacji
+   	 * (takze dla API level 8 lub nizszego). Tworzac sciezke, uwzglednia
+   	 * podana nazwe paczki aplikacji.
+   	 * 
+   	 * @param packageName	nazwa paczki aplikacji
+   	 * @return 				obiekt File - zalecana pelna sciezka do katalogu na pliki tymczasowe aplikacji
+   	 */
+   	public static File getExternalCacheDirAllApiLevels(final String packageName) {
+   		return FileUtil.getExternalDirAllApiLevels(packageName, EXT_STORAGE_CACHE_PATH_SUFFIX);
+   	}
+   
+   	/**
+     * zwraca obiekt File - zalecana sciezke do katalogu na dane aplikacji, uwzgledniajac nazwe paczki aplikacji 
+     * oraz podana nazwe katalogu. Jesli nie ma jeszcze tego katalogu, to (jesli to mozliwe) go wraz z drzewem
+     * katalogow (ojcow).
+     * @param packageName	nazwa paczki aplikacji
+     * @param suffixType		nazwa katalogu
+     * @return				obiekt File - zalecana pelna sciezka do katalogu na dane aplikacji
+     */
+   	private static File getExternalDirAllApiLevels(final String packageName, final String suffixType) {
+   		File dir = new File(Environment.getExternalStorageDirectory() + EXT_STORAGE_PATH_PREFIX + packageName + suffixType);
+   		// wykonaj jako jeden nieprzerwany blok czynnosci na plikach - zaloz blokade na statyczny obiekt DATA_LOCK
+   		synchronized (FileUtil.DATA_LOCK) {
+   			try {
+   				dir.mkdirs();
+   				dir.createNewFile();
+   			} catch (IOException e) {
+   				Log.e(LOG_TAG, "Blad tworzenia pliku", e);
+   			}
+   		}
+   		return dir;
+   	}
+
+    /**
+     * kopiuje zawartosc podanego plik do podanego docelowego pliku i zwraca, czy operacja
+     * kopiowania sie powiodla
+     * 
+     * @param src	plik zrodlowy
+     * @param dst	plik docelowy
+     * @return		czy operacja kopiowania sie 
+     */
+   	public static boolean copyFile(final File src, final File dst) {
+   		boolean result = false;
+   		FileChannel inChannel = null;
+   		FileChannel outChannel = null;
+   		// wykonaj jako jeden nieprzerwany blok czynnosci na plikach - zaloz blokade na statyczny obiekt DATA_LOCK
+   		synchronized (FileUtil.DATA_LOCK) {
+   			try {
+   				inChannel = new FileInputStream(src).getChannel();
+   				outChannel = new FileOutputStream(dst).getChannel();
+   				inChannel.transferTo(0, inChannel.size(), outChannel);	// kopiowanie bitowe (szybkie)
+   				result = true;
+   			} catch (IOException e) {
+   				Log.e(LOG_TAG, "Blad kopiowania pliku", e);
+   			} finally {
+   				// Zwolnij przydzielone zasoby dla inChannel
+   				if (inChannel != null && inChannel.isOpen()) {
+   					try {
+   						inChannel.close();
+   					} catch (IOException e) { /* zignorowac */ }
+   				}
+   				// Zwolnij przydzielone zasoby dla inChannel
+   				if (outChannel != null && outChannel.isOpen()) {
+   					try {
+   						outChannel.close();
+   					} catch (IOException e) { /* zignorowac */ }
+   				}
+   			}
+   		}
+   		return result;
+   	}
+
+   	/**
+     * tworzy/nadpisuje podany plik, wypelniajac go podana zawartoscia (tekstem) 
+     * i zwraca, czy cala operacja sie powiodla 
+     * 
+     * @param fileContents	tekst do wpisania do pliku
+     * @param file			plik do wypelnienia
+     * @return				czy operacja wypelnienia pliku podana zawartoscia sie powiodla
+     */
+   	public static boolean writeStringAsFile(final String fileContents, final File file) {
+   		boolean result = false;
+		// wykonaj jako jeden nieprzerwany blok czynnosci na plikach - zaloz blokade na statyczny obiekt DATA_LOCK
+		synchronized (FileUtil.DATA_LOCK) {
+			try{
+				if (file != null) {
+					file.createNewFile(); // jesli plik nie istnial, tworzy go, w przeciwnym przypadku nic sie nie stanie (tylko zwroci false)
+					Writer toFileWriter = new BufferedWriter(new FileWriter(file), 1024);
+					toFileWriter.write(fileContents);
+					toFileWriter.close();
+					result = true;
+				}
+			} catch (IOException e) {
+				Log.e(LOG_TAG, "Blad przy wypelnianiu pliku podana zawartoscia " + e.getMessage(), e);
+			}
+		}
+      	return result;
+   	}
+
+   	/**
+   	 * Dopisuje podany String na koncu pliku i zwraca, czy operacja sie powiodla
+   	 * 
+   	 * @param appendContents	tekst do dopisania
+   	 * @param file			plik, do ktorego ma byc dopisany tekst
+   	 * @return				czy operacja dopisywania Stringa na koncu pliku sie powiodla
+   	 */
+   	public static boolean appendStringToFile(final String appendContents, final File file) {
+   		boolean result = false;
+		// wykonaj jako jeden nieprzerwany blok czynnosci na plikach - zaloz blokade na statyczny obiekt DATA_LOCK
+   		synchronized (FileUtil.DATA_LOCK) {
+   			try {
+	            if ((file != null) && file.canWrite()) {
+	            	file.createNewFile(); // jesli plik nie istnial, tworzy go, w przeciwnym przypadku nic sie nie stanie (tylko zwroci false)
+	            	Writer out = new BufferedWriter(new FileWriter(file, true), 1024);
+	            	out.write(appendContents);
+	            	out.close();
+	            	result = true;
+	            	}
+   			} catch (IOException e) {
+   				Log.e(LOG_TAG, "Blad przy dopisywaniu tekstu na koncu pliku " + e.getMessage(), e);
+   			}
+   		}
+   		return result;
+   	}
+
+   	/**
+    * zwraca zawartosc (tekst) pliku albo null jesli plik nie istnieje,
+    * badz nie mozna z niego czytac
     * 
-    * @param packageName
-    * @return
+    * @param file	plik, ktorego zawartosc (tekst) chcemy odczytac
+    * @return		zawartosc (tekst) pliku albo null jesli plik nie istnieje,
     */
-   public static File getExternalCacheDirAllApiLevels(final String packageName) {
-      return FileUtil.getExternalDirAllApiLevels(packageName, EXT_STORAGE_CACHE_PATH_SUFFIX);
-   }
-
-   private static File getExternalDirAllApiLevels(final String packageName, final String suffixType) {
-      File dir =
-               new File(Environment.getExternalStorageDirectory() + EXT_STORAGE_PATH_PREFIX + packageName + suffixType);
-      synchronized (FileUtil.DATA_LOCK) {
-         try {
-            dir.mkdirs();
-            dir.createNewFile();
-         } catch (IOException e) {
-            Log.e(LOG_TAG, "Error creating file", e);
-         }
-      }
-      return dir;
-   }
-
-   /**
-    * Copy file, return true on success, false on failure.
-    * 
-    * @param src
-    * @param dst
-    * @return
-    */
-   public static boolean copyFile(final File src, final File dst) {
-      boolean result = false;
-      FileChannel inChannel = null;
-      FileChannel outChannel = null;
-      synchronized (FileUtil.DATA_LOCK) {
-         try {
-            inChannel = new FileInputStream(src).getChannel();
-            outChannel = new FileOutputStream(dst).getChannel();
-            inChannel.transferTo(0, inChannel.size(), outChannel);
-            result = true;
-         } catch (IOException e) {
-
-         } finally {
-            if (inChannel != null && inChannel.isOpen()) {
-               try {
-                  inChannel.close();
-               } catch (IOException e) {
-                  // ignore
-               }
-            }
-            if (outChannel != null && outChannel.isOpen()) {
-               try {
-                  outChannel.close();
-               } catch (IOException e) {
-                  // ignore
-               }
-            }
-         }
-      }
-      return result;
-   }
-
-   /**
-    * Replace entire File with contents of String, return true on success, false on failure.
-    * 
-    * @param fileContents
-    * @param file
-    * @return
-    */
-   public static boolean writeStringAsFile(final String fileContents, final File file) {
-      boolean result = false;
-      try {
-         synchronized (FileUtil.DATA_LOCK) {
-            if (file != null) {
-               file.createNewFile(); // ok if returns false, overwrite
-               Writer out = new BufferedWriter(new FileWriter(file), 1024);
-               out.write(fileContents);
-               out.close();
-               result = true;
-            }
-         }
-      } catch (IOException e) {
-         Log.e(LOG_TAG, "Error writing string data to file " + e.getMessage(), e);
-      }
-      return result;
-   }
-
-   /**
-    * Append String to end of File, return true on success, false on failure.
-    * 
-    * @param appendContents
-    * @param file
-    * @return
-    */
-   public static boolean appendStringToFile(final String appendContents, final File file) {
-      boolean result = false;
-      try {
-         synchronized (FileUtil.DATA_LOCK) {
-            if ((file != null) && file.canWrite()) {
-               file.createNewFile(); // ok if returns false, overwrite
-               Writer out = new BufferedWriter(new FileWriter(file, true), 1024);
-               out.write(appendContents);
-               out.close();
-               result = true;
-            }
-         }
-      } catch (IOException e) {
-         Log.e(LOG_TAG, "Error appending string data to file " + e.getMessage(), e);
-      }
-      return result;
-   }
-
-   /**
-    * Read file as String, return null if file is not present or not readable.
-    * 
-    * @param file
-    * @return
-    */
-   public static String readFileAsString(final File file) {
-      StringBuilder sb = null;
-      try {
-         synchronized (FileUtil.DATA_LOCK) {
-            if ((file != null) && file.canRead()) {
-               sb = new StringBuilder();
-               String line = null;
-               BufferedReader in = new BufferedReader(new FileReader(file), 1024);
-               while ((line = in.readLine()) != null) {
-                  sb.append(line + System.getProperty("line.separator"));
-               }
-            }
-         }
-      } catch (IOException e) {
-         Log.e(LOG_TAG, "Error reading file " + e.getMessage(), e);
-      }
-      if (sb != null) {
-         return sb.toString();
-      }
-      return null;
-   }
+   	public static String readFileAsString(final File file) {
+   		StringBuilder sb = null;
+   		boolean result = false;
+   		// wykonaj jako jeden nieprzerwany blok czynnosci na plikach - zaloz blokade na statyczny obiekt DATA_LOCK
+   		synchronized (FileUtil.DATA_LOCK) {
+   			try {
+	   			if ((file != null) && file.canRead()) {
+	   				sb = new StringBuilder();
+	   				String line = null;
+	   				BufferedReader in = new BufferedReader(new FileReader(file), 1024);
+	   				while ((line = in.readLine()) != null) {
+	   					sb.append(line + System.getProperty("line.separator"));
+	   				}
+	   			}
+	   			result = true;
+   			} catch (IOException e) {
+   				Log.e(LOG_TAG, "Blad przy czytaniu zawartosci pliku " + e.getMessage(), e);
+   			}
+   		}
+   		if (result) return sb.toString();
+   		return null;
+   	}
 }
