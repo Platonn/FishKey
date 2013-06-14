@@ -82,7 +82,7 @@ public class FlashcardSetProvider extends AssetsReader {
 				throw new QuizInitException();
 			}
 			if (!ExternalStorageUtil.writeStringAsFile(context, DEFAULT_FILE_NAME_JSON, fromAssetsText)) {
-				Log.e(LOG_TAG, "Nie zapisac zestawu fiszek do pliku");
+				Log.e(LOG_TAG, "Nie mozna zapisac zestawu fiszek do pliku");
 				throw new QuizInitException();
 			}
 			fileText = ExternalStorageUtil.readFileAsString(context, DEFAULT_FILE_NAME_JSON );

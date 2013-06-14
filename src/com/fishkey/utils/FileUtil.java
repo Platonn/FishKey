@@ -128,7 +128,7 @@ public final class FileUtil {
    				inChannel.transferTo(0, inChannel.size(), outChannel);	// kopiowanie bitowe (szybkie)
    				result = true;
    			} catch (IOException e) {
-   				Log.e(LOG_TAG, "Blad kopiowania pliku", e);
+   				Log.e(LOG_TAG, "Blad kopiowania pliku: " + e.getMessage());
    			} finally {
    				if (inChannel != null && inChannel.isOpen()) {
    					try {
@@ -166,7 +166,7 @@ public final class FileUtil {
 					result = true;
 				}
 			} catch (IOException e) {
-				Log.e(LOG_TAG, "Blad przy wypelnianiu pliku podana zawartoscia " + e.getMessage(), e);
+				Log.e(LOG_TAG, "Blad przy wypelnianiu pliku podana zawartoscia: " + e.getMessage());
 			} finally {
 				if (out != null) {
 					try {
@@ -198,7 +198,7 @@ public final class FileUtil {
 	            	result = true;
 	            	}
    			} catch (IOException e) {
-   				Log.e(LOG_TAG, "Blad przy dopisywaniu tekstu na koncu pliku " + e.getMessage(), e);
+   				Log.e(LOG_TAG, "Blad przy dopisywaniu tekstu na koncu pliku: " + e.getMessage());
    			} finally {
 				if (out != null) {
 					try {
@@ -233,7 +233,7 @@ public final class FileUtil {
 	   			}
 	   			result = true;
    			} catch (IOException e) {
-   				Log.e(LOG_TAG, "Blad przy czytaniu zawartosci pliku " + e.getMessage(), e);
+   				Log.e(LOG_TAG, "Blad przy czytaniu zawartosci pliku: " + e.getMessage());
    			} finally {
 				if (in != null) {
 					try {
