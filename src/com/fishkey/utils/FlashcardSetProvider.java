@@ -81,7 +81,7 @@ public class FlashcardSetProvider extends AssetsReader {
 				Log.e(LOG_TAG, "Nie mozna wczytac zestawu fiszek z pliku assets");
 				throw new QuizInitException();
 			}
-			if (!ExternalStorageUtil.writeStringAsFile(context, DEFAULT_FILE_NAME_JSON, fromAssetsText)) {
+			if (!ExternalStorageUtil.writeStringAsFile(context, fromAssetsText, DEFAULT_FILE_NAME_JSON)) {
 				Log.e(LOG_TAG, "Nie mozna zapisac zestawu fiszek do pliku");
 				throw new QuizInitException();
 			}
