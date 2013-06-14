@@ -17,7 +17,7 @@ import android.util.Log;
 import com.fishkey.exceptions.QuizInitException;
 import com.fishkey.model.Flashcard;
 import com.fishkey.model.FlashcardSet;
-import com.fishkey.utils.AssetsReader;
+import com.fishkey.utils.AssetsUtil;
 import com.fishkey.utils.ExternalStorageUtil;
 
 /**
@@ -25,7 +25,7 @@ import com.fishkey.utils.ExternalStorageUtil;
  * @author Platon
  *
  */
-public class FlashcardSetProvider extends AssetsReader {
+public class FlashcardSetProvider extends AssetsUtil {
 	
 	/** tag to oznaczania logow */
 	private static final String LOG_TAG = FlashcardSetProvider.class.getName();
@@ -78,7 +78,7 @@ public class FlashcardSetProvider extends AssetsReader {
 		String fileText;
 		fileText = ExternalStorageUtil.readFileAsString(context, DEFAULT_FILE_NAME_JSON);
 		if (fileText == null){	// jesli nie udalo sie wczytac danych z pliku, sproboj go utworzyc na podstawie pliku przykladowego z katalogu assets. Jesli cos pojdzie nie tak, rzuc wyjatkiem 
-			String fromAssetsText = AssetsReader.readFileAsString(context, DEFAULT_FILE_NAME_JSON);
+			String fromAssetsText = AssetsUtil.readFileAsString(context, DEFAULT_FILE_NAME_JSON);
 			if (fromAssetsText == null){
 				Log.e(LOG_TAG, "Nie mozna wczytac zestawu fiszek z pliku assets");
 				throw new QuizInitException();

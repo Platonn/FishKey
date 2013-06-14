@@ -13,10 +13,10 @@ import android.util.Log;
  * @author Platon
  *
  */
-public class AssetsReader {
+public class AssetsUtil {
 	
 	/** tag to oznaczania logow */
-	private static final String LOG_TAG = AssetsReader.class.getName();
+	private static final String LOG_TAG = AssetsUtil.class.getName();
 
 	/**
 	 * zwraca zawartosc (tekst) pliku o podanej nazwie (z katalogu assets)
