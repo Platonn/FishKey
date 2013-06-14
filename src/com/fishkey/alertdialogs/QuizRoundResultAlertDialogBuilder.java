@@ -4,7 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.util.Log;
 
-import com.example.fishkey.R;
+import com.fishkey.R;
 import com.fishkey.QuizActivity;
 import com.fishkey.QuizRound;
 import com.fishkey.Umpire;
@@ -58,7 +58,7 @@ public class QuizRoundResultAlertDialogBuilder extends AlertDialog.Builder {
 	    		 				+ activity.getResources().getText(R.string.wrong)
 	    );
 		alertButtonText = (String) activity.getResources().getText(R.string.next);
-		
+		this.setPositiveButton(alertButtonText, null);
 	}
 	
 	/**
@@ -70,7 +70,6 @@ public class QuizRoundResultAlertDialogBuilder extends AlertDialog.Builder {
 		alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
 			@Override
 			public void onDismiss(DialogInterface dialog) {
-				quizActivity.updateState();
 				quizActivity.askUser();
 			}
 		});

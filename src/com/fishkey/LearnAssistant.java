@@ -2,8 +2,9 @@ package com.fishkey;
 
 import android.content.Context;
 
-import com.fishkey.exceptions.LoadFlashcardSetException;
+import com.fishkey.exceptions.QuizInitException;
 import com.fishkey.model.FlashcardSet;
+import com.fishkey.utils.FlashcardSetProvider;
 
 /**
  * odpowiada za efektywna nauke
@@ -20,8 +21,8 @@ public class LearnAssistant {
 		statsManager = new StatisticsManager();
 	}
 	
-	public static FlashcardSet getFlashcardSet(Context context) throws LoadFlashcardSetException {
-		FlashcardSet fs = FlashcardSetProvider.importDataFromAssetsFile(context, "slowka.txt");
+	public static FlashcardSet getFlashcardSet(Context context) throws QuizInitException {
+		FlashcardSet fs = FlashcardSetProvider.getFlashcardSet(context);
 		//TODO: tu przejrzec zestaw fiszek i podjac decyzje, ktore z nich wstrzymac.
 		// zmodyfikowac takze statystyki dotyczace wstrzymanych fiszek
 		return fs;

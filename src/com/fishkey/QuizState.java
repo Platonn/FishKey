@@ -10,9 +10,10 @@ import java.util.LinkedList;
 import com.fishkey.exceptions.EmptyQuizException;
 import com.fishkey.exceptions.EndOfQuizException;
 import com.fishkey.exceptions.EndOfQuizRoundException;
-import com.fishkey.exceptions.LoadFlashcardSetException;
+import com.fishkey.exceptions.QuizInitException;
 import com.fishkey.model.Flashcard;
 import com.fishkey.model.FlashcardSet;
+import com.fishkey.utils.FlashcardSetProvider;
 
 import android.R.integer;
 import android.content.Context;
@@ -56,14 +57,14 @@ class QuizState implements IQuizInformator, IFlashcardPassOn {
 	 * Posiada wlasne statystyki, ktore udostepnia
 	 * 
 	 * @param	 context	obiekt <code>Context</code>
-	 * @throws LoadFlashcardSetException
+	 * @throws QuizInitException
 	 * @throws EmptyQuizException 
 	 */
-	public QuizState(Context context) throws LoadFlashcardSetException, EmptyQuizException {
+	public QuizState(Context context) throws QuizInitException, EmptyQuizException {
 		QuizRound.resetRoundsCounter();
 		roundsList = new LinkedList<QuizRound>();
 		
-		FlashcardSet fs = FlashcardSetProvider.importDataFromAssetsFile(context, "slowka.txt");
+		FlashcardSet fs = FlashcardSetProvider.getFlashcardSet(context);
 		if(fs.isEmpty()) throw new EmptyQuizException();
 		
 		fs.shuffle();

@@ -1,0 +1,11 @@
+{"id": "1",
+ "name": "Zestaw testowy",
+ "flashcards": [
+  	{"id": "1", "ang": "bay", "pol": "zatoka"},
+  	{"id": "2", "ang": "canal", "pol": "kanał"},
+  	{"id": "3", "ang": "coastline", "pol": "linia brzegowa"},
+  	{"id": "4", "ang": "dense forest", "pol": "gęsty las"},
+  	{"id": "5", "ang": "dunes", "pol": "wydmy"},
+  	{"id": "6", "ang": "estuary", "pol": "ujście rzeki"}
+ ]
+}

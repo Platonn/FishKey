@@ -5,7 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
-import com.example.fishkey.R;
+import com.fishkey.R;
 import com.fishkey.QuizActivity;
 
 /**
@@ -28,6 +28,7 @@ public class CrashAlertDialogBuilder extends AlertDialog.Builder {
 		this.setTitle(title);
 		this.setMessage(message);
 		String alertButtonText = (String) activity.getResources().getText(R.string.finish);
+		this.setPositiveButton(alertButtonText, null);
 	}
 	
 	/**
