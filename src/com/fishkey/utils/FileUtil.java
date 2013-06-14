@@ -15,10 +15,9 @@ import java.io.Writer;
 import java.nio.channels.FileChannel;
 
 /**
- * posiada metody do operowania na plikach
+ * posiada metody do operowania na plikach reprezentowanych przez obiekty klasy File
  * 
- * @author Platonn 
- * @author ...na podstawie przykladu z ksiazki "Android in practice"
+ * @author Platonn - na podstawie przykladu z ksiazki "Android in practice"
  */
 public final class FileUtil {
 	
@@ -41,6 +40,9 @@ public final class FileUtil {
    	 * (<code>new Object[0]</code> zajmuje mniej pamieci niz <code>new Object</code>)
    	 */
    	public static final Object[] DATA_LOCK = new Object[0];
+   	
+   	/** Znak nowej linii - zgodny z kodowaniem systemu */
+	public static final String LINE_SEP = System.getProperty("line.separator");
 
    	/**
    	 * zwraca, czy mozna pisac w zewnetrznej pamieci
@@ -217,7 +219,8 @@ public final class FileUtil {
 	   				String line = null;
 	   				BufferedReader in = new BufferedReader(new FileReader(file), 1024);
 	   				while ((line = in.readLine()) != null) {
-	   					sb.append(line + System.getProperty("line.separator"));
+	   					sb.append(line + System.getProperty(LINE_SEP));
+	   					
 	   				}
 	   			}
 	   			result = true;
