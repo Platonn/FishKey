@@ -228,7 +228,7 @@ public final class FileUtil {
 	   				String line = null;
 	   				in = new BufferedReader(new FileReader(file), 1024);
 	   				while ((line = in.readLine()) != null) {
-	   					sb.append(line + System.getProperty(LINE_SEP));
+	   					sb.append(line + LINE_SEP);
 	   				}
 	   			}
 	   			result = true;
