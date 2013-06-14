@@ -100,64 +100,64 @@ public class FileReader {
 	    }
 	}
 
-   public static String readInternal(Context context, String fileName) throws IOException {
-	   FileInputStream fis = null;
-	   Scanner scanner = null;
-	   StringBuilder sb = new StringBuilder();
-	   try {
-		   fis = context.openFileInput(fileName);
-		   // scanner does mean one more object, but it's easier to work with
-		   scanner = new Scanner(fis);
-		   while (scanner.hasNextLine()) {
-			   sb.append(scanner.nextLine() + LINE_SEP);
-		   }
-		   Toast.makeText(context, "Wczytano z pliku", Toast.LENGTH_SHORT).show();
-	   } catch (FileNotFoundException e) {
-		   Log.e(Constants.DATA, "File not found", e);
-		   throw new IOException();
-	   } finally {
-		   if (fis != null) {
-			   try {
-				   fis.close();
-			   } catch (IOException e) {
-				   // ignore, and take the verbosity punch from Java ;)
-			   }
-		   }
-		   if (scanner != null) {
-			   scanner.close();
-		   }
-	   }      
-      return sb.toString();
-   }
+	public static String readInternal(Context context, String fileName) throws IOException {
+		FileInputStream fis = null;
+		Scanner scanner = null;
+		StringBuilder sb = new StringBuilder();
+		try {
+			fis = context.openFileInput(fileName);
+			// scanner does mean one more object, but it's easier to work with
+			scanner = new Scanner(fis);
+			while (scanner.hasNextLine()) {
+				sb.append(scanner.nextLine() + LINE_SEP);
+			}
+			Toast.makeText(context, "Wczytano z pliku", Toast.LENGTH_SHORT).show();
+		} catch (FileNotFoundException e) {
+			Log.e(Constants.DATA, "File not found", e);
+			throw new IOException();
+		} finally {
+			if (fis != null) {
+				try {
+					fis.close();
+				} catch (IOException e) {
+					// ignore, and take the verbosity punch from Java ;)
+				}
+			}
+			if (scanner != null) {
+				scanner.close();
+			}
+		}      
+		return sb.toString();
+	}
    
-   protected static void writeExternal(Context context, String fileName, String text) throws IOException {
-	      if (FileUtil.isExternalStorageWritable()) {
-	         File dir = FileUtil.getExternalFilesDirAllApiLevels(context.getPackageName());
-	         File file = new File(dir, fileName);
-	         FileUtil.writeStringAsFile(text, file);
-	         Toast.makeText(context, "File written", Toast.LENGTH_SHORT).show();
-	      } else {
-	         Toast.makeText(context, "External storage not writable", Toast.LENGTH_SHORT).show();
-	         throw new IOException();
-	      }
-	   }
+	protected static void writeExternal(Context context, String fileName, String text) throws IOException {
+		if (FileUtil.isExternalStorageWritable()) {
+		    File dir = FileUtil.getExternalFilesDirAllApiLevels(context.getPackageName());
+		    File file = new File(dir, fileName);
+		    FileUtil.writeStringAsFile(text, file);
+		    Toast.makeText(context, "File written", Toast.LENGTH_SHORT).show();
+	    } else {
+	    	Toast.makeText(context, "External storage not writable", Toast.LENGTH_SHORT).show();
+	        throw new IOException();
+	    }
+	}
 
-	   protected static String readExternal(Context context, String fileName) throws IOException {
-	      if (FileUtil.isExternalStorageReadable()) {
-	         File dir = FileUtil.getExternalFilesDirAllApiLevels(context.getPackageName());
-	         File file = new File(dir, fileName);
-	         String text;
-	         if (file.exists() && file.canRead()) {
+	protected static String readExternal(Context context, String fileName) throws IOException {
+		if (FileUtil.isExternalStorageReadable()) {
+			File dir = FileUtil.getExternalFilesDirAllApiLevels(context.getPackageName());
+	        File file = new File(dir, fileName);
+	        String text;
+	        if (file.exists() && file.canRead()) {
 	        	text = FileUtil.readFileAsString(file);
 	            Toast.makeText(context, "File read", Toast.LENGTH_SHORT).show();
-	         } else {
+	        } else {
 	            Toast.makeText(context, "Unable to read file: " + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();  
 		         throw new IOException();
-	         }
-	         return text; 
-	      } else {
-	         Toast.makeText(context, "External storage not readable", Toast.LENGTH_SHORT).show();
-	         throw new IOException();
-	      }
-	   }
+	        }
+	        return text; 
+		} else {
+	        Toast.makeText(context, "External storage not readable", Toast.LENGTH_SHORT).show();
+	        throw new IOException();
+	    }
+	}
 }
