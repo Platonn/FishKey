@@ -13,7 +13,6 @@ import com.fishkey.exceptions.EndOfQuizRoundException;
 import com.fishkey.exceptions.QuizInitException;
 import com.fishkey.model.Flashcard;
 import com.fishkey.model.FlashcardSet;
-import com.fishkey.utils.FlashcardSetProvider;
 
 import android.R.integer;
 import android.content.Context;

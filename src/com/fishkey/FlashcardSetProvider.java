@@ -1,4 +1,4 @@
-package com.fishkey.utils;
+package com.fishkey;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -17,6 +17,8 @@ import android.util.Log;
 import com.fishkey.exceptions.QuizInitException;
 import com.fishkey.model.Flashcard;
 import com.fishkey.model.FlashcardSet;
+import com.fishkey.utils.AssetsReader;
+import com.fishkey.utils.ExternalStorageUtil;
 
 /**
  * Dostarcza zestaw fiszek do przeprowadzenia quizu

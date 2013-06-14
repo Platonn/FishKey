@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.fishkey.exceptions.QuizInitException;
 import com.fishkey.model.FlashcardSet;
-import com.fishkey.utils.FlashcardSetProvider;
 
 /**
  * odpowiada za efektywna nauke
