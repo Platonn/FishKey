@@ -5,7 +5,7 @@ import android.content.Context;
 import com.fishkey.exceptions.EmptyQuizException;
 import com.fishkey.exceptions.EndOfQuizException;
 import com.fishkey.exceptions.EndOfQuizRoundException;
-import com.fishkey.exceptions.LoadFlashcardSetException;
+import com.fishkey.exceptions.QuizInitException;
 
 /**
  * Sedzia sumienie ocenia "naiwnie" poprawnosc odpowiedi,
@@ -18,12 +18,12 @@ public class UmpireConscience extends Umpire {
 	 * konstruktor t.j Umpire
 	 * @see Umpire
 	 * @param context
-	 * @throws LoadFlashcardSetException
+	 * @throws QuizInitException
 	 * @throws EmptyQuizException
 	 * @throws EndOfQuizException
 	 * @throws EndOfQuizRoundException
 	 */
-	public UmpireConscience(Context context) throws LoadFlashcardSetException, EmptyQuizException, EndOfQuizException, EndOfQuizRoundException {
+	public UmpireConscience(Context context) throws QuizInitException, EmptyQuizException, EndOfQuizException, EndOfQuizRoundException {
 		super(context);
 	}
 	

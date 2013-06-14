@@ -6,7 +6,7 @@ import android.util.Log;
 import com.fishkey.exceptions.EmptyQuizException;
 import com.fishkey.exceptions.EndOfQuizException;
 import com.fishkey.exceptions.EndOfQuizRoundException;
-import com.fishkey.exceptions.LoadFlashcardSetException;
+import com.fishkey.exceptions.QuizInitException;
 import com.fishkey.model.Flashcard;
 
 /**
@@ -48,12 +48,12 @@ public class Umpire implements IQuizInformator {
 	/**
 	 * konstruktor sedziego pobiera pierwsza fiszke do przepytania
 	 * @param context
-	 * @throws LoadFlashcardSetException gdy nieudalo sie wczytac zestawu fiszek
+	 * @throws QuizInitException gdy nieudalo sie wczytac zestawu fiszek
 	 * @throws EmptyQuizException gdy wczytany zestaw fiszek jest pusty
 	 * @throws EndOfQuizRoundException 
 	 * @throws EndOfQuizException 
 	 */
-	public Umpire(Context context) throws LoadFlashcardSetException, EmptyQuizException, EndOfQuizException, EndOfQuizRoundException {
+	public Umpire(Context context) throws QuizInitException, EmptyQuizException, EndOfQuizException, EndOfQuizRoundException {
 		quizState = new QuizState(context);
 		getNextFlashcard();							// TODO: tu nie powinien byc rzucany wyjatek konca rundy ani quizu!
 	}

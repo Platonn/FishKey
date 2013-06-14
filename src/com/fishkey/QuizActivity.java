@@ -7,7 +7,7 @@ import com.fishkey.alertdialogs.QuizRoundResultAlertDialogBuilder;
 import com.fishkey.exceptions.EmptyQuizException;
 import com.fishkey.exceptions.EndOfQuizException;
 import com.fishkey.exceptions.EndOfQuizRoundException;
-import com.fishkey.exceptions.LoadFlashcardSetException;
+import com.fishkey.exceptions.QuizInitException;
 import com.fishkey.model.Flashcard;
 
 
