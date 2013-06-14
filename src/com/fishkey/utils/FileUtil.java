@@ -2,7 +2,6 @@ package com.fishkey.utils;
 
 import android.os.Environment;
 import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -131,13 +130,11 @@ public final class FileUtil {
    			} catch (IOException e) {
    				Log.e(LOG_TAG, "Blad kopiowania pliku", e);
    			} finally {
-   				// Zwolnij przydzielone zasoby dla inChannel
    				if (inChannel != null && inChannel.isOpen()) {
    					try {
    						inChannel.close();
    					} catch (IOException e) { /* zignorowac */ }
    				}
-   				// Zwolnij przydzielone zasoby dla inChannel
    				if (outChannel != null && outChannel.isOpen()) {
    					try {
    						outChannel.close();
@@ -153,23 +150,29 @@ public final class FileUtil {
      * i zwraca, czy cala operacja sie powiodla 
      * 
      * @param fileContents	tekst do wpisania do pliku
-     * @param file			plik do wypelnienia
+     * @param file			plik do wypelnienia tekstem
      * @return				czy operacja wypelnienia pliku podana zawartoscia sie powiodla
      */
    	public static boolean writeStringAsFile(final String fileContents, final File file) {
    		boolean result = false;
+   		Writer out = null;
 		// wykonaj jako jeden nieprzerwany blok czynnosci na plikach - zaloz blokade na statyczny obiekt DATA_LOCK
 		synchronized (FileUtil.DATA_LOCK) {
 			try{
 				if (file != null) {
 					file.createNewFile(); // jesli plik nie istnial, tworzy go, w przeciwnym przypadku nic sie nie stanie (tylko zwroci false)
-					Writer toFileWriter = new BufferedWriter(new FileWriter(file), 1024);
-					toFileWriter.write(fileContents);
-					toFileWriter.close();
+					out = new BufferedWriter(new FileWriter(file), 1024);
+					out.write(fileContents);
 					result = true;
 				}
 			} catch (IOException e) {
 				Log.e(LOG_TAG, "Blad przy wypelnianiu pliku podana zawartoscia " + e.getMessage(), e);
+			} finally {
+				if (out != null) {
+					try {
+						out.close();
+					} catch (IOException e) { /* zignoruj */ }
+				}
 			}
 		}
       	return result;
@@ -184,51 +187,63 @@ public final class FileUtil {
    	 */
    	public static boolean appendStringToFile(final String appendContents, final File file) {
    		boolean result = false;
+   		Writer out = null;
 		// wykonaj jako jeden nieprzerwany blok czynnosci na plikach - zaloz blokade na statyczny obiekt DATA_LOCK
    		synchronized (FileUtil.DATA_LOCK) {
    			try {
 	            if ((file != null) && file.canWrite()) {
 	            	file.createNewFile(); // jesli plik nie istnial, tworzy go, w przeciwnym przypadku nic sie nie stanie (tylko zwroci false)
-	            	Writer out = new BufferedWriter(new FileWriter(file, true), 1024);
+	            	out = new BufferedWriter(new FileWriter(file, true), 1024);
 	            	out.write(appendContents);
-	            	out.close();
 	            	result = true;
 	            	}
    			} catch (IOException e) {
    				Log.e(LOG_TAG, "Blad przy dopisywaniu tekstu na koncu pliku " + e.getMessage(), e);
-   			}
+   			} finally {
+				if (out != null) {
+					try {
+						out.close();
+					} catch (IOException e) { /* zignoruj */ }
+				}
+			}
    		}
-   		return result;
+  		return result;
    	}
 
    	/**
-    * zwraca zawartosc (tekst) pliku albo null jesli plik nie istnieje,
-    * badz nie mozna z niego czytac
-    * 
-    * @param file	plik, ktorego zawartosc (tekst) chcemy odczytac
-    * @return		zawartosc (tekst) pliku albo null jesli plik nie istnieje,
-    */
+   	 * zwraca zawartosc (tekst) pliku albo null jesli plik nie istnieje
+   	 * badz nie mozna z niego czytac
+   	 * 
+   	 * @param file	plik, ktorego zawartosc (tekst) chcemy odczytac
+   	 * @return		zawartosc (tekst) pliku albo null jesli plik nie istnieje,
+   	 */
    	public static String readFileAsString(final File file) {
-   		StringBuilder sb = null;
+   		StringBuilder sb = new StringBuilder();
+   		BufferedReader in = null;
    		boolean result = false;
    		// wykonaj jako jeden nieprzerwany blok czynnosci na plikach - zaloz blokade na statyczny obiekt DATA_LOCK
    		synchronized (FileUtil.DATA_LOCK) {
    			try {
 	   			if ((file != null) && file.canRead()) {
-	   				sb = new StringBuilder();
 	   				String line = null;
-	   				BufferedReader in = new BufferedReader(new FileReader(file), 1024);
+	   				in = new BufferedReader(new FileReader(file), 1024);
 	   				while ((line = in.readLine()) != null) {
 	   					sb.append(line + System.getProperty(LINE_SEP));
-	   					
 	   				}
 	   			}
 	   			result = true;
    			} catch (IOException e) {
    				Log.e(LOG_TAG, "Blad przy czytaniu zawartosci pliku " + e.getMessage(), e);
-   			}
+   			} finally {
+				if (in != null) {
+					try {
+						in.close();
+					} catch (IOException e) { /* zignoruj */ }
+				}
+			}
    		}
    		if (result) return sb.toString();
    		return null;
    	}
+   	
 }

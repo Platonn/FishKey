@@ -23,7 +23,7 @@ import com.fishkey.model.FlashcardSet;
  * @author Platon
  *
  */
-public class FlashcardSetProvider extends FileReader {
+public class FlashcardSetProvider extends AssetsReader {
 	
 	/** tag to oznaczania logow */
 	private static final String LOG_TAG = FlashcardSetProvider.class.getName();
@@ -32,36 +32,7 @@ public class FlashcardSetProvider extends FileReader {
 	private static final String DEFAULT_FILE_NAME_TXT = "slowka.txt";
 	
 	/** domyslna nazwa pliku JSON */
-	private static final String DEFAULT_FILE_NAME_JSON = "slowka.json";
-	
-	/** 
-	 * zwraca wczytany z pliku zestaw fiszek. 
-	 * <p>
-	 * W pliku powinny znajdowac sie w kolejnych liniach slowka w formacie:
-	 * pol - ang (oddzielone myslnikiem)
-	 * 
-	 * @param	context		obiekt klasy context - do obslugi plikow
-	 * @param	fileString	nazwa pliku do importu fiszek
-	 * @return	wczytany z pliku zestaw fiszek
-	 * @throws LoadFlashcardSetException gdy nie uda sie wczytac zestawu fiszek
-	 * @deprecated Zaleca sie uzycie <code>readJSONfile()</code>
-	 * @see #parseJSON()
-	 */
-	protected static FlashcardSet parsePlain(String textPlain) throws LoadFlashcardSetException {
-		FlashcardSet flashcardSet = new FlashcardSet();
-		try {
-			BufferedReader reader = new BufferedReader(new StringReader(textPlain));
-		    String line = null;
-		    String text[];																// Tablica, do ktorej beda wczytywane tresci oddzielone potem myslnikiem
-			while ((line = reader.readLine()) != null) {
-				text = line.split(" - ");												// Dwie spacje obok umozliwiaja podanie slowka zawierajacego "gęstą spację", np. semi-detached								// Rozdzielenie pytania od odpowiedzi przez separator (myslnik)
-				flashcardSet.add(new Flashcard(text[1].trim(),text[0].trim()));			// Wczytuje wg schematu: "PYTANIE - ODPOWIEDZ" (musza byc spacje wokol myslnika)
-			}
-		} catch (IOException e) {
-			throw new LoadFlashcardSetException();
-		}
-		return flashcardSet;
-	}
+	private static final String DEFAULT_FILE_NAME_JSON = "slowka.json.txt";
 	
 	/** 
 	 * zwraca wczytany z pliku JSON zestaw fiszek 
@@ -71,7 +42,7 @@ public class FlashcardSetProvider extends FileReader {
 	 * @return	wczytany z pliku zestaw fiszek
 	 * @throws LoadFlashcardSetException gdy nie uda sie wczytac zestawu fiszek
 	 */
-	protected static FlashcardSet parseJSON(String JSONText) throws LoadFlashcardSetException {
+	private static FlashcardSet parseJSON(String JSONText) throws LoadFlashcardSetException {
 		// Nazwy pol JSON:
 		final String TAG_ID				= "id";
 		final String TAG_NAME			= "name";
@@ -89,7 +60,7 @@ public class FlashcardSetProvider extends FileReader {
 			    								c.getString(TAG_ANG).trim() ));
 			}
 		} catch (JSONException e) {
-			Log.e(LOG_TAG, "Blad czytania JSON. Przyczyna: " + e.getMessage()); 
+			Log.e(LOG_TAG, "Blad czytania JSON. " + e.getMessage()); 
 			throw new LoadFlashcardSetException();
 		}
 		return flashcardSet;
@@ -102,15 +73,21 @@ public class FlashcardSetProvider extends FileReader {
 	 * @throws LoadFlashcardSetException	gdy wczytanie zestawu fiszek z zwenetrznego zrodla sie nie powiodlo sie
 	 */
 	public static FlashcardSet getFlashcardSet(Context context) throws LoadFlashcardSetException {
-		String fileText; // = readFromAssetsFile(context, DEFAULT_FILE_NAME_JSON, null); //spike
-		try {
-			fileText = readExternal(context, DEFAULT_FILE_NAME_JSON );
-		} catch (IOException e) {
-			try {
-				String fromAssetsText = readFromAssetsFile(context, DEFAULT_FILE_NAME_JSON, null);
-				writeExternal(context, DEFAULT_FILE_NAME_JSON, fromAssetsText); //spike - nie robic tego tak
-				fileText = readExternal(context, DEFAULT_FILE_NAME_JSON );
-			} catch (IOException e1){ 
+		String fileText;
+		fileText = ExternalStorageUtil.readFileAsString(context, DEFAULT_FILE_NAME_JSON);
+		if (fileText == null){	// jesli nie udalo sie wczytac danych z pliku, sproboj go utworzyc na podstawie pliku przykladowego z katalogu assets. Jesli cos pojdzie nie tak, rzuc wyjatkiem 
+			String fromAssetsText = AssetsReader.readFileAsString(context, DEFAULT_FILE_NAME_JSON);
+			if (fromAssetsText == null){
+				Log.e(LOG_TAG, "Nie mozna wczytac zestawu fiszek z pliku assets");
+				throw new LoadFlashcardSetException();
+			}
+			if (!ExternalStorageUtil.writeStringAsFile(context, DEFAULT_FILE_NAME_JSON, fromAssetsText)) {
+				Log.e(LOG_TAG, "Nie zapisac zestawu fiszek do pliku");
+				throw new LoadFlashcardSetException();
+			}
+			fileText = ExternalStorageUtil.readFileAsString(context, DEFAULT_FILE_NAME_JSON );
+			if (fileText == null) {
+				Log.e(LOG_TAG, "Nie wczytac zestawu fiszek z pliku");
 				throw new LoadFlashcardSetException();
 			}
 		}
