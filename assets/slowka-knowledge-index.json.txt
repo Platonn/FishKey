@@ -1,5 +1,5 @@
 {"id": "1",
- "knowledgeIndexSet": [
+ "flashcards": [
   	{"id": "1", "value": "0", "date": ""},
   	{"id": "2", "value": "0", "date": ""},
   	{"id": "3", "value": "0", "date": ""},
