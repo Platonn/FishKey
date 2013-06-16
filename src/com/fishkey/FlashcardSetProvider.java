@@ -46,8 +46,9 @@ public class FlashcardSetProvider extends AssetsUtil {
 		final String TAG_ID				= "id";
 		final String TAG_NAME			= "name";
 		final String TAG_FLASHCARDS		= "flashcards";
-		final String TAG_ANG			= "ang";
-		final String TAG_POL			= "pol";
+		final String TAG_F_ID			= "id";
+		final String TAG_F_ANG			= "ang";
+		final String TAG_F_POL			= "pol";
 		// Wczytywanie JSON:
 		FlashcardSet flashcardSet = new FlashcardSet();
 		try {
@@ -57,9 +58,9 @@ public class FlashcardSetProvider extends AssetsUtil {
 			JSONArray flashcardsArray = jsonObject.getJSONArray(TAG_FLASHCARDS);
 			for(int i=0; i < flashcardsArray.length(); i++){
 			    JSONObject c = flashcardsArray.getJSONObject(i);
-			    long id 	= Long.parseLong(c.getString(TAG_ID).trim());
-			    String pol 	= c.getString(TAG_POL).trim();
-			    String ang 	= c.getString(TAG_ANG).trim();
+			    long id 	= Long.parseLong(c.getString(TAG_F_ID).trim());
+			    String pol 	= c.getString(TAG_F_POL).trim();
+			    String ang 	= c.getString(TAG_F_ANG).trim();
 			    flashcardSet.add(new Flashcard(id, pol, ang));
 			}
 		} catch (JSONException e) {
