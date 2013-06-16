@@ -28,6 +28,11 @@ public class FlashcardSet {
 	private static Random random = new Random();
 	
 	/**
+	 * nazwa zestawu fiszek, domyslnie null
+	 */
+	private String name = null; 
+	
+	/**
 	 * inicjalizuje liste fiszek
 	 */
 	public FlashcardSet(){
@@ -102,5 +107,24 @@ public class FlashcardSet {
 	public void addAllFrom(FlashcardSet fs) {
 		list.addAll(fs.list);
 		size += fs.size();
+	}
+	
+	/**
+	 * zwraca nazwe zestawu fiszek badz null, jesli brak nazwy quizu.
+	 * <p>
+	 * Nazwe zestawu fiszek mozna ustawic za pomoca metody <code>setName(String)</code>
+	 * @return	nazwa quizu badz null, jesli brak nazwy quizu
+	 * @see #setName(String)
+	 */
+	public String getName() {
+		return name;
+	}
+	
+	/**
+	 * ustawia nazwe dla zestawu fiszek
+	 * @param n	nazwa zestawu fiszek
+	 */
+	public void setName(String name){
+		this.name = name;
 	}
 }

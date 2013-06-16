@@ -30,9 +30,6 @@ public class FlashcardSetProvider extends AssetsUtil {
 	/** tag to oznaczania logow */
 	private static final String LOG_TAG = FlashcardSetProvider.class.getName();
 	
-	/** domyslna nazwa pliku plain */
-	private static final String DEFAULT_FILE_NAME_TXT = "slowka.txt";
-	
 	/** domyslna nazwa pliku JSON */
 	private static final String DEFAULT_FILE_NAME_JSON = "slowka.json.txt";
 	
@@ -55,11 +52,15 @@ public class FlashcardSetProvider extends AssetsUtil {
 		FlashcardSet flashcardSet = new FlashcardSet();
 		try {
 			JSONObject jsonObject = new JSONObject(JSONText);
+			String FSname = jsonObject.getString(TAG_NAME).trim();
+			flashcardSet.setName(FSname);
 			JSONArray flashcardsArray = jsonObject.getJSONArray(TAG_FLASHCARDS);
 			for(int i=0; i < flashcardsArray.length(); i++){
 			    JSONObject c = flashcardsArray.getJSONObject(i);
-			    flashcardSet.add(new Flashcard( c.getString(TAG_POL).trim(),
-			    								c.getString(TAG_ANG).trim() ));
+			    long id 	= Long.parseLong(c.getString(TAG_ID).trim());
+			    String pol 	= c.getString(TAG_POL).trim();
+			    String ang 	= c.getString(TAG_ANG).trim();
+			    flashcardSet.add(new Flashcard(id, pol, ang));
 			}
 		} catch (JSONException e) {
 			Log.e(LOG_TAG, "Blad czytania JSON. " + e.getMessage()); 
