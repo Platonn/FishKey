@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.text.ParseException;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,6 +35,13 @@ public class KnowledgeIndexSetProvider extends AssetsUtil {
 	
 	/** domyslna nazwa pliku JSON */
 	private static final String DEFAULT_FILE_NAME_JSON = "slowka-knowledge-index.json.txt";
+
+	// Nazwy pol JSON:
+	static final String TAG_ID				= "id";
+	static final String TAG_FLASHCARDS		= "flashcards";
+	static final String TAG_F_ID			= "id";
+	static final String TAG_F_VALUE		= "value";
+	static final String TAG_F_DATE			= "date";
 	
 	/** 
 	 * zwraca wczytany z pliku JSON zestaw fiszek 
@@ -44,22 +52,17 @@ public class KnowledgeIndexSetProvider extends AssetsUtil {
 	 * @throws QuizInitException gdy nie uda sie wczytac zestawu fiszek
 	 */
 	private static KnowledgeIndexSet parseJSON(String JSONText) throws QuizInitException {
-		// Nazwy pol JSON:
-		final String TAG_ID				= "id";
-		final String TAG_FLASHCARDS		= "flashcards";
-		final String TAG_F_ID			= "id";
-		final String TAG_F_VALUE		= "value";
-		final String TAG_F_DATE			= "date";
 		// Wczytywanie JSON:
-		KnowledgeIndexSet knowledgeIndexSet = new KnowledgeIndexSet();
+		KnowledgeIndexSet knowledgeIndexSet;
 		try {
 			JSONObject jsonObject = new JSONObject(JSONText);
+			knowledgeIndexSet = new KnowledgeIndexSet(jsonObject.getLong(TAG_ID));
 			JSONArray flashcardsArray = jsonObject.getJSONArray(TAG_FLASHCARDS);
 			for(int i=0; i < flashcardsArray.length(); i++){
 				try{
 					JSONObject c = flashcardsArray.getJSONObject(i);
-				    long id 	= Long.parseLong(c.getString(TAG_F_ID).trim());
-				    int value	= Integer.parseInt(c.getString(TAG_F_VALUE).trim());
+				    long id 	= c.getLong(TAG_F_ID);
+				    int value	= c.getInt(TAG_F_VALUE);
 				    String date	= c.getString(TAG_F_DATE).trim();
 				    knowledgeIndexSet.put(id, knowledgeIndexSet.new KnowledgeIndex(value,date));
 				} catch(ParseException e) {
@@ -100,4 +103,36 @@ public class KnowledgeIndexSetProvider extends AssetsUtil {
 		}
 		return parseJSON(fileText);
 	}
+	
+	private static String makeJSONString(KnowledgeIndexSet kis) throws JSONException{
+        JSONObject json = new JSONObject();
+		json.put(TAG_ID, kis.getId());
+		for (Map.Entry<Long, KnowledgeIndexSet.KnowledgeIndex> entry : kis.entrySet()) {
+			JSONObject jsonFlashcardKi = new JSONObject();
+			Long id = entry.getKey();
+			KnowledgeIndexSet.KnowledgeIndex ki = entry.getValue(); 	
+			jsonFlashcardKi.put(TAG_F_ID, id);
+			jsonFlashcardKi.put(TAG_F_VALUE, ki.getValue());
+			jsonFlashcardKi.put(TAG_F_DATE, ki.getDateAsString());
+			json.accumulate(TAG_FLASHCARDS, jsonFlashcardKi);
+		}
+		return json.toString();
+	}
+
+	
+	public static boolean archiveKnowledgeIndexSet(Context context, KnowledgeIndexSet knowledgeIndexSet) {
+		boolean result = false;
+		try {
+			String fileText = makeJSONString(knowledgeIndexSet);
+			if (!ExternalStorageUtil.writeStringAsFile(context, fileText, DEFAULT_FILE_NAME_JSON))
+				Log.e(LOG_TAG, "Nie mozna zapisac wspolczynnikow znajomosci fiszek z pliku");
+			else
+				result = true;
+		}
+		catch (JSONException e){
+			Log.e(LOG_TAG,"Blad przy generowaniu napisu JSON.");
+		}
+		return result;
+	}
+	
 }
