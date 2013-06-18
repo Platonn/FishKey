@@ -18,7 +18,7 @@ public class QuizRoundsHistory {
 	private static final String LOG_TAG = QuizRoundsHistory.class.getName();
 	
 	/** lista uporzadkowana (historia) rund quizu */
-	private LinkedList<QuizRound> roundsList;
+	private LinkedList<QuizRound> roundsList = new LinkedList<QuizRound>();
 	
 	/**
 	 * zwraca obiekt QuizRound biezacej rundy
