@@ -20,6 +20,7 @@ import com.fishkey.exceptions.QuizInitException;
 import com.fishkey.model.Flashcard;
 import com.fishkey.model.FlashcardSet;
 import com.fishkey.model.KnowledgeIndexSet;
+import com.fishkey.model.KnowledgeIndex;
 import com.fishkey.utils.AssetsUtil;
 import com.fishkey.utils.ExternalStorageUtil;
 
@@ -28,7 +29,7 @@ import com.fishkey.utils.ExternalStorageUtil;
  * @author Platon
  *
  */
-public class KnowledgeIndexSetProvider extends AssetsUtil {
+public class KnowledgeIndexSetProvider {
 	
 	/** tag to oznaczania logow */
 	private static final String LOG_TAG = KnowledgeIndexSetProvider.class.getName();
@@ -44,12 +45,12 @@ public class KnowledgeIndexSetProvider extends AssetsUtil {
 	static final String TAG_F_DATE			= "date";
 	
 	/** 
-	 * zwraca wczytany z pliku JSON zestaw fiszek 
+	 * zwraca wczytany z pliku JSON zestaw wspolczynnikow znajomosci fiszek 
 	 * 
 	 * @param	context		obiekt klasy context - do obslugi plikow
-	 * @param	fileString	nazwa pliku do importu fiszek
-	 * @return	wczytany z pliku zestaw fiszek
-	 * @throws QuizInitException gdy nie uda sie wczytac zestawu fiszek
+	 * @param	fileString	nazwa pliku do importu wspolczynnikow znajomosci fiszek 
+	 * @return	wczytany z pliku zestaw wspolczynnikow znajomosci fiszek 
+	 * @throws QuizInitException gdy nie uda sie wczytac zestawu wspolczynnikow znajomosci fiszek 
 	 */
 	private static KnowledgeIndexSet parseJSON(String JSONText) throws QuizInitException {
 		// Wczytywanie JSON:
@@ -64,9 +65,13 @@ public class KnowledgeIndexSetProvider extends AssetsUtil {
 				    long id 	= c.getLong(TAG_F_ID);
 				    int value	= c.getInt(TAG_F_VALUE);
 				    String date	= c.getString(TAG_F_DATE).trim();
-				    knowledgeIndexSet.put(id, knowledgeIndexSet.new KnowledgeIndex(value,date));
+				    KnowledgeIndex kiToPut = new KnowledgeIndex(value, date);
+				    KnowledgeIndex kiMaybeWasThere;
+					if((kiMaybeWasThere = knowledgeIndexSet.put(id, kiToPut)) != null) {
+				    	Log.w(LOG_TAG, "Dwie wartosci wspolczynnika znajomosci fiszki o tym samym id: (" + kiMaybeWasThere.toString() + ") oraz (" + kiToPut.toString() + ")");
+				    }
 				} catch(ParseException e) {
-					Log.w(LOG_TAG, "Nie mozna wczytac fiszki. " + e.getMessage()); 
+					Log.w(LOG_TAG, "Nie mozna wczytac wspolczynnika znajomosci fiszki. " + e.getMessage()); 
 				}
 			}
 		} catch (JSONException e) {
@@ -77,10 +82,10 @@ public class KnowledgeIndexSetProvider extends AssetsUtil {
 	}
 	
 	/**
-	 * zwraca wczytany z zewnetrznego zrodla zestaw fiszek
+	 * zwraca wczytany z zewnetrznego zrodla zestaw wspolczynnikow znajomosci fiszek 
 	 * @param context	obiekt Context
-	 * @return			zestaw fiszek
-	 * @throws QuizInitException	gdy wczytanie zestawu fiszek z zwenetrznego zrodla sie nie powiodlo sie
+	 * @return			zestaw wspolczynnikow znajomosci fiszek 
+	 * @throws QuizInitException	gdy wczytanie zestawu wspolczynnikow znajomosci fiszek z zwenetrznego zrodla sie nie powiodlo sie
 	 */
 	public static KnowledgeIndexSet getKnowledgeIndexSet(Context context) throws QuizInitException {
 		String fileText;
@@ -104,13 +109,22 @@ public class KnowledgeIndexSetProvider extends AssetsUtil {
 		return parseJSON(fileText);
 	}
 	
+	/**
+	 * zwraca utworzony tekst JSON na podstawie podanego zestawu wspolczynnikow znajomosci
+	 * fiszek
+	 * @param kis				zestaw wspolczynnikow znajomosci fiszek
+	 * @return					tekst JSON utworzony na podstawie podanego zestawu
+	 * 							wspolczynnikow znajomosci fiszek
+	 * @throws JSONException	gdy nie uda stowrzyc poprawnego tekstu JSON na podstawie
+	 * 							zestawu wspolczynnikow znajomosci
+	 */
 	private static String makeJSONString(KnowledgeIndexSet kis) throws JSONException{
         JSONObject json = new JSONObject();
 		json.put(TAG_ID, kis.getId());
-		for (Map.Entry<Long, KnowledgeIndexSet.KnowledgeIndex> entry : kis.entrySet()) {
+		for (Map.Entry<Long, KnowledgeIndex> entry : kis.entrySet()) {
 			JSONObject jsonFlashcardKi = new JSONObject();
 			Long id = entry.getKey();
-			KnowledgeIndexSet.KnowledgeIndex ki = entry.getValue(); 	
+			KnowledgeIndex ki = entry.getValue(); 	
 			jsonFlashcardKi.put(TAG_F_ID, id);
 			jsonFlashcardKi.put(TAG_F_VALUE, ki.getValue());
 			jsonFlashcardKi.put(TAG_F_DATE, ki.getDateAsString());
@@ -119,7 +133,13 @@ public class KnowledgeIndexSetProvider extends AssetsUtil {
 		return json.toString();
 	}
 
-	
+	/**
+	 * archiwizuje podany zestaw wspolczynnikow znajomosci fiszek i zwraca czy cala operacja sie powiodla
+	 * @param context				obiekt Context
+	 * @param knowledgeIndexSet		zestaw wspolczynnikow znajomosci fiszek
+	 * @return						czy operacja zarchiwizowania podanego zestawu wspolczynnikow
+	 * 								znajomosci fiszek sie powiodla
+	 */
 	public static boolean archiveKnowledgeIndexSet(Context context, KnowledgeIndexSet knowledgeIndexSet) {
 		boolean result = false;
 		try {
