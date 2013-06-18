@@ -90,13 +90,31 @@ public class QuizActivity extends Activity {
 			String title 	= (String) this.getResources().getText(R.string.quiz_empty_title);
 			String message 	= (String) this.getResources().getText(R.string.quiz_empty);
 			new CrashAlertDialogBuilder(QuizActivity.this, title, message).show();
+		} catch (QuizInitException e) {
+			Log.e(LOG_TAG,"Blad rozpoczecia quizu");
+			showUnexpectedBehaviourAlertDialog();
+		} catch (EndOfQuizException e) {
+			Log.e(LOG_TAG,"Nieoczekiwany koniec quizu");
+			showUnexpectedBehaviourAlertDialog();
+		} catch (EndOfQuizRoundException e) {
+			Log.e(LOG_TAG,"Nieoczekiwany koniec rundy");
+			showUnexpectedBehaviourAlertDialog();
 		} catch (Exception e) {
-			String title 	= (String) this.getResources().getText(R.string.quiz_error_title);
-			String message 	= (String) this.getResources().getText(R.string.quiz_error);
-			new CrashAlertDialogBuilder(QuizActivity.this, title, message).show();
+			Log.e(LOG_TAG,"Nieoczekiwany wyjatek quizu: " + e.getMessage());
+			showUnexpectedBehaviourAlertDialog();
 		}
 	}
-
+	
+	/** 
+	 * wyswielta alert dialog z informacja o nieoczekiwanym zachowaniu quizu. Po zamknieciu
+	 * alertu zamykana jest aktywnosc
+	 */
+	private void showUnexpectedBehaviourAlertDialog() {
+		String title 	= (String) this.getResources().getText(R.string.quiz_error_title);
+		String message 	= (String) this.getResources().getText(R.string.quiz_error);
+		new CrashAlertDialogBuilder(QuizActivity.this, title, message).show();
+	}
+	
 	/**
 	 * wyswietla pytania na ekranie i blokuje/odblokowuje kontrolki
 	 * 
