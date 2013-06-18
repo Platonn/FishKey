@@ -1,12 +1,5 @@
 package com.fishkey;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringReader;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,7 +18,7 @@ import com.fishkey.utils.ExternalStorageUtil;
  * @author Platon
  *
  */
-public class FlashcardSetProvider extends AssetsUtil {
+public class FlashcardSetProvider {
 	
 	/** tag to oznaczania logow */
 	private static final String LOG_TAG = FlashcardSetProvider.class.getName();
@@ -50,18 +43,23 @@ public class FlashcardSetProvider extends AssetsUtil {
 		final String TAG_F_ANG			= "ang";
 		final String TAG_F_POL			= "pol";
 		// Wczytywanie JSON:
-		FlashcardSet flashcardSet = new FlashcardSet();
+		FlashcardSet flashcardSet;
 		try {
 			JSONObject jsonObject = new JSONObject(JSONText);
+			Long FSid = jsonObject.getLong(TAG_ID);
 			String FSname = jsonObject.getString(TAG_NAME).trim();
-			flashcardSet.setName(FSname);
+			flashcardSet = new FlashcardSet(FSid, FSname);
 			JSONArray flashcardsArray = jsonObject.getJSONArray(TAG_FLASHCARDS);
 			for(int i=0; i < flashcardsArray.length(); i++){
 			    JSONObject c = flashcardsArray.getJSONObject(i);
-			    long id 	= Long.parseLong(c.getString(TAG_F_ID).trim());
-			    String pol 	= c.getString(TAG_F_POL).trim();
-			    String ang 	= c.getString(TAG_F_ANG).trim();
-			    flashcardSet.add(new Flashcard(id, pol, ang));
+			    long Fid 		= Long.parseLong(c.getString(TAG_F_ID).trim());
+			    String Fpol 	= c.getString(TAG_F_POL).trim();
+			    String Fang 	= c.getString(TAG_F_ANG).trim();
+			    Flashcard flashcardToPut = new Flashcard(Fpol, Fang);
+			    Flashcard flashcardMaybeWasThere;
+				if((flashcardMaybeWasThere = flashcardSet.put(Fid, flashcardToPut)) != null) {
+			    	Log.w(LOG_TAG, "Dwie fiszki o tym samym id: (" + flashcardMaybeWasThere.toString() + ") oraz (" + flashcardToPut.toString() + ")");
+			    }
 			}
 		} catch (JSONException e) {
 			Log.e(LOG_TAG, "Blad czytania JSON. " + e.getMessage()); 
