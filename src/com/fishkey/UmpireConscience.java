@@ -6,6 +6,9 @@ import com.fishkey.exceptions.EmptyQuizException;
 import com.fishkey.exceptions.EndOfQuizException;
 import com.fishkey.exceptions.EndOfQuizRoundException;
 import com.fishkey.exceptions.QuizInitException;
+import com.fishkey.model.AnswerCorrectness;
+import com.fishkey.model.AnswerCorrectness;
+import com.fishkey.model.AnswerCorrectness.Correctness;
 
 /**
  * Sedzia sumienie ocenia "naiwnie" poprawnosc odpowiedi,
@@ -39,7 +42,9 @@ public class UmpireConscience extends Umpire {
 	 * @throws EndOfQuizException 
 	 */
 	public void adjudicate(boolean knew) throws EndOfQuizException, EndOfQuizRoundException{
-		quizState.putAnswered(currentFlashcard,knew);
+		Correctness correctness 	= knew ? Correctness.CORRECT : Correctness.WRONG;
+		Long id 					= currentIdWithFlashcard.getId();
+		quizState.putAnswered(new AnswerCorrectness(id,correctness));
 		getNextFlashcard();
 	}
 }
