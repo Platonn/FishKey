@@ -33,7 +33,7 @@ public class AssetsUtil {
    		synchronized (FileUtil.DATA_LOCK) {
    			try{
 				in = context.getAssets().open(fileName);
-				BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+				BufferedReader reader = new BufferedReader(new InputStreamReader(in), 8*1024);
 			    String line = null;
 			    while ((line = reader.readLine()) != null) {
 			      sb.append(line).append(FileUtil.LINE_SEP);
