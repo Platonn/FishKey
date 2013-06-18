@@ -40,20 +40,12 @@ public class QuizRound {
 	public final int NUMBER;
 	
 	/**
-	 * licznik rund
-	 * <p>
-	 * licznik utworzonych instancji obiektu QuizRound
-	 * @see QuizRound
-	 */
-	private static int roundsCounter = 0;
-	
-	/**
 	 * tag to oznaczania logow
 	 */
 	private static final String LOG_TAG = QuizRound.class.getName();
 	
 	/**
-	 * przygotowuje runde do przeprowadzenia
+	 * przygotowuje runde do przeprowadzenia, ustawia jej numer na 1
 	 * <p>
 	 * ustawia podany zestaw fiszek jako zestaw do przepytania
 	 * @param fs			zestaw fiszek do przepytania w rundzie
@@ -63,12 +55,13 @@ public class QuizRound {
 		answeredCorrectList		= new AnswerCorrectnessList();
 		answeredWrongList		= new AnswerCorrectnessList();
 		SIZE					= idToAskList.size();
-		NUMBER 					= ++roundsCounter;
+		NUMBER 					= 1;
 		Log.v(LOG_TAG,"Rozpoczeto runde nr " + NUMBER);
 	}
 	
 	/**
-	 * przygotowuje kolejna runde do przeprowadzenia na podstawie poprzedniej
+	 * przygotowuje kolejna runde do przeprowadzenia na podstawie poprzedniej,
+	 * ustawia jej numer na o 1 wiekszy niz poprzedniej
 	 * <p>
 	 * kopiuje z poprzedniej rundy zestaw fiszek nieodgadnietych do zestawu fiszek do przepytania
 	 * biezacej rundzie
@@ -88,7 +81,7 @@ public class QuizRound {
 		answeredCorrectList		= new AnswerCorrectnessList();
 		answeredWrongList		= new AnswerCorrectnessList();
 		SIZE					= idToAskList.size();
-		NUMBER 					= ++roundsCounter;
+		NUMBER 					= prevRound.NUMBER + 1;
 		Log.v(LOG_TAG,"Rozpoczeto nastepna runde nr " + NUMBER);
 	}
 	
@@ -117,13 +110,6 @@ public class QuizRound {
 	}
 	
 	/* Implementacja metod wlasnych */
-	
-	/**
-	 * wyzerowuje licznik rund
-	 */
-	public static void resetRoundsCounter() {
-		roundsCounter = 0;
-	}
 	
 	/**
 	 * zwraca info, czy jest juz rundy quizu
