@@ -1,14 +1,13 @@
 package com.fishkey;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.fishkey.exceptions.EmptyQuizException;
 import com.fishkey.exceptions.EndOfQuizException;
 import com.fishkey.exceptions.EndOfQuizRoundException;
 import com.fishkey.exceptions.QuizInitException;
 import com.fishkey.model.AnswerCorrectness.Correctness;
-import com.fishkey.model.Flashcard;
-import com.fishkey.model.AnswerCorrectness;
 import com.fishkey.model.AnswerCorrectness;
 import com.fishkey.model.FlashcardWithId;
 
@@ -54,9 +53,17 @@ public class Umpire implements IQuizInformator {
 	 * @throws EndOfQuizRoundException 
 	 * @throws EndOfQuizException 
 	 */
-	public Umpire(Context context) throws QuizInitException, EmptyQuizException, EndOfQuizException, EndOfQuizRoundException {
+	public Umpire(Context context) throws QuizInitException, EmptyQuizException {
 		quizState = new QuizState(context);
-		getNextFlashcard();							// TODO: tu nie powinien byc rzucany wyjatek konca rundy ani quizu!
+		try {
+			getNextFlashcard();
+		} catch (EndOfQuizException e) {
+			Log.w(LOG_TAG,"Wyjatek EndOfQuizException nie powinien byc napotakny, a zostal przechwycony.");
+			throw new QuizInitException();
+		} catch (EndOfQuizRoundException e) {
+			Log.w(LOG_TAG,"Wyjatek EndOfQuizRoundException nie powinien byc napotakny, a zostal przechwycony.");
+			throw new QuizInitException();
+		}
 	}
 	
 	/**
