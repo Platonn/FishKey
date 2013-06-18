@@ -1,28 +1,30 @@
 package com.fishkey;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.fishkey.exceptions.EndOfQuizException;
 import com.fishkey.exceptions.EndOfQuizRoundException;
-import com.fishkey.model.Flashcard;
-import com.fishkey.model.FlashcardSet;
+import com.fishkey.model.AnswerCorrectness;
+import com.fishkey.model.AnswerCorrectnessList;
+import com.fishkey.model.AnswerCorrectness;
+import com.fishkey.model.FlashcardIdList;
+import com.fishkey.model.ShuffleLinkedList;
 
-public class QuizRound implements IFlashcardPassOn {
+public class QuizRound {
 	/**
-	 * zestaw fiszek do przepytania
+	 * lista id fiszek do przepytania
 	 */
-	FlashcardSet toAskSet;
+	FlashcardIdList idToAskList;
 	
 	/**
-	 * zestaw fiszek, na ktore odpowiedziano poprawnie
+	 * lista id fiszek, na ktore udzielono poprawnej odpowiedzi
 	 */
-	FlashcardSet answeredCorrectSet;
+	AnswerCorrectnessList answeredCorrectList;
 	
 	/**
-	 * zestaw fiszek, na ktore odpowiedziano blednie
+	 * lista id fiszek, na ktore udzielono blednej odpowiedzi
 	 */
-	FlashcardSet answeredWrongSet;
+	AnswerCorrectnessList answeredWrongList;
 	
 	/**
 	 * ilosc fiszek do przepytania w rundzie
@@ -56,11 +58,11 @@ public class QuizRound implements IFlashcardPassOn {
 	 * ustawia podany zestaw fiszek jako zestaw do przepytania
 	 * @param fs			zestaw fiszek do przepytania w rundzie
 	 */
-	public QuizRound(FlashcardSet fs) {
-		toAskSet 				= fs;
-		answeredCorrectSet		= new FlashcardSet();
-		answeredWrongSet		= new FlashcardSet();
-		SIZE					= toAskSet.size();
+	public QuizRound(FlashcardIdList idToAskList) {
+		this.idToAskList		= idToAskList;
+		answeredCorrectList		= new AnswerCorrectnessList();
+		answeredWrongList		= new AnswerCorrectnessList();
+		SIZE					= idToAskList.size();
 		NUMBER 					= ++roundsCounter;
 		Log.v(LOG_TAG,"Rozpoczeto runde nr " + NUMBER);
 	}
@@ -74,37 +76,44 @@ public class QuizRound implements IFlashcardPassOn {
 	 * @throws EndOfQuizException rzucany, gdy w konstruktorze rundy zostanie podany pusty zestaw fiszek
 	 */
 	public QuizRound(QuizRound prevRound) throws EndOfQuizException {
-		FlashcardSet fs = prevRound.answeredWrongSet;
-		if(fs.isEmpty()) {
+		AnswerCorrectnessList prevAnsweredWrong = prevRound.getAnsweredWrongIdList();
+		if(prevAnsweredWrong.isEmpty()) {
 			Log.v(LOG_TAG,"Koniec quizu");
 			throw new EndOfQuizException();
 		}
-		toAskSet				= new FlashcardSet();
-		toAskSet.addAllFrom(fs);
-		answeredCorrectSet		= new FlashcardSet();
-		answeredWrongSet		= new FlashcardSet();
-		SIZE					= toAskSet.size();
+		idToAskList				= new FlashcardIdList();
+		for(AnswerCorrectness idWithAnsw : prevAnsweredWrong) {
+			idToAskList.add(idWithAnsw.getId());
+		}
+		answeredCorrectList		= new AnswerCorrectnessList();
+		answeredWrongList		= new AnswerCorrectnessList();
+		SIZE					= idToAskList.size();
 		NUMBER 					= ++roundsCounter;
 		Log.v(LOG_TAG,"Rozpoczeto nastepna runde nr " + NUMBER);
 	}
 	
 	/* Implementacja metod interfejsu IFlashcardPassOn */
 	
-	public Flashcard popFlashcard() throws EndOfQuizRoundException {
+	public Long popFlashcardId() throws EndOfQuizRoundException {
 		if (isEnd()) {
 			Log.v(LOG_TAG,"Koniec rundy nr "+NUMBER);
 			throw new EndOfQuizRoundException(getReport());
 		}
 		else
-			return toAskSet.pop();
+			return idToAskList.poll();
 	}
 	
-	public void putAnswered(Flashcard f, boolean isCorrectAnswered) {
-		if (isCorrectAnswered)
-			answeredCorrectSet.add(f);
-		else
-			answeredWrongSet.add(f);
-		Log.v(LOG_TAG,"Dodano do zestawu " + (isCorrectAnswered ? "poprawnych" : "blednych") + ": " + f.getQuestion());
+	public void putAnswered(AnswerCorrectness idWithAnsw) {
+		if (idWithAnsw.getAnswer().equals(AnswerCorrectness.Correctness.CORRECT)){
+			answeredCorrectList.offer(idWithAnsw);
+			Log.v(LOG_TAG,"Dodano do listy poprawnych id fiszki: " + idWithAnsw.getId());
+		} else if (idWithAnsw.getAnswer().equals(AnswerCorrectness.Correctness.WRONG)) {
+			answeredWrongList.offer(idWithAnsw);
+			Log.v(LOG_TAG,"Dodano do listy blednych id fiszki: " + idWithAnsw.getId());
+		} else {
+			Log.w(LOG_TAG,"Nie mozna dodac do listy poprawnych ani blednych id fiszki: "+ idWithAnsw.getId());
+		}
+		
 	}
 	
 	/* Implementacja metod wlasnych */
@@ -124,41 +133,51 @@ public class QuizRound implements IFlashcardPassOn {
 	 * @return	true, jesli zestaw koniec rundy, false w przeciwnym przypadku
 	 */
 	private boolean isEnd(){
-		return toAskSet.isEmpty();
+		return idToAskList.isEmpty();
 	}
 	
-	/* Implementacja metod interfejsu IQuizRoundInformator */
-	
-	/**
-	 * zwraca liczbe poprawnych odpowiedzi w tej rundzie
-	 * @return	liczba poprawnych odpowiedzi w tej rundzie
+	/** 
+	 * zwraca zestaw dobrze odpowiedzianych fiszek, jesli nastapil juz koniec quizu,
+	 * w przeciwnym przypadku zwraca false
+	 * 
+	 * @return	zestaw dobrze odpowiedzianych fiszek, jesli nastapil juz koniec quizu,
+	 * 			w przeciwnym przypadku zwraca false
 	 */
-	public int getNumCorrect(){
-		return answeredCorrectSet.size();
+	public AnswerCorrectnessList getAnsweredCorrectList(){
+		if(isEnd())
+			return this.answeredCorrectList;
+		else
+			return null;
 	}
 	
-	/**
-	 * zwraca liczbe blednych odpowiedzi w tej rundzie
-	 * @return	liczba blednych odpowiedzi w tej rundzie
+	/** 
+	 * zwraca zestaw zle odpowiedzianych fiszek, jesli nastapil juz koniec quizu,
+	 * w przeciwnym przypadku zwraca false
+	 * 
+	 * @return	zestaw zle odpowiedzianych fiszek, jesli nastapil juz koniec quizu,
+	 * 			w przeciwnym przypadku false
 	 */
-	public int getNumWrong(){
-		return answeredWrongSet.size();
+	public AnswerCorrectnessList getAnsweredWrongIdList(){
+		if(isEnd())
+			return this.answeredWrongList;
+		else
+			return null;
 	}
 	
 	/**
 	 * Dodaje fiszke do zestawu dobrze ogadnietych
 	 * @param	fiszka do dodania do zestawu dobrze odgadnietych
 	 */
-	public void answeredCorrect(Flashcard f){
-		answeredCorrectSet.add(f);
+	public void answeredCorrect(AnswerCorrectness idWithAnsw){
+		answeredCorrectList.offer(idWithAnsw);
 	}
 	
 	/**
 	 * Dodaje fiszke do zestawu dobrze ogadnietych
 	 * @param	fiszka do dodania do zestawu dobrze odgadnietych
 	 */
-	public void answeredWrong(Flashcard f){
-		answeredWrongSet.add(f);
+	public void answeredWrong(AnswerCorrectness idWithAnsw){
+		answeredWrongList.offer(idWithAnsw);
 	}
 	
 	/**
@@ -193,5 +212,21 @@ public class QuizRound implements IFlashcardPassOn {
 	 */
 	public Report getReport(){
 		return new Report();
+	}
+	
+	/**
+	 * zwraca liczbe poprawnych odpowiedzi w tej rundzie
+	 * @return	liczba poprawnych odpowiedzi w tej rundzie
+	 */
+	public int getNumCorrect(){
+		return answeredCorrectList.size();
+	}
+	
+	/**
+	 * zwraca liczbe blednych odpowiedzi w tej rundzie
+	 * @return	liczba blednych odpowiedzi w tej rundzie
+	 */
+	public int getNumWrong(){
+		return answeredWrongList.size();
 	}
 }
