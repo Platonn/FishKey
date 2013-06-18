@@ -4,12 +4,7 @@ package com.fishkey.model;
  * klasa reprezentujaca pojedyncza fiszke
  */
 public class Flashcard {
-	
-	/**
-	 * id fiszki
-	 */
-	private long id;
-	
+
 	/**
 	 * pytanie fiszki
 	 */
@@ -26,25 +21,15 @@ public class Flashcard {
 	 * @param	q	pytanie fiszki
 	 * @param	a	pdpowiedz fiszki 
 	 */
-	public Flashcard(long i, String q, String a) {
-		id		 = i;
-		question = q;
-		answer	 = a;
-	}
-	
-	/** 
-	 * zwraca id fiszki
-	 * 
-	 * @return	String	id fiszki
-	 */
-	public long getId() {
-		return id;
+	public Flashcard(String q, String a) {
+		question	= q;
+		answer		= a;
 	}
 	
 	/** 
 	 * zwraca pytanie fiszki
 	 * 
-	 * @return	String	pytanie fiszki 
+	 * @return	pytanie fiszki 
 	 */
 	public String getQuestion() {
 		return question;
@@ -53,10 +38,19 @@ public class Flashcard {
 	/** 
 	 * zwraca prawidlowa odpowiedz fiszki
 	 * 
-	 * @return	String	prawidlowa odpowiedz fiszki 
+	 * @return	prawidlowa odpowiedz fiszki 
 	 */
 	public String getAnswer() {
 		return answer;
+	}
+	
+	/**
+	 * zwraca pytanie i odpowiedz oddzielone myslnikiem
+	 * @return pytanie i odpowiedz oddzielone myslnikiem
+	 */
+	@Override
+	public String toString() {
+		return getQuestion() + " - " + getAnswer();
 	}
 	
 }
