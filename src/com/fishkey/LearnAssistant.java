@@ -13,6 +13,7 @@ import com.fishkey.model.AnswerCorrectnessList;
 import com.fishkey.model.FlashcardIdList;
 import com.fishkey.model.FlashcardSet;
 import com.fishkey.model.KnowledgeIndexSet;
+import com.fishkey.model.QuizRoundsHistory;
 import com.fishkey.model.ShuffleLinkedList;
 import com.fishkey.model.KnowledgeIndex;
 
@@ -124,14 +125,13 @@ public class LearnAssistant {
 	}
 	
 	/**
-	 * TODO: zrobic to rzeczywiscie dla listy raportow z konca rund - teraz to jest robione z listy calych Rund
-	 * 
 	 * aktualizuje w zewnetrznym zrodle wartosci wspolczynnikow znajomosci fiszek
-	 * na podstawie otrzymanej listy raportow z koncow rund quizu - zawierajacych informacje
-	 * o poprawnosci badz blednosci odpowiedzi na kolejne zadawane pytania z fiszek
-	 * @param roundsList	lista raportow z koncow rund quizu
+	 * na podstawie otrzymanej historii quizu - zawierajacych informacje
+	 * o poprawnosci badz blednosci odpowiedzi na kolejne zadawane pytania
+	 * @param quizHistory	historia rund quizu 
 	 */
-	public void updateKnowledgeIndex(LinkedList<QuizRound> roundsList) {
+	public void updateKnowledgeIndex(QuizRoundsHistory quizHistory) {
+		LinkedList<QuizRound> roundsList = quizHistory.getAllRoundsList();
 		for(QuizRound round : roundsList){
 			AnswerCorrectnessList fsCorrect = round.getAnsweredCorrectList();
 			AnswerCorrectnessList fsWrong = round.getAnsweredWrongIdList();

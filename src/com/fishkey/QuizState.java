@@ -138,7 +138,7 @@ class QuizState implements IQuizInformator {
 		try {
 			quizHistory.startNextRound();	
 		} catch (EndOfQuizException eofQuiz) {
-			learnAssistant.updateKnowledgeIndex(quizHistory.getAllRoundsList());
+			learnAssistant.updateKnowledgeIndex(quizHistory);
 			throw eofQuiz;
 		}
 	}	
