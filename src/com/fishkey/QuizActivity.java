@@ -3,6 +3,7 @@ package com.fishkey;
 
 import com.fishkey.R;
 import com.fishkey.alertdialogs.CrashAlertDialogBuilder;
+import com.fishkey.alertdialogs.CrashWeakAlertDialogBuilder;
 import com.fishkey.alertdialogs.QuizRoundResultAlertDialogBuilder;
 import com.fishkey.exceptions.EmptyQuizException;
 import com.fishkey.exceptions.EndOfQuizException;
@@ -14,13 +15,22 @@ import com.fishkey.model.Flashcard;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
+/**
+ * aktywnosc quizu. Odpowiada za ekran i sterowanie interakcja z uzytkownikiem.
+ * @author Platon
+ *
+ */
 public class QuizActivity extends Activity {
 	
 	private Button buttonDontKnow;
@@ -34,9 +44,6 @@ public class QuizActivity extends Activity {
 	private View progressBarWrong;
 	private View progressBarEmpty;
 	
-	private Flashcard currentFlashcard;
-	private static final String answerReplacement = "?";	// zamiast odpowiedzi najpierw wyswietla sie znak zapytania
-	
 	/**
 	 * tag to oznaczania logow
 	 */
@@ -47,14 +54,16 @@ public class QuizActivity extends Activity {
 	 */
 	private Umpire umpire;
 	
+	/**
+	 * metoda wywolywana przy stworzeniu aktywnoci
+	 */
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.quiz_activity);
 		
-		// Stworzenie sedziego
 		try {
+			// Stworzenie sedziego
 			umpire = new UmpireConscience(this);
-			
 			
 			// Pobranie referencji do zasobow widoku
 			buttonKnow 	  					= (Button) findViewById(R.id.button_know);
@@ -85,11 +94,11 @@ public class QuizActivity extends Activity {
 		        }
 			});
 			
-			askUser();
+			askUser();	// Zadaj pierwsze pytanie
 		} catch (EmptyQuizException e) {
 			String title 	= (String) this.getResources().getText(R.string.quiz_empty_title);
 			String message 	= (String) this.getResources().getText(R.string.quiz_empty);
-			new CrashAlertDialogBuilder(QuizActivity.this, title, message).show();
+			new CrashWeakAlertDialogBuilder(QuizActivity.this, title, message).show(); //spike: zrobic to w przyszlosci CrashAlert, bo teraz po kliknieciu sprzetowego Cofnij nic sie nie dzieje
 		} catch (QuizInitException e) {
 			Log.e(LOG_TAG,"Blad rozpoczecia quizu");
 			showUnexpectedBehaviourAlertDialog();
@@ -205,11 +214,40 @@ public class QuizActivity extends Activity {
 	 */
 	public void showCorrectAnswer() {
 		String answerText = umpire.getAnswer();
-		answer.setText(answerText);			// Wyswietlenie poprawnej odpowiedzi
+		answer.setText(answerText);							// Wyswietlenie poprawnej odpowiedzi
 		buttonShowAnswer.setEnabled(false);
 		buttonKnow.setEnabled(true);
 		buttonDontKnow.setEnabled(true);
 		Log.v(LOG_TAG,"Wyswietlono odpowiedz: " + answerText);
+	}
+	
+	/**
+	 * Metoda wywolywana przy stworzeniu menu
+	 */
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.bottom_menu_activity, menu);	
+		// ustawienie listnera dla glownego przycisku menu
+		menu.findItem(R.id.reset_knowledge_index).setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				LearnAssistant learnAssistant;
+				try {
+					learnAssistant = new LearnAssistant(QuizActivity.this);
+					learnAssistant.resetKnowledgeIndex();		
+				} catch (QuizInitException e) {/*zignnoruj*/}
+						
+				// zrestartuj ta aktywnosc - wylaczajac animacje zamkniecia i startu aktywnosci:
+				Intent intent = getIntent();
+			    overridePendingTransition(0, 0);
+			    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+			    finish();
+			    overridePendingTransition(0, 0);
+			    startActivity(intent);
+				return false;
+			}
+		});
+		super.onCreateOptionsMenu(menu);
+		return true;
 	}
 }
 
