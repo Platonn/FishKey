@@ -1,14 +1,9 @@
 package com.fishkey;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.text.ParseException;
 import java.util.Map;
 
+import org.joda.time.DateMidnight;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,8 +12,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.fishkey.exceptions.QuizInitException;
-import com.fishkey.model.Flashcard;
-import com.fishkey.model.FlashcardSet;
+
 import com.fishkey.model.KnowledgeIndexSet;
 import com.fishkey.model.KnowledgeIndex;
 import com.fishkey.utils.AssetsUtil;
@@ -39,9 +33,10 @@ public class KnowledgeIndexSetProvider {
 
 	// Nazwy pol JSON:
 	static final String TAG_ID				= "id";
+	static final String TAG_DATE			= "date";
 	static final String TAG_FLASHCARDS		= "flashcards";
 	static final String TAG_F_ID			= "id";
-	static final String TAG_F_VALUE		= "value";
+	static final String TAG_F_VALUE			= "value";
 	static final String TAG_F_DATE			= "date";
 	
 	/** 
@@ -57,7 +52,9 @@ public class KnowledgeIndexSetProvider {
 		KnowledgeIndexSet knowledgeIndexSet;
 		try {
 			JSONObject jsonObject = new JSONObject(JSONText);
-			knowledgeIndexSet = new KnowledgeIndexSet(jsonObject.getLong(TAG_ID));
+			Long idSet 			= jsonObject.getLong(TAG_ID);
+			String dateSet 		= jsonObject.getString(TAG_DATE).trim();
+			knowledgeIndexSet 	= new KnowledgeIndexSet(idSet,dateSet);
 			JSONArray flashcardsArray = jsonObject.getJSONArray(TAG_FLASHCARDS);
 			for(int i=0; i < flashcardsArray.length(); i++){
 				try{
@@ -118,9 +115,10 @@ public class KnowledgeIndexSetProvider {
 	 * @throws JSONException	gdy nie uda stowrzyc poprawnego tekstu JSON na podstawie
 	 * 							zestawu wspolczynnikow znajomosci
 	 */
-	private static String makeJSONString(KnowledgeIndexSet kis) throws JSONException{
+	private static String makeJSONString(KnowledgeIndexSet kis, String currentDateText) throws JSONException{
         JSONObject json = new JSONObject();
 		json.put(TAG_ID, kis.getId());
+		json.put(TAG_DATE, currentDateText);
 		for (Map.Entry<Long, KnowledgeIndex> entry : kis.entrySet()) {
 			JSONObject jsonFlashcardKi = new JSONObject();
 			Long id = entry.getKey();
@@ -140,10 +138,10 @@ public class KnowledgeIndexSetProvider {
 	 * @return						czy operacja zarchiwizowania podanego zestawu wspolczynnikow
 	 * 								znajomosci fiszek sie powiodla
 	 */
-	public static boolean archiveKnowledgeIndexSet(Context context, KnowledgeIndexSet knowledgeIndexSet) {
+	public static boolean archiveKnowledgeIndexSet(Context context, KnowledgeIndexSet knowledgeIndexSet, String currentDateText) {
 		boolean result = false;
 		try {
-			String fileText = makeJSONString(knowledgeIndexSet);
+			String fileText = makeJSONString(knowledgeIndexSet,currentDateText);
 			if (!ExternalStorageUtil.writeStringAsFile(context, fileText, DEFAULT_FILE_NAME_JSON))
 				Log.e(LOG_TAG, "Nie mozna zapisac wspolczynnikow znajomosci fiszek z pliku");
 			else
