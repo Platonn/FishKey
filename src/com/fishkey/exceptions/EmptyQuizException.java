@@ -5,6 +5,6 @@ package com.fishkey.exceptions;
  * @author Platon
  *
  */
-public class EmptyQuizException extends Exception {
+public class EmptyQuizException extends QuizException {
 	private static final long serialVersionUID = -5945689269366100186L;
 }
