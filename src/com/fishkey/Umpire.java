@@ -59,10 +59,10 @@ public class Umpire implements IQuizInformator {
 			getNextFlashcard();
 		} catch (EndOfQuizException e) {
 			Log.w(LOG_TAG,"Wyjatek EndOfQuizException nie powinien byc napotakny, a zostal przechwycony.");
-			throw new QuizInitException();
+			throw new EmptyQuizException();
 		} catch (EndOfQuizRoundException e) {
 			Log.w(LOG_TAG,"Wyjatek EndOfQuizRoundException nie powinien byc napotakny, a zostal przechwycony.");
-			throw new QuizInitException();
+			throw new EmptyQuizException();
 		}
 	}
 	
