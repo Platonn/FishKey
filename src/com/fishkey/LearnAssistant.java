@@ -1,10 +1,16 @@
 package com.fishkey;
 
+import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.joda.time.DateMidnight;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+
 import android.content.Context;
+import android.util.Log;
 
 import com.fishkey.exceptions.QuizInitException;
 import com.fishkey.model.Flashcard;
@@ -27,26 +33,53 @@ import com.fishkey.model.KnowledgeIndex;
  */
 public class LearnAssistant {
 	
-	/** stala wartosc, o jaka zwieksza sie wspolczynniki */
+	/** tag do oznaczania logow */
+	private static final String LOG_TAG = LearnAssistant.class.getName();
+	
+	/** wartosc, o jaka zwieksza sie wspolczynniki */
 	private static final int INCREASE_KI_VALUE = 1;
 	
-	/** stala wartosc, o jaka zmniejsza sie wspolczynniki */
+	/** wartosc, o jaka zmniejsza sie wspolczynniki */
 	private static final int DECREASE_KI_VALUE = 3;
-		
+	
+	
+	// Cele do osiagniecia, by wejsc na wyzszy stopien zawieszenia fiszki
+	private static final int TARGET_0		= 0;
+	private static final int TARGET_1		= 1;
+	private static final int TARGET_2		= 2;
+
+	// Ilosc stopni zawieszenia: 3
+	
+	// Numer dnia od ostatniego przepytania z fiszki, po ktorym zostanie
+	// ostanie ona odwieszona. Numer dnia zalezy od stopnia zawieszenia.
+	private static final int DAY_PERIOD_1	= 2;
+	private static final int DAY_PERIOD_2	= 3;
+	private static final int DAY_PERIOD_3	= 5;
+	
+	/**
+	 * Numer dnia od ostatniego przepytania z fiszki, po ktorym zostana
+	 * zresetowane wszystkie wspolczynniki znajomosci fiszek w zestawie
+	 */
+	final int PERIOD_TO_RESET 	= 30;
+	
 	/** zestaw fiszek do przepytania */
-	FlashcardSet toAskFlashcardSet;
+	private FlashcardSet toAskFlashcardSet;
 	
 	/** zestaw fiszek "zawieszonych" */
-	FlashcardSet suspendedFlashcardSet;
+	private FlashcardSet suspendedFlashcardSet;
 	
 	/** zestaw wspolczynnikow znajomosci fiszek */
-	KnowledgeIndexSet knowledgeIndexSet;
+	private KnowledgeIndexSet knowledgeIndexSet;
 	
 	/** obiekt Context */ 
-	Context context;
+	private Context context;
+	
+	/** data dnia, w ktorym utworzono obiekt */
+	private final DateMidnight currentDate;
 	
 	public LearnAssistant(Context ctx) throws QuizInitException {
-		context = ctx;
+		context 				= ctx;
+		currentDate 			= new DateMidnight();
 		toAskFlashcardSet		= FlashcardSetProvider.getFlashcardSet(ctx);
 		knowledgeIndexSet		= KnowledgeIndexSetProvider.getKnowledgeIndexSet(ctx);
 		suspendedFlashcardSet	= null;
@@ -57,20 +90,62 @@ public class LearnAssistant {
 	 * przygotowuje zestaw fiszek do przepytania i zawieszonych
 	 */
 	private void prepareToAskAndSuspendedFlashcardSet() {
-		//TODO: tu przejrzec zestaw fiszek i podjac decyzje, ktore z nich wstrzymac.
-		// zmodyfikowac takze statystyki dotyczace wstrzymanych fiszek
 		Long susFSid = toAskFlashcardSet.getId();
 		String susFSname = toAskFlashcardSet.getName() + " - zawieszone";
-		suspendedFlashcardSet = new FlashcardSet(null, null);
-		for (Map.Entry<Long, KnowledgeIndex> entry : knowledgeIndexSet.entrySet()) {
-			Long id = entry.getKey();
-			KnowledgeIndex ki = entry.getValue();
-			int value = ki.getValue();
-			if (value>0) { // TEMP: - nie robic tego tak - jesli value >0 , to usun z zestawu fiszke
-				suspendedFlashcardSet.put(id,toAskFlashcardSet.get(id));
-				toAskFlashcardSet.remove(id);
+		suspendedFlashcardSet 		= new FlashcardSet(null, null);
+		
+		DateMidnight lastUseDate 	= knowledgeIndexSet.getDate();
+		DateMidnight current		= new DateMidnight();
+		Integer dateDifference 			= Days.daysBetween(new DateMidnight(lastUseDate), new DateMidnight(current)).getDays();
+		if (dateDifference >= PERIOD_TO_RESET) {
+			Log.i(LOG_TAG,"Minelo 30 dni od ostatniego quizu. KnowledgeIndex do zresetowania."); //spike - debug
+			this.resetAndArchiveKnowledgeIndex();
+		} else {
+			for (Map.Entry<Long, KnowledgeIndex> entry : knowledgeIndexSet.entrySet()) {
+				Long id = entry.getKey();
+				KnowledgeIndex ki = entry.getValue();
+				if(isSuspended(ki)) {
+					suspendedFlashcardSet.put(id,toAskFlashcardSet.get(id));
+					toAskFlashcardSet.remove(id);
+				}
 			}
 		}
+	}
+	
+	/**
+	 * zwraca informacje, czy fiszka jest zawieszona. Niech roznica dni =
+	 * (def.) roznica dni miedzy dniem dzisiejszym a dniem ostatniego przepytania z fiszki.
+	 * Fiszka jest zawieszona, jesli ma dodatni wspolczynnik oraz:
+	 * <p>
+	 * - wspolczynnik jest niewiekszy niz 1 i roznica dni jest nie mniejsza niz 2
+	 * <p>
+	 * - wspolczynnik jest niewiekszy niz 2 i roznica dni jest nie mniejsza niz 3
+	 * <p>
+	 * - wspolczynnik jest wiekszy niz 2 i roznica dni jest nie mniejsza niz 5
+	 * @param ki 	wspolczynnik znajomosci fiszki wraz z data ostatniego
+	 * 				przepytania z niej
+	 * @return		informacja, czy fiszka jest zawieszona
+	 */
+	private boolean isSuspended(KnowledgeIndex ki){
+		Integer value 			= ki.getValue();
+		Log.d(LOG_TAG,"Wartosc " + value.toString()); //spike - debug
+		int dateDifference 	= ki.dayDifferenceTo(currentDate);
+		
+		if (value <= TARGET_0) {
+			Log.d(LOG_TAG,"idSuspended returns false 0"); //spike - debug
+			return false;
+		} if (value <= TARGET_1 && dateDifference >= DAY_PERIOD_1) {
+			Log.d(LOG_TAG,"idSuspended returns false 1"); //spike - debug
+			return false;
+		} if (value <= TARGET_2 && dateDifference >= DAY_PERIOD_2) {
+			Log.d(LOG_TAG,"idSuspended returns false 2"); //spike - debug
+			return false;
+		} if (value > TARGET_2 && dateDifference >= DAY_PERIOD_3) {
+			Log.d(LOG_TAG,"idSuspended returns false 3"); //spike - debug
+			return false;
+		}
+		Log.d(LOG_TAG,"idSuspended returns true"); //spike - debug
+		return true;
 	}
 	
 	/**
@@ -150,6 +225,32 @@ public class LearnAssistant {
 				ki.setCurrentDate();
 			}
 		}
-		KnowledgeIndexSetProvider.archiveKnowledgeIndexSet(context, knowledgeIndexSet);
+		KnowledgeIndexSetProvider.archiveKnowledgeIndexSet(context, knowledgeIndexSet, getCurrentDateAsString());
+	}
+	
+	/**
+	 * resetuje wspolczynniki znajomosci fiszek - ustawia wartosci na 0, a date na biezaca 
+	 */
+	private void resetAndArchiveKnowledgeIndex(){
+		knowledgeIndexSet.setCurrentDate();
+		for (Map.Entry<Long, KnowledgeIndex> entry : knowledgeIndexSet.entrySet()) {
+			KnowledgeIndex ki = entry.getValue();
+			ki.setValue(0);
+			ki.setCurrentDate();
+		}
+		KnowledgeIndexSetProvider.archiveKnowledgeIndexSet(context, knowledgeIndexSet, getCurrentDateAsString());
+	}
+	
+	/**
+	 * zwraca jako string date utworzenia tego obiektu
+	 * @return String - data utworzenia tego obiektu
+	 */
+	public String getCurrentDateAsString(){
+		return currentDate.toString(KnowledgeIndex.dateFormat);
+	}
+	
+	//spike
+	public void resetKnowledgeIndex(){
+		this.resetAndArchiveKnowledgeIndex();
 	}
 }
