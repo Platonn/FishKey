@@ -1,9 +1,7 @@
 package com.fishkey.model;
 
 /** 
- * Lista id fiszek.
- * <p>
- * Mozna te liste tasowac.
+ * lista samych id fiszek, ktora mozna tasowac
  * @author Platon
  *
  */

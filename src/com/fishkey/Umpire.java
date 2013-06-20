@@ -12,9 +12,9 @@ import com.fishkey.model.AnswerCorrectness;
 import com.fishkey.model.FlashcardWithId;
 
 /**
- * Sedzia sprawdza poprawnosc udzielanych odpowiedzi.
+ * sedzia sprawdza poprawnosc udzielanych odpowiedzi,
  * <p>
- * Pobiera od <code>QuizManager</code>'a fiszke. Na jej podstawie
+ * Pobiera od <code>QuizManager</code>'a fiszke, Na jej podstawie
  * potrafi zadac pytanie i ocenic odpowiedz.
  * 
  * @author Platon

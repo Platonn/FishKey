@@ -10,7 +10,7 @@ import org.joda.time.format.ISODateTimeFormat;
 import android.util.Log;
 
 /**
- * wspolczynnik znajomosci fiszki wraz z data ostatniego przepytania z tej fiszki
+ * wspolczynnik znajomosci fiszki
  * @author Platon
  *
  */

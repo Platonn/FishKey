@@ -3,7 +3,7 @@ package com.fishkey.model;
 import java.util.LinkedHashMap;
 
 /**
- * zestaw fiszek o unikalnym id
+ * zestaw fiszek - indeksowanych po id fiszek
  * @author Platon
  *
  */

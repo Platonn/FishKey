@@ -1,7 +1,5 @@
 package com.fishkey;
 
-import java.util.LinkedList;
-
 import android.content.Context;
 
 import com.fishkey.exceptions.EmptyQuizException;
@@ -9,18 +7,16 @@ import com.fishkey.exceptions.EndOfQuizException;
 import com.fishkey.exceptions.EndOfQuizRoundException;
 import com.fishkey.exceptions.QuizInitException;
 import com.fishkey.model.Flashcard;
-import com.fishkey.model.AnswerCorrectnessList;
 import com.fishkey.model.AnswerCorrectness;
 import com.fishkey.model.FlashcardIdList;
 import com.fishkey.model.FlashcardSet;
 import com.fishkey.model.FlashcardWithId;
 import com.fishkey.model.QuizRoundsHistory;
-import com.fishkey.model.ShuffleLinkedList;
 
 /**  
  * odpowiada za obsluge stanu quizu
  */
-class QuizState implements IQuizInformator {
+public class QuizState implements IQuizInformator {
 	
 	/**
 	 * historia rund quizu

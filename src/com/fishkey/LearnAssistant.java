@@ -24,7 +24,7 @@ import com.fishkey.model.ShuffleLinkedList;
 import com.fishkey.model.KnowledgeIndex;
 
 /**
- * Asystent uczenia sie odpowiada za efektywna nauke.
+ * asystent uczenia sie odpowiada za efektywna nauke,
  * <p>
  * Podejmuje decyzje na podstawie statystyk - z ktorych fiszek warto, a z ktorych nie warto
  * przepytywac uzytkownika

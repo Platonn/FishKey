@@ -8,7 +8,7 @@ import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
 /**
- * zestaw wspolczynnikow znajomosci fiszek zwiazany z nimi po id
+ * zestaw wspolczynnikow znajomosci fiszek - indeksowanych po id fiszek
  * @author Platon
  *
  */

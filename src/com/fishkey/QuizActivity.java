@@ -27,7 +27,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 /**
- * aktywnosc quizu. Odpowiada za ekran i sterowanie interakcja z uzytkownikiem.
+ * aktywnosc quizu, odpowiada sterowanie interakcja z uzytkownikiem.
  * @author Platon
  *
  */

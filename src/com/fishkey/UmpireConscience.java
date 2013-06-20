@@ -11,7 +11,7 @@ import com.fishkey.model.AnswerCorrectness;
 import com.fishkey.model.AnswerCorrectness.Correctness;
 
 /**
- * Sedzia sumienie ocenia "naiwnie" poprawnosc odpowiedi,
+ * sedzia sumienie ocenia "naiwnie" poprawnosc odpowiedzi,
  * bazujac na informacji, czy odpowiadajacy znal poprawna odpowiedz
  * @author Platon
  *

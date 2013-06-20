@@ -4,6 +4,13 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 
+/**
+ * lista dziedziczaca z LinkedList, posiadajaca metode do mieszania kolejnosci swoich elementow
+ * @author Platon
+ *
+ * @param <T>	typ elementow do przechowywania na liscie
+ * @see LinkedList
+ */
 public class ShuffleLinkedList<T> extends LinkedList<T> {
 	private static final long serialVersionUID = -7351042828068144420L;
 

@@ -10,6 +10,11 @@ import com.fishkey.model.AnswerCorrectness;
 import com.fishkey.model.FlashcardIdList;
 import com.fishkey.model.ShuffleLinkedList;
 
+/**
+ * runda quizu
+ * @author Platon
+ *
+ */
 public class QuizRound {
 	/**
 	 * lista id fiszek do przepytania

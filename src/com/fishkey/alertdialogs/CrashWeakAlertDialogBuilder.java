@@ -9,9 +9,10 @@ import com.fishkey.R;
 import com.fishkey.QuizActivity;
 
 /**
- * tworzy AlertDialog, ktory po wcisnieciu "pozytywnego przycisku" badz 
- * przy wcisnieciu sprzetowego Cofnij, wykona akcje:
- * zakmnie podana aktywnosc
+ * tworzy AlertDialog, ktory po wcisnieciu "pozytywnego przycisku" wykona akcje:
+ * zakmnie podana aktywnosc,
+ * <p>
+ * po wcisnieciu sprzetowego Cofnij, alert zostanie pominiety
  * @author Platon
  *
  */

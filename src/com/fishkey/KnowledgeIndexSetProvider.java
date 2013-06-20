@@ -19,7 +19,7 @@ import com.fishkey.utils.AssetsUtil;
 import com.fishkey.utils.ExternalStorageUtil;
 
 /**
- * Dostarcza zestaw fiszek do przeprowadzenia quizu
+ * dostarcza zestaw wspolczynnikow znajomosci fiszek do przeprowadzenia quizu
  * @author Platon
  *
  */

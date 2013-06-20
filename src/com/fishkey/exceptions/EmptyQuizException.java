@@ -1,7 +1,7 @@
 package com.fishkey.exceptions;
 
 /**
- * wyjatek rzucany, gdy quiz nie posiada zadnych fiszek
+ * wyjatek rzucany, gdy quiz nie posiada zadnych fiszek juz na poczatku quizu
  * @author Platon
  *
  */
