@@ -7,6 +7,6 @@ package com.fishkey.exceptions;
  * @author Platon
  *
  */
-public class EndOfQuizException extends Exception {
+public class EndOfQuizException extends QuizException {
 	private static final long serialVersionUID = -234955486677863840L;
 }

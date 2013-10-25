@@ -27,6 +27,8 @@
     <string name="quiz_error_title">Błąd quizu</string>
     <string name="quiz_error">Nastąpiło nieoczekiwane zachowanie quizu. Musi on zostać zamknięty.</string>
     
+    <string name="quiz_menu_reset_knowledge_index">Zresetuj współczynniki znajomości słówek</string>
+    
     <!-- Próbne wartości w wersji alpha -->
     <string name="alpha_state">12/80</string>
     <string name="alpha_question">uczyć się</string>

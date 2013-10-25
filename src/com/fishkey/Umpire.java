@@ -7,12 +7,14 @@ import com.fishkey.exceptions.EmptyQuizException;
 import com.fishkey.exceptions.EndOfQuizException;
 import com.fishkey.exceptions.EndOfQuizRoundException;
 import com.fishkey.exceptions.QuizInitException;
-import com.fishkey.model.Flashcard;
+import com.fishkey.model.AnswerCorrectness.Correctness;
+import com.fishkey.model.AnswerCorrectness;
+import com.fishkey.model.FlashcardWithId;
 
 /**
- * Sedzia sprawdza poprawnosc udzielanych odpowiedzi.
+ * sedzia sprawdza poprawnosc udzielanych odpowiedzi,
  * <p>
- * Pobiera od <code>QuizManager</code>'a fiszke. Na jej podstawie
+ * Pobiera od <code>QuizManager</code>'a fiszke, Na jej podstawie
  * potrafi zadac pytanie i ocenic odpowiedz.
  * 
  * @author Platon
@@ -34,10 +36,8 @@ public class Umpire implements IQuizInformator {
 	
 	/**
 	 * aktualnie przepytywana fiszka
-	 * <p>
-	 * gdy rowne null, to znaczy ze nie ma juz fiszek w zestawie do odpytywania
 	 */
-	Flashcard currentFlashcard;
+	FlashcardWithId currentIdWithFlashcard;
 	
 	/**
 	 * tekst, ktory pojawi sie w miejscu poprawnej odpowiedzi przed ujawnieniem prawdziwej
@@ -53,9 +53,17 @@ public class Umpire implements IQuizInformator {
 	 * @throws EndOfQuizRoundException 
 	 * @throws EndOfQuizException 
 	 */
-	public Umpire(Context context) throws QuizInitException, EmptyQuizException, EndOfQuizException, EndOfQuizRoundException {
+	public Umpire(Context context) throws QuizInitException, EmptyQuizException {
 		quizState = new QuizState(context);
-		getNextFlashcard();							// TODO: tu nie powinien byc rzucany wyjatek konca rundy ani quizu!
+		try {
+			getNextFlashcard();
+		} catch (EndOfQuizException e) {
+			Log.w(LOG_TAG,"Wyjatek EndOfQuizException nie powinien byc napotakny, a zostal przechwycony.");
+			throw new EmptyQuizException();
+		} catch (EndOfQuizRoundException e) {
+			Log.w(LOG_TAG,"Wyjatek EndOfQuizRoundException nie powinien byc napotakny, a zostal przechwycony.");
+			throw new EmptyQuizException();
+		}
 	}
 	
 	/**
@@ -66,8 +74,10 @@ public class Umpire implements IQuizInformator {
 	 * @throws EndOfQuizException gdy koniec quizu
 	 */
 	public void adjudicate(String answer) throws EndOfQuizException, EndOfQuizRoundException{
-		boolean verdict = answer.equals(currentFlashcard.getAnswer());
-		quizState.putAnswered(currentFlashcard,verdict);
+		boolean verdict 		= answer.equals(currentIdWithFlashcard.getFlashcard().getAnswer());
+		Correctness correctness	= verdict ? Correctness.CORRECT : Correctness.WRONG;
+		Long id 				= currentIdWithFlashcard.getId();
+		quizState.putAnswered(new AnswerCorrectness(id,correctness));
 		getNextFlashcard();
 	}
 	
@@ -76,7 +86,7 @@ public class Umpire implements IQuizInformator {
 	 * @return	tresc pytania biezacej fiszki
 	 */
 	public String getQuestion() {
-		return currentFlashcard.getQuestion();
+		return currentIdWithFlashcard.getFlashcard().getQuestion();
 	}
 	
 	/**
@@ -84,7 +94,7 @@ public class Umpire implements IQuizInformator {
 	 * @return	poprawna odpowiedz biezacej fiszki
 	 */
 	public String getAnswer() {
-		return currentFlashcard.getAnswer();
+		return currentIdWithFlashcard.getFlashcard().getAnswer();
 	}
 	
 	/**
@@ -94,11 +104,12 @@ public class Umpire implements IQuizInformator {
 	 */
 	protected void getNextFlashcard() throws EndOfQuizException, EndOfQuizRoundException {
 		try {
-			currentFlashcard = quizState.popFlashcard();
+			currentIdWithFlashcard = quizState.getFlashcardWithId();
 		} catch (EndOfQuizRoundException eofQuizRound) {
-			quizState.startNextRound();						// Rozpocznij nowa runde. Jesli nie ma nastepnej rundy, zostanie rzucony wyjatek EOFQuiz
-			currentFlashcard = quizState.popFlashcard();	// W przeciwnym przypadku rozpocznie sie nowa runda. Wiec Pobierz nowa fiszke // TODO: tu NIE powinien byc rzucany wyjatek eofQuizRound! 
-			throw eofQuizRound;								// i rzuc dalej wyjatek EOFQuizRound
+			quizState.startNextRound();										// Rozpocznij nowa runde. Jesli nie ma nastepnej rundy, zostanie rzucony wyjatek EOFQuiz
+			try {currentIdWithFlashcard = quizState.getFlashcardWithId();}	// W przeciwnym przypadku rozpocznie sie nowa runda. Wiec Pobierz nowa fiszke wraz z id
+			catch (EndOfQuizRoundException e) { /* zignoruj */ }
+			throw eofQuizRound;												// i rzuc dalej wyjatek EOFQuizRound
 		}
 	}
 	

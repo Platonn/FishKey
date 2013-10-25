@@ -13,10 +13,10 @@ import android.util.Log;
  * @author Platon
  *
  */
-public class AssetsReader {
+public class AssetsUtil {
 	
 	/** tag to oznaczania logow */
-	private static final String LOG_TAG = AssetsReader.class.getName();
+	private static final String LOG_TAG = AssetsUtil.class.getName();
 
 	/**
 	 * zwraca zawartosc (tekst) pliku o podanej nazwie (z katalogu assets)
@@ -33,7 +33,7 @@ public class AssetsReader {
    		synchronized (FileUtil.DATA_LOCK) {
    			try{
 				in = context.getAssets().open(fileName);
-				BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+				BufferedReader reader = new BufferedReader(new InputStreamReader(in), 8*1024);
 			    String line = null;
 			    while ((line = reader.readLine()) != null) {
 			      sb.append(line).append(FileUtil.LINE_SEP);

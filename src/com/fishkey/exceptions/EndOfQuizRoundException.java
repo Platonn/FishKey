@@ -9,7 +9,7 @@ import com.fishkey.QuizRound;
  * @author Platon
  *
  */
-public class EndOfQuizRoundException extends Exception {
+public class EndOfQuizRoundException extends QuizException {
 	private static final long serialVersionUID = 939757981209543083L;
 	
 	/**
